@@ -286,7 +286,7 @@ function HeroSection() {
             ref={title1Ref}
             style={{
               fontFamily: "var(--font-display)",
-              fontSize: "clamp(3rem, 8vw, 8.5rem)",
+              fontSize: "clamp(2.5rem, 6.5vw, 6.2rem)",
               fontWeight: 500,
               lineHeight: 1.05,
               letterSpacing: "0",
@@ -300,11 +300,11 @@ function HeroSection() {
             ref={title2Ref}
             style={{
               fontFamily: "var(--font-display)",
-              fontSize: "clamp(3rem, 8vw, 8.5rem)",
+              fontSize: "clamp(2.5rem, 6.5vw, 6.2rem)",
               fontWeight: 500,
               lineHeight: 1.05,
               letterSpacing: "0",
-              background: "linear-gradient(135deg, var(--color-violet) 0%, var(--color-violet-light) 40%, var(--color-cyan) 80%, var(--color-cyan-light) 100%)",
+              background: "linear-gradient(135deg, var(--color-violet) 0%, var(--color-violet-light) 100%)",
               WebkitBackgroundClip: "text",
               WebkitTextFillColor: "transparent",
               backgroundClip: "text",
@@ -323,8 +323,10 @@ function HeroSection() {
             fontSize: "clamp(0.9rem, 2vw, 1.2rem)",
             color: "var(--color-cyan)",
             marginBottom: "20px",
-            height: "2em",
+            minHeight: "2.5em",
+            lineHeight: "1.4",
             display: "flex",
+            flexWrap: "wrap",
             alignItems: "center",
             justifyContent: "center",
             gap: "8px",
@@ -1386,7 +1388,7 @@ function WorksSection() {
               data-cursor-text="VIEW STUDY"
               style={{
                 display: "grid",
-                gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
+                gridTemplateColumns: "repeat(auto-fit, minmax(460px, 1fr))",
                 gap: "0",
                 background: "transparent",
                 border: "1px solid var(--color-border)",
