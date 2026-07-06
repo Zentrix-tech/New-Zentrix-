@@ -178,7 +178,6 @@ export default function CustomCursor() {
       }
 
       // 1. Lerp cursor positions
-      // Fine-tuned smooth interpolation values for high-end feel
       const lerpVal = prefersReducedMotion.current ? 0.35 : 0.15;
       const dx = mouse.current.x - pos.current.x;
       const dy = mouse.current.y - pos.current.y;
@@ -211,10 +210,10 @@ export default function CustomCursor() {
       const stretch = prefersReducedMotion.current ? 1.0 : Math.min(1.15, 1 + speed * 0.002);
       const squash = prefersReducedMotion.current ? 1.0 : Math.max(0.85, 1 - speed * 0.002);
 
-      // Apply transforms on logo container
+      // Apply transforms on logo container (no translate(-50%, -50%) because top-left represents the click hotspot!)
       logoContainer.style.transform = `translate3d(${pos.current.x}px, ${pos.current.y + idleY}px, 0) rotate(${angle}deg) scale(${isHovered ? 1.3 : 1}) scale3d(${stretch}, ${squash}, 1)`;
 
-      // 5. Outer glowing ring follows slightly slower for fluid trailing
+      // 5. Outer glowing ring follows slower, centered on the hotspot
       const ringLerpVal = prefersReducedMotion.current ? 0.35 : 0.08;
       ringPos.current.x += (pos.current.x - ringPos.current.x) * ringLerpVal;
       ringPos.current.y += (pos.current.y - ringPos.current.y) * ringLerpVal;
@@ -231,8 +230,8 @@ export default function CustomCursor() {
           const p = particles.current[i];
           p.x += p.vx;
           p.y += p.vy;
-          p.vy += 0.045; // subtle gravity pull
-          p.vx *= 0.97;  // friction
+          p.vy += 0.045; // gravity
+          p.vx *= 0.97;
           p.vy *= 0.97;
           p.alpha -= 0.025;
 
@@ -261,7 +260,7 @@ export default function CustomCursor() {
 
           ctx.beginPath();
           ctx.arc(r.x, r.y, r.radius, 0, Math.PI * 2);
-          ctx.strokeStyle = "rgba(163, 126, 54, 0.4)";
+          ctx.strokeStyle = "rgba(163, 126, 54, 0.45)";
           ctx.lineWidth = 1.5;
           ctx.globalAlpha = r.alpha;
           ctx.stroke();
@@ -313,47 +312,66 @@ export default function CustomCursor() {
           position: "fixed",
           top: 0,
           left: 0,
-          width: "54px",
-          height: "54px",
-          border: "1.5px solid rgba(163, 126, 54, 0.45)",
+          width: "56px",
+          height: "56px",
+          border: "1.5px solid rgba(163, 126, 54, 0.5)",
           borderRadius: "50%",
           pointerEvents: "none",
           zIndex: 99997,
           transform: "translate3d(-100px, -100px, 0) translate(-50%, -50%)",
-          boxShadow: "0 0 20px rgba(163, 126, 54, 0.15)",
+          boxShadow: "0 0 20px rgba(163, 126, 54, 0.2)",
           transition: "transform 0.05s ease-out, scale 0.4s cubic-bezier(0.16, 1, 0.3, 1)",
           willChange: "transform",
         }}
       />
 
-      {/* Main Brand Logo Cursor */}
+      {/* Main Brand Logo Cursor with Pointer Tip Shape */}
       <div
         ref={logoRef}
         style={{
           position: "fixed",
           top: 0,
           left: 0,
-          width: "32px",
-          height: "32px",
+          width: "44px", // Increased size!
+          height: "44px",
           pointerEvents: "none",
           zIndex: 99998,
-          transform: "translate3d(-100px, -100px, 0) translate(-50%, -50%)",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
+          transform: "translate3d(-100px, -100px, 0)",
           willChange: "transform",
         }}
       >
+        {/* Tiny custom arrow pointer pointing up-left */}
+        <svg
+          width="13"
+          height="13"
+          viewBox="0 0 24 24"
+          fill="var(--color-violet)"
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            transform: "translate(-2px, -2px)", // Aligns M2 2 tip exactly with (0,0) mouse coordinate
+            filter: "drop-shadow(0 1px 3px rgba(163, 126, 54, 0.4))",
+          }}
+        >
+          <path d="M2 2l20 10-9 2-2 9z" fill="currentColor" />
+        </svg>
+
+        {/* The brand logo, increased in size, slightly inclined position */}
         <img
-          src="/logo_main.png"
+          src="/logo_cursor.png"
           alt="Cursor Logo"
           style={{
             width: "100%",
             height: "100%",
             objectFit: "contain",
-            filter: "drop-shadow(0 2px 6px rgba(163, 126, 54, 0.15)) drop-shadow(0 4px 12px rgba(163, 126, 54, 0.1))",
+            position: "absolute",
+            top: "6px",
+            left: "6px",
+            transform: "rotate(-15deg)", // permanently inclined!
+            filter: "drop-shadow(0 2px 6px rgba(163, 126, 54, 0.18))",
             mixBlendMode: "multiply",
-            transition: "transform 0.3s cubic-bezier(0.16, 1, 0.3, 1)",
+            transformOrigin: "top left",
           }}
           className="cursor-logo-img-hover"
         />
