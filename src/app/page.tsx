@@ -1189,14 +1189,24 @@ function StatsSection() {
 
 const featuredProjects = [
   {
-    id: "valli-hospital",
-    title: "Valli Hospital Web Platform",
-    category: "Healthcare",
-    description: "A comprehensive online presence and patient booking consultation portal for Valli Hospital, facilitating seamless healthcare access.",
-    link: "https://www.vallihospital.in/",
-    color: "#06B6D4",
-    tags: ["Next.js", "Prisma", "PostgreSQL"],
-    metrics: ["4x Booking Speed", "Manual Load -40%", "15K+ Visits"],
+    id: "avs-engg-college",
+    title: "AVS Engineering College Portal",
+    category: "Education",
+    description: "Comprehensive web infrastructure for AVS Engineering College, supporting academic notices, placement portals, online admissions, and department sites.",
+    link: "https://www.avsenggcollege.ac.in/",
+    color: "#A37E36",
+    tags: ["Next.js", "TypeScript", "Node.js", "PostgreSQL"],
+    metrics: ["Load Time -75%", "Admin Speed 3x", "100% Mobile"],
+  },
+  {
+    id: "sakthi-kailash-college",
+    title: "Sakthi Kailash Women's College",
+    category: "Education",
+    description: "Custom institutional website for Sakthi Kailash Women's College, highlighting courses, placement records, achievements, and departments.",
+    link: "https://www.sakthikailashcollege.org/",
+    color: "#EC4899",
+    tags: ["React", "TypeScript", "Tailwind CSS", "Framer Motion"],
+    metrics: ["Traffic +180%", "Speed 95%", "Engage 99%"],
   },
   {
     id: "avs-college-omalur",
@@ -1207,16 +1217,6 @@ const featuredProjects = [
     color: "#8B5CF6",
     tags: ["Next.js", "TypeScript", "Node.js"],
     metrics: ["98% Performance", "2.5x Inbound Rise", "0% Downtime"],
-  },
-  {
-    id: "reiz",
-    title: "Reiz Platform",
-    category: "Technology",
-    description: "A premium, state-of-the-art interactive digital experience showcasing brand identity, futuristic layouts, and interactive animations.",
-    link: "https://reiz-six.vercel.app/",
-    color: "#10B981",
-    tags: ["Next.js", "GSAP", "Three.js"],
-    metrics: ["Avg Session 4m", "UI Index 9.5", "100% SEO"],
   },
 ];
 
