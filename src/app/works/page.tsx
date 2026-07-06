@@ -18,6 +18,7 @@ const projects = [
     category: "Education",
     year: "2026",
     link: "https://www.avsenggcollege.ac.in/",
+    image: "/work_avs_engg.png",
     color: "#A37E36",
     gradient: "linear-gradient(135deg, rgba(163,126,54,0.15), rgba(163,126,54,0.03))",
     description: "Comprehensive web infrastructure for AVS Engineering College, supporting academic notices, placement portals, online admissions, and department sites.",
@@ -39,6 +40,7 @@ const projects = [
     category: "Education",
     year: "2026",
     link: "https://www.sakthikailashcollege.org/",
+    image: "/work_sakthi_kailash.png",
     color: "#EC4899",
     gradient: "linear-gradient(135deg, rgba(108,78,49,0.15), rgba(108,78,49,0.03))",
     description: "Custom institutional website for Sakthi Kailash Women's College, highlighting courses, placement records, achievements, and departments.",
@@ -60,6 +62,7 @@ const projects = [
     category: "Education",
     year: "2026",
     link: "https://www.avscollegeomalur.edu.in/",
+    image: "/work_avs_omalur.png",
     color: "#8B5CF6",
     gradient: "linear-gradient(135deg, rgba(184,147,75,0.15), rgba(184,147,75,0.03))",
     description: "Official institutional web platform and student portal for AVS College of Arts & Science, providing access to academic resources, admissions, and college news.",
@@ -81,6 +84,7 @@ const projects = [
     category: "Technology",
     year: "2026",
     link: "https://www.hashprime.in/",
+    image: "/work_hashprime.png",
     color: "#F59E0B",
     gradient: "linear-gradient(135deg, rgba(245,158,11,0.15), rgba(245,158,11,0.03))",
     description: "Advanced corporate website for HashPrime, showcasing services, technical consultation portfolio, and digital solutions.",
@@ -102,6 +106,7 @@ const projects = [
     category: "Healthcare",
     year: "2026",
     link: "https://www.vallihospital.in/",
+    image: "/work_valli_hospital.png",
     color: "#06B6D4",
     gradient: "linear-gradient(135deg, rgba(108,78,49,0.15), rgba(108,78,49,0.03))",
     description: "A comprehensive online presence and patient booking consultation portal for Valli Hospital, facilitating seamless healthcare access.",
@@ -123,6 +128,7 @@ const projects = [
     category: "Technology",
     year: "2026",
     link: "https://reiz-six.vercel.app/",
+    image: "/work_reiz.png",
     color: "#10B981",
     gradient: "linear-gradient(135deg, rgba(16,185,129,0.15), rgba(16,185,129,0.03))",
     description: "A premium, state-of-the-art interactive digital experience showcasing brand identity, futuristic layouts, and interactive animations.",
@@ -144,6 +150,7 @@ const projects = [
     category: "Marketing",
     year: "2026",
     link: "https://www.vallihospital.in/",
+    image: "/work_valli_meta_ads.png",
     color: "#3B82F6",
     gradient: "linear-gradient(135deg, rgba(59,130,246,0.15), rgba(59,130,246,0.03))",
     description: "Strategic lead-generation digital marketing campaign executing meta ads targeting Salem and surrounding regions for Valli Hospital.",
@@ -165,6 +172,7 @@ const projects = [
     category: "Technology",
     year: "2026",
     link: "https://github.com/Zentrix-tech",
+    image: "/work_speech_to_text.png",
     color: "#A37E36",
     gradient: "linear-gradient(135deg, rgba(163,126,54,0.15), rgba(163,126,54,0.03))",
     description: "A high-performance offline speech-to-text model designed for Windows and macOS environments using Python and Whisper integrations.",
@@ -207,42 +215,37 @@ function ProjectCard({ project, index }: { project: typeof projects[0]; index: n
       }}
     >
       {/* Visual header */}
+      {/* Visual header with screenshot */}
       <div
         style={{
-          height: "200px",
-          background: project.gradient,
+          height: "220px",
           position: "relative",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
           overflow: "hidden",
+          borderBottom: "1px solid var(--color-border)",
         }}
       >
+        <img
+          src={project.image}
+          alt={project.title}
+          style={{
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+            transform: hovered ? "scale(1.06)" : "scale(1)",
+            transition: "transform 0.6s cubic-bezier(0.16, 1, 0.3, 1)",
+          }}
+        />
+        {/* Soft gradient overlay to merge nicely */}
         <div
           style={{
             position: "absolute",
             inset: 0,
-            backgroundImage: `linear-gradient(var(--color-surface) 1px, transparent 1px), linear-gradient(90deg, var(--color-surface) 1px, transparent 1px)`,
-            backgroundSize: "30px 30px",
+            background: "linear-gradient(to bottom, rgba(26,22,18,0.05) 0%, rgba(26,22,18,0.3) 100%)",
+            opacity: hovered ? 0.7 : 0.4,
+            transition: "opacity 0.4s ease",
+            pointerEvents: "none",
           }}
         />
-        <div
-          style={{
-            width: 80,
-            height: 80,
-            borderRadius: "20px",
-            background: `${project.color}20`,
-            border: `2px solid ${project.color}40`,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            position: "relative",
-            zIndex: 1,
-            boxShadow: `0 0 40px ${project.color}30`,
-          }}
-        >
-          <Icon size={36} style={{ color: project.color }} />
-        </div>
         {/* Category badge */}
         <div
           style={{
@@ -250,15 +253,17 @@ function ProjectCard({ project, index }: { project: typeof projects[0]; index: n
             top: "16px",
             left: "16px",
             padding: "4px 12px",
-            background: `${project.color}20`,
+            background: "rgba(250, 247, 242, 0.9)",
+            backdropFilter: "blur(8px)",
             border: `1px solid ${project.color}30`,
             borderRadius: "100px",
-            fontFamily: "Inter, sans-serif",
+            fontFamily: "var(--font-body)",
             fontSize: "0.7rem",
             fontWeight: 700,
             letterSpacing: "0.1em",
             textTransform: "uppercase",
-            color: project.color,
+            color: "var(--color-text-primary)",
+            zIndex: 2,
           }}
         >
           {project.category}
@@ -269,12 +274,14 @@ function ProjectCard({ project, index }: { project: typeof projects[0]; index: n
             top: "16px",
             right: "16px",
             padding: "4px 12px",
-            background: "var(--color-surface-2)",
+            background: "rgba(250, 247, 242, 0.9)",
+            backdropFilter: "blur(8px)",
             border: "1px solid var(--color-border)",
             borderRadius: "100px",
-            fontFamily: "JetBrains Mono, monospace",
+            fontFamily: "var(--font-mono)",
             fontSize: "0.7rem",
             color: "var(--color-text-muted)",
+            zIndex: 2,
           }}
         >
           {project.year}

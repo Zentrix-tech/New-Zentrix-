@@ -1194,6 +1194,7 @@ const featuredProjects = [
     category: "Education",
     description: "Comprehensive web infrastructure for AVS Engineering College, supporting academic notices, placement portals, online admissions, and department sites.",
     link: "https://www.avsenggcollege.ac.in/",
+    image: "/work_avs_engg.png",
     color: "#A37E36",
     tags: ["Next.js", "TypeScript", "Node.js", "PostgreSQL"],
     metrics: ["Load Time -75%", "Admin Speed 3x", "100% Mobile"],
@@ -1204,6 +1205,7 @@ const featuredProjects = [
     category: "Education",
     description: "Custom institutional website for Sakthi Kailash Women's College, highlighting courses, placement records, achievements, and departments.",
     link: "https://www.sakthikailashcollege.org/",
+    image: "/work_sakthi_kailash.png",
     color: "#EC4899",
     tags: ["React", "TypeScript", "Tailwind CSS", "Framer Motion"],
     metrics: ["Traffic +180%", "Speed 95%", "Engage 99%"],
@@ -1214,6 +1216,7 @@ const featuredProjects = [
     category: "Education",
     description: "Official institutional web platform and student portal for AVS College of Arts & Science, providing access to academic resources and admissions.",
     link: "https://www.avscollegeomalur.edu.in/",
+    image: "/work_avs_omalur.png",
     color: "#8B5CF6",
     tags: ["Next.js", "TypeScript", "Node.js"],
     metrics: ["98% Performance", "2.5x Inbound Rise", "0% Downtime"],
@@ -1488,93 +1491,39 @@ function WorksSection() {
                 </Link>
               </div>
 
-              {/* Visual side */}
+              {/* Visual side with screenshot */}
               <div
                 className="project-visual-anim"
                 style={{
-                  background: `linear-gradient(135deg, ${project.color}08 0%, ${project.color}03 100%)`,
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
                   minHeight: "340px",
                   position: "relative",
                   overflow: "hidden",
                   order: i % 2 === 0 ? 1 : -1,
+                  borderLeft: i % 2 === 0 ? "1px solid var(--color-border)" : "none",
+                  borderRight: i % 2 !== 0 ? "1px solid var(--color-border)" : "none",
                 }}
               >
-                {/* Decorative visualization */}
-                <div style={{ position: "relative", width: "200px", height: "200px" }}>
-                  <div
-                    style={{
-                      position: "absolute",
-                      inset: 0,
-                      borderRadius: "50%",
-                      border: `1px solid ${project.color}30`,
-                      animation: "spin-slow 20s linear infinite",
-                    }}
-                  />
-                  <div
-                    style={{
-                      position: "absolute",
-                      inset: "20px",
-                      borderRadius: "50%",
-                      border: `1px solid ${project.color}20`,
-                      animation: "spin-reverse 15s linear infinite",
-                    }}
-                  />
-                  <div
-                    style={{
-                      position: "absolute",
-                      inset: "40px",
-                      borderRadius: "50%",
-                      background: `${project.color}10`,
-                      border: `1px solid ${project.color}15`,
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                    }}
-                  >
-                    <Rocket size={40} style={{ color: project.color, opacity: 0.7 }} />
-                  </div>
-                </div>
-
-                {/* Floating elements */}
+                <img
+                  src={project.image}
+                  alt={project.title}
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "cover",
+                    position: "absolute",
+                    inset: 0,
+                    transition: "transform 0.8s cubic-bezier(0.16, 1, 0.3, 1)",
+                  }}
+                  className="project-row-image"
+                />
                 <div
                   style={{
                     position: "absolute",
-                    top: "20%",
-                    right: "15%",
-                    width: "48px",
-                    height: "48px",
-                    background: `${project.color}15`,
-                    border: `1px solid ${project.color}25`,
-                    borderRadius: "12px",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    animation: "float 5s ease-in-out infinite",
+                    inset: 0,
+                    background: "linear-gradient(to bottom, rgba(26,22,18,0.05) 0%, rgba(26,22,18,0.2) 100%)",
+                    pointerEvents: "none",
                   }}
-                >
-                  <TrendingUp size={20} style={{ color: project.color }} />
-                </div>
-                <div
-                  style={{
-                    position: "absolute",
-                    bottom: "25%",
-                    left: "15%",
-                    width: "40px",
-                    height: "40px",
-                    background: "var(--color-surface)",
-                    border: "1px solid var(--color-border)",
-                    borderRadius: "10px",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    animation: "float-reverse 6s ease-in-out infinite",
-                  }}
-                >
-                  <Database size={16} style={{ color: "var(--color-text-muted)" }} />
-                </div>
+                />
               </div>
             </div>
           ))}
