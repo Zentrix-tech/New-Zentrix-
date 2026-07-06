@@ -44,7 +44,7 @@ function ParticleField() {
     resize();
     window.addEventListener("resize", resize);
 
-    const colors = ["rgba(124,58,237,", "rgba(168,85,247,", "rgba(6,182,212,", "rgba(236,72,153,"];
+    const colors = ["rgba(184,147,75,", "rgba(108,78,49,", "rgba(108,78,49,", "rgba(108,78,49,"];
 
     const spawnParticle = () => {
       const color = colors[Math.floor(Math.random() * colors.length)];
@@ -109,7 +109,7 @@ function ParticleField() {
             ctx.beginPath();
             ctx.moveTo(particles[i].x, particles[i].y);
             ctx.lineTo(particles[j].x, particles[j].y);
-            ctx.strokeStyle = `rgba(124,58,237,${0.08 * (1 - dist / 120)})`;
+            ctx.strokeStyle = `rgba(184,147,75,${0.08 * (1 - dist / 120)})`;
             ctx.lineWidth = 0.5;
             ctx.stroke();
           }
@@ -206,9 +206,9 @@ function HeroSection() {
           position: "absolute",
           inset: 0,
           background: `
-            radial-gradient(ellipse at 15% 40%, rgba(139, 92, 246, 0.12) 0%, transparent 60%),
-            radial-gradient(ellipse at 85% 20%, rgba(6, 182, 212, 0.08) 0%, transparent 50%),
-            radial-gradient(ellipse at 50% 80%, rgba(236, 72, 153, 0.06) 0%, transparent 40%)
+            radial-gradient(ellipse at 15% 40%, rgba(184, 147, 75, 0.12) 0%, transparent 60%),
+            radial-gradient(ellipse at 85% 20%, rgba(108, 78, 49, 0.08) 0%, transparent 50%),
+            radial-gradient(ellipse at 50% 80%, rgba(108, 78, 49, 0.06) 0%, transparent 40%)
           `,
           pointerEvents: "none",
         }}
@@ -250,8 +250,8 @@ function HeroSection() {
             alignItems: "center",
             gap: "8px",
             padding: "8px 20px",
-            background: "rgba(139, 92, 246, 0.08)",
-            border: "1px solid rgba(139, 92, 246, 0.2)",
+            background: "rgba(184, 147, 75, 0.08)",
+            border: "1px solid rgba(184, 147, 75, 0.2)",
             borderRadius: "100px",
             marginBottom: "32px",
           }}
@@ -382,7 +382,7 @@ function HeroSection() {
               fontWeight: 700,
               fontSize: "0.95rem",
               textDecoration: "none",
-              boxShadow: "0 20px 50px rgba(139, 92, 246, 0.25)",
+              boxShadow: "0 20px 50px rgba(184, 147, 75, 0.25)",
               transition: "transform 0.3s cubic-bezier(0.16,1,0.3,1)",
             }}
           >
@@ -579,7 +579,7 @@ function TechMarquee() {
       ref={containerRef}
       style={{
         padding: "48px 0",
-        background: "rgba(8, 8, 10, 0.4)",
+        background: "var(--color-bg-secondary)",
         borderTop: "1px solid var(--color-border)",
         borderBottom: "1px solid var(--color-border)",
         overflow: "hidden",
@@ -627,7 +627,7 @@ function TechMarquee() {
                 gap: "12px",
                 padding: "10px 28px",
                 margin: "0 6px",
-                background: "rgba(255,255,255,0.02)",
+                background: "var(--color-surface)",
                 border: "1px solid var(--color-border)",
                 borderRadius: "100px",
               }}
@@ -665,8 +665,8 @@ function TechMarquee() {
                 gap: "12px",
                 padding: "10px 28px",
                 margin: "0 6px",
-                background: "rgba(6, 182, 212, 0.02)",
-                border: "1px solid rgba(6, 182, 212, 0.1)",
+                background: "rgba(108, 78, 49, 0.02)",
+                border: "1px solid rgba(108, 78, 49, 0.1)",
                 borderRadius: "100px",
               }}
             >
@@ -697,8 +697,8 @@ const featuredServices = [
   {
     id: "web-development",
     icon: Globe,
-    color: "#7C3AED",
-    gradient: "linear-gradient(135deg, rgba(124,58,237,0.15), rgba(168,85,247,0.05))",
+    color: "#6C4E31",
+    gradient: "linear-gradient(135deg, rgba(184,147,75,0.15), rgba(108,78,49,0.05))",
     title: "Web Development",
     description: "Next.js, React, full-stack applications built for performance and scale.",
     features: ["React & Next.js", "SEO Optimized", "Blazing Fast"],
@@ -707,7 +707,7 @@ const featuredServices = [
     id: "app-development",
     icon: Smartphone,
     color: "#06B6D4",
-    gradient: "linear-gradient(135deg, rgba(6,182,212,0.15), rgba(34,211,238,0.05))",
+    gradient: "linear-gradient(135deg, rgba(108,78,49,0.15), rgba(34,211,238,0.05))",
     title: "App Development",
     description: "Cross-platform mobile apps with Flutter and React Native that feel native.",
     features: ["iOS & Android", "Flutter / RN", "App Store Ready"],
@@ -715,8 +715,8 @@ const featuredServices = [
   {
     id: "ai-automation",
     icon: Bot,
-    color: "#A855F7",
-    gradient: "linear-gradient(135deg, rgba(168,85,247,0.15), rgba(124,58,237,0.05))",
+    color: "#B8934B",
+    gradient: "linear-gradient(135deg, rgba(108,78,49,0.15), rgba(184,147,75,0.05))",
     title: "AI Automation",
     description: "Machine learning pipelines, intelligent workflows, and AI-powered systems.",
     features: ["ML Models", "Workflow Bots", "Data Analytics"],
@@ -725,7 +725,7 @@ const featuredServices = [
     id: "enterprise-software",
     icon: Server,
     color: "#EC4899",
-    gradient: "linear-gradient(135deg, rgba(236,72,153,0.15), rgba(244,114,182,0.05))",
+    gradient: "linear-gradient(135deg, rgba(108,78,49,0.15), rgba(244,114,182,0.05))",
     title: "Enterprise Software",
     description: "Custom ERP, CRM, HMS, and management systems for growing businesses.",
     features: ["ERP / CRM", "HMS / SMS", "Custom Systems"],
@@ -767,7 +767,7 @@ function ServiceCard({
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       style={{
-        background: hovered ? service.gradient : "rgba(255,255,255,0.01)",
+        background: hovered ? service.gradient : "transparent",
         border: `1px solid ${hovered ? service.color + "30" : "var(--color-border)"}`,
         borderRadius: "20px",
         padding: "32px",
@@ -941,7 +941,7 @@ function ServicesSection() {
         style={{
           position: "absolute",
           inset: 0,
-          background: "radial-gradient(ellipse at 50% 50%, rgba(139,92,246,0.04) 0%, transparent 70%)",
+          background: "radial-gradient(ellipse at 50% 50%, rgba(184,147,75,0.04) 0%, transparent 70%)",
           pointerEvents: "none",
         }}
       />
@@ -955,10 +955,10 @@ function ServicesSection() {
               alignItems: "center",
               gap: "8px",
               padding: "6px 16px",
-              border: "1px solid rgba(139,92,246,0.25)",
+              border: "1px solid rgba(184,147,75,0.25)",
               borderRadius: "100px",
               marginBottom: "20px",
-              background: "rgba(139,92,246,0.06)",
+              background: "rgba(184,147,75,0.06)",
             }}
           >
             <span style={{ width: 6, height: 6, borderRadius: "50%", background: "var(--color-violet-light)" }} />
@@ -1044,7 +1044,7 @@ function ServicesSection() {
               transition: "all 0.3s ease",
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.background = "rgba(255, 255, 255, 0.03)";
+              e.currentTarget.style.background = "var(--color-surface)";
               e.currentTarget.style.borderColor = "var(--color-text-primary)";
             }}
             onMouseLeave={(e) => {
@@ -1108,7 +1108,7 @@ function StatsSection() {
     <section
       style={{
         padding: "clamp(60px, 8vw, 100px) 0",
-        background: "linear-gradient(135deg, rgba(139,92,246,0.03) 0%, rgba(6,182,212,0.02) 100%)",
+        background: "linear-gradient(135deg, rgba(184,147,75,0.03) 0%, rgba(108,78,49,0.02) 100%)",
         borderTop: "1px solid var(--color-border)",
         borderBottom: "1px solid var(--color-border)",
       }}
@@ -1336,10 +1336,10 @@ function WorksSection() {
               alignItems: "center",
               gap: "8px",
               padding: "6px 16px",
-              border: "1px solid rgba(6, 182, 212, 0.25)",
+              border: "1px solid rgba(108, 78, 49, 0.25)",
               borderRadius: "100px",
               marginBottom: "20px",
-              background: "rgba(6, 182, 212, 0.06)",
+              background: "rgba(108, 78, 49, 0.06)",
             }}
           >
             <span style={{ width: 6, height: 6, borderRadius: "50%", background: "var(--color-cyan)" }} />
@@ -1385,7 +1385,7 @@ function WorksSection() {
                 display: "grid",
                 gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
                 gap: "0",
-                background: "rgba(255,255,255,0.01)",
+                background: "transparent",
                 border: "1px solid var(--color-border)",
                 borderRadius: "24px",
                 overflow: "hidden",
@@ -1455,7 +1455,7 @@ function WorksSection() {
                       key={tag}
                       style={{
                         padding: "4px 12px",
-                        background: "rgba(255,255,255,0.03)",
+                        background: "var(--color-surface)",
                         border: "1px solid var(--color-border)",
                         borderRadius: "100px",
                         fontFamily: "var(--font-body)",
@@ -1564,8 +1564,8 @@ function WorksSection() {
                     left: "15%",
                     width: "40px",
                     height: "40px",
-                    background: "rgba(255,255,255,0.04)",
-                    border: "1px solid rgba(255,255,255,0.08)",
+                    background: "var(--color-surface)",
+                    border: "1px solid var(--color-border)",
                     borderRadius: "10px",
                     display: "flex",
                     alignItems: "center",
@@ -1573,7 +1573,7 @@ function WorksSection() {
                     animation: "float-reverse 6s ease-in-out infinite",
                   }}
                 >
-                  <Database size={16} style={{ color: "#94A3B8" }} />
+                  <Database size={16} style={{ color: "var(--color-text-muted)" }} />
                 </div>
               </div>
             </div>
@@ -1597,7 +1597,7 @@ function WorksSection() {
               fontWeight: 700,
               fontSize: "0.95rem",
               textDecoration: "none",
-              boxShadow: "0 12px 40px rgba(139, 92, 246, 0.25)",
+              boxShadow: "0 12px 40px rgba(184, 147, 75, 0.25)",
             }}
           >
             View All Projects <ArrowRight size={16} />
@@ -1611,8 +1611,8 @@ function WorksSection() {
 // ─── PROCESS SECTION ─────────────────────────────────────────────────────────
 
 const processSteps = [
-  { step: "01", title: "Discovery", desc: "We dive deep into your vision, goals, and requirements to build a strategic roadmap.", icon: "🔍", color: "#7C3AED" },
-  { step: "02", title: "Design", desc: "Awwwards-caliber UI/UX design — wireframes, prototypes, and pixel-perfect visuals.", icon: "✦", color: "#A855F7" },
+  { step: "01", title: "Discovery", desc: "We dive deep into your vision, goals, and requirements to build a strategic roadmap.", icon: "🔍", color: "#6C4E31" },
+  { step: "02", title: "Design", desc: "Awwwards-caliber UI/UX design — wireframes, prototypes, and pixel-perfect visuals.", icon: "✦", color: "#B8934B" },
   { step: "03", title: "Engineering", desc: "Clean, scalable code with modern architectures, CI/CD pipelines, and comprehensive testing.", icon: "⚡", color: "#06B6D4" },
   { step: "04", title: "Launch", desc: "Smooth deployment with monitoring, performance optimization, and post-launch support.", icon: "🚀", color: "#10B981" },
 ];
@@ -1726,7 +1726,7 @@ function ProcessSection() {
           transform: "translate(-50%, -50%)",
           width: "800px",
           height: "400px",
-          background: "radial-gradient(ellipse, rgba(139,92,246,0.06) 0%, transparent 70%)",
+          background: "radial-gradient(ellipse, rgba(184,147,75,0.06) 0%, transparent 70%)",
           pointerEvents: "none",
         }}
       />
@@ -1825,7 +1825,7 @@ function ProcessSection() {
                   width: 72,
                   height: 72,
                   borderRadius: "50%",
-                  background: "rgba(255,255,255,0.02)",
+                  background: "var(--color-surface)",
                   border: "2px solid var(--color-border)",
                   display: "flex",
                   flexDirection: "column",
@@ -1899,7 +1899,7 @@ const testimonials = [
     text: "Zentrix delivered an incredible HMS that transformed our entire hospital operations. The attention to detail and quality is extraordinary.",
     rating: 5,
     avatar: "A",
-    color: "#7C3AED",
+    color: "#6C4E31",
   },
   {
     id: 2,
@@ -1919,7 +1919,7 @@ const testimonials = [
     text: "Their AI automation suite cut our manual work by 80%. The team is incredibly professional and delivered ahead of schedule.",
     rating: 5,
     avatar: "R",
-    color: "#A855F7",
+    color: "#B8934B",
   },
   {
     id: 4,
@@ -1982,7 +1982,7 @@ function TestimonialsSection() {
               fontFamily: "Syne, sans-serif",
               fontSize: "clamp(2.2rem, 5vw, 4rem)",
               fontWeight: 800,
-              color: "#F8FAFC",
+              color: "var(--color-text-primary)",
               lineHeight: 1.05,
               letterSpacing: "-0.03em",
             }}
@@ -2007,8 +2007,8 @@ function TestimonialsSection() {
               transition={{ duration: 0.8, delay: i * 0.1, ease: [0.16, 1, 0.3, 1] }}
               style={{
                 padding: "32px",
-                background: "rgba(255,255,255,0.02)",
-                border: "1px solid rgba(255,255,255,0.06)",
+                background: "var(--color-surface)",
+                border: "1px solid var(--color-surface-2)",
                 borderRadius: "20px",
                 transition: "all 0.3s ease",
                 position: "relative",
@@ -2019,8 +2019,8 @@ function TestimonialsSection() {
                 e.currentTarget.style.background = `${t.color}05`;
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.borderColor = "rgba(255,255,255,0.06)";
-                e.currentTarget.style.background = "rgba(255,255,255,0.02)";
+                e.currentTarget.style.borderColor = "var(--color-surface-2)";
+                e.currentTarget.style.background = "var(--color-surface)";
               }}
             >
               {/* Stars */}
@@ -2035,7 +2035,7 @@ function TestimonialsSection() {
                 style={{
                   fontFamily: "Inter, sans-serif",
                   fontSize: "0.9375rem",
-                  color: "#94A3B8",
+                  color: "var(--color-text-muted)",
                   lineHeight: 1.7,
                   marginBottom: "24px",
                   fontStyle: "italic",
@@ -2066,10 +2066,10 @@ function TestimonialsSection() {
                   {t.avatar}
                 </div>
                 <div>
-                  <div style={{ fontFamily: "Syne, sans-serif", fontWeight: 600, fontSize: "0.9rem", color: "#F8FAFC" }}>
+                  <div style={{ fontFamily: "Syne, sans-serif", fontWeight: 600, fontSize: "0.9rem", color: "var(--color-text-primary)" }}>
                     {t.name}
                   </div>
-                  <div style={{ fontFamily: "Inter, sans-serif", fontSize: "0.75rem", color: "#475569" }}>
+                  <div style={{ fontFamily: "Inter, sans-serif", fontSize: "0.75rem", color: "var(--color-text-secondary)" }}>
                     {t.role} @ {t.company}
                   </div>
                 </div>
@@ -2089,7 +2089,7 @@ function TestimonialsSection() {
               fontFamily: "Inter, sans-serif",
               fontSize: "0.875rem",
               fontWeight: 600,
-              color: "#94A3B8",
+              color: "var(--color-text-muted)",
               textDecoration: "none",
             }}
           >
@@ -2107,7 +2107,7 @@ function InnovationSection() {
   const { ref, inView } = useInViewObserver({ threshold: 0.1, triggerOnce: true });
 
   const innovations = [
-    { icon: "🤖", title: "AI Research", desc: "Computer vision, NLP, and predictive models for real-world applications.", color: "#7C3AED" },
+    { icon: "🤖", title: "AI Research", desc: "Computer vision, NLP, and predictive models for real-world applications.", color: "#6C4E31" },
     { icon: "⚙️", title: "IoT & Automation", desc: "Smart systems connecting physical devices to intelligent software platforms.", color: "#06B6D4" },
     { icon: "🏥", title: "Healthcare Innovation", desc: "Experimental apps revolutionizing patient care and medical workflows.", color: "#10B981" },
     { icon: "🌐", title: "Future Ideas", desc: "Internal products and experimental concepts pushing technology boundaries.", color: "#F59E0B" },
@@ -2127,7 +2127,7 @@ function InnovationSection() {
         style={{
           position: "absolute",
           inset: 0,
-          backgroundImage: `linear-gradient(rgba(124,58,237,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(124,58,237,0.03) 1px, transparent 1px)`,
+          backgroundImage: `linear-gradient(rgba(184,147,75,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(184,147,75,0.03) 1px, transparent 1px)`,
           backgroundSize: "40px 40px",
           pointerEvents: "none",
         }}
@@ -2146,14 +2146,14 @@ function InnovationSection() {
                   alignItems: "center",
                   gap: "8px",
                   padding: "6px 16px",
-                  border: "1px solid rgba(124, 58, 237, 0.3)",
+                  border: "1px solid rgba(184, 147, 75, 0.3)",
                   borderRadius: "100px",
                   marginBottom: "24px",
-                  background: "rgba(124, 58, 237, 0.08)",
+                  background: "rgba(184, 147, 75, 0.08)",
                 }}
               >
-                <FlaskConical size={14} style={{ color: "#A855F7" }} />
-                <span style={{ fontFamily: "Inter, sans-serif", fontSize: "0.75rem", fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase", color: "#A855F7" }}>
+                <FlaskConical size={14} style={{ color: "#B8934B" }} />
+                <span style={{ fontFamily: "Inter, sans-serif", fontSize: "0.75rem", fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase", color: "#B8934B" }}>
                   Innovation Lab
                 </span>
               </motion.div>
@@ -2166,7 +2166,7 @@ function InnovationSection() {
                   fontFamily: "Syne, sans-serif",
                   fontSize: "clamp(2rem, 4vw, 3.5rem)",
                   fontWeight: 800,
-                  color: "#F8FAFC",
+                  color: "var(--color-text-primary)",
                   lineHeight: 1.05,
                   letterSpacing: "-0.03em",
                   marginBottom: "20px",
@@ -2176,7 +2176,7 @@ function InnovationSection() {
                 <br />
                 <span
                   style={{
-                    background: "linear-gradient(135deg, #7C3AED, #A855F7, #06B6D4)",
+                    background: "linear-gradient(135deg, #6C4E31, #B8934B, #06B6D4)",
                     WebkitBackgroundClip: "text",
                     WebkitTextFillColor: "transparent",
                     backgroundClip: "text",
@@ -2193,7 +2193,7 @@ function InnovationSection() {
                 style={{
                   fontFamily: "Inter, sans-serif",
                   fontSize: "0.9375rem",
-                  color: "#94A3B8",
+                  color: "var(--color-text-muted)",
                   lineHeight: 1.7,
                   marginBottom: "32px",
                   maxWidth: "480px",
@@ -2209,13 +2209,13 @@ function InnovationSection() {
                 style={{ display: "flex", gap: "16px" }}
               >
                 <div style={{ textAlign: "center" }}>
-                  <div style={{ fontFamily: "Syne, sans-serif", fontSize: "2rem", fontWeight: 800, color: "#A855F7" }}>5+</div>
-                  <div style={{ fontFamily: "Inter, sans-serif", fontSize: "0.75rem", color: "#475569" }}>Active Projects</div>
+                  <div style={{ fontFamily: "Syne, sans-serif", fontSize: "2rem", fontWeight: 800, color: "#B8934B" }}>5+</div>
+                  <div style={{ fontFamily: "Inter, sans-serif", fontSize: "0.75rem", color: "var(--color-text-secondary)" }}>Active Projects</div>
                 </div>
-                <div style={{ width: "1px", background: "rgba(255,255,255,0.06)" }} />
+                <div style={{ width: "1px", background: "var(--color-surface-2)" }} />
                 <div style={{ textAlign: "center" }}>
                   <div style={{ fontFamily: "Syne, sans-serif", fontSize: "2rem", fontWeight: 800, color: "#06B6D4" }}>10+</div>
-                  <div style={{ fontFamily: "Inter, sans-serif", fontSize: "0.75rem", color: "#475569" }}>Technologies</div>
+                  <div style={{ fontFamily: "Inter, sans-serif", fontSize: "0.75rem", color: "var(--color-text-secondary)" }}>Technologies</div>
                 </div>
               </motion.div>
 
@@ -2232,13 +2232,13 @@ function InnovationSection() {
                     alignItems: "center",
                     gap: "10px",
                     padding: "14px 28px",
-                    background: "linear-gradient(135deg, #7C3AED, #A855F7)",
+                    background: "linear-gradient(135deg, #6C4E31, #B8934B)",
                     color: "#fff",
                     borderRadius: "100px",
                     fontFamily: "Inter, sans-serif",
                     fontWeight: 600,
                     textDecoration: "none",
-                    boxShadow: "0 12px 40px rgba(124,58,237,0.3)",
+                    boxShadow: "0 12px 40px rgba(184,147,75,0.3)",
                   }}
                 >
                   <FlaskConical size={16} />
@@ -2280,10 +2280,10 @@ function InnovationSection() {
                   }}
                 >
                   <div style={{ fontSize: "2rem", marginBottom: "12px" }}>{item.icon}</div>
-                  <h4 style={{ fontFamily: "Syne, sans-serif", fontWeight: 700, fontSize: "1rem", color: "#F8FAFC", marginBottom: "8px" }}>
+                  <h4 style={{ fontFamily: "Syne, sans-serif", fontWeight: 700, fontSize: "1rem", color: "var(--color-text-primary)", marginBottom: "8px" }}>
                     {item.title}
                   </h4>
-                  <p style={{ fontFamily: "Inter, sans-serif", fontSize: "0.8rem", color: "#94A3B8", lineHeight: 1.6 }}>
+                  <p style={{ fontFamily: "Inter, sans-serif", fontSize: "0.8rem", color: "var(--color-text-muted)", lineHeight: 1.6 }}>
                     {item.desc}
                   </p>
                 </motion.div>
@@ -2324,8 +2324,8 @@ function CTASection() {
           position: "absolute",
           inset: 0,
           background: `
-            radial-gradient(ellipse at 30% 50%, rgba(124,58,237,0.15) 0%, transparent 60%),
-            radial-gradient(ellipse at 70% 50%, rgba(6,182,212,0.1) 0%, transparent 60%)
+            radial-gradient(ellipse at 30% 50%, rgba(184,147,75,0.15) 0%, transparent 60%),
+            radial-gradient(ellipse at 70% 50%, rgba(108,78,49,0.1) 0%, transparent 60%)
           `,
           pointerEvents: "none",
         }}
@@ -2351,14 +2351,14 @@ function CTASection() {
                 alignItems: "center",
                 gap: "8px",
                 padding: "8px 20px",
-                border: "1px solid rgba(124, 58, 237, 0.3)",
+                border: "1px solid rgba(184, 147, 75, 0.3)",
                 borderRadius: "100px",
                 marginBottom: "32px",
-                background: "rgba(124, 58, 237, 0.08)",
+                background: "rgba(184, 147, 75, 0.08)",
               }}
             >
-              <Award size={14} style={{ color: "#A855F7" }} />
-              <span style={{ fontFamily: "Inter, sans-serif", fontSize: "0.8rem", fontWeight: 600, color: "#A855F7" }}>
+              <Award size={14} style={{ color: "#B8934B" }} />
+              <span style={{ fontFamily: "Inter, sans-serif", fontSize: "0.8rem", fontWeight: 600, color: "#B8934B" }}>
                 Premium Quality Guaranteed
               </span>
             </div>
@@ -2373,11 +2373,11 @@ function CTASection() {
                 marginBottom: "24px",
               }}
             >
-              <span style={{ color: "#F8FAFC" }}>Ready to Build</span>
+              <span style={{ color: "var(--color-text-primary)" }}>Ready to Build</span>
               <br />
               <span
                 style={{
-                  background: "linear-gradient(135deg, #7C3AED, #A855F7, #06B6D4)",
+                  background: "linear-gradient(135deg, #6C4E31, #B8934B, #06B6D4)",
                   WebkitBackgroundClip: "text",
                   WebkitTextFillColor: "transparent",
                   backgroundClip: "text",
@@ -2391,7 +2391,7 @@ function CTASection() {
               style={{
                 fontFamily: "Inter, sans-serif",
                 fontSize: "clamp(0.9rem, 2vw, 1.15rem)",
-                color: "#94A3B8",
+                color: "var(--color-text-muted)",
                 lineHeight: 1.7,
                 marginBottom: "48px",
               }}
@@ -2407,14 +2407,14 @@ function CTASection() {
                   alignItems: "center",
                   gap: "10px",
                   padding: "18px 44px",
-                  background: "linear-gradient(135deg, #7C3AED, #A855F7)",
+                  background: "linear-gradient(135deg, #6C4E31, #B8934B)",
                   color: "#fff",
                   borderRadius: "100px",
                   fontFamily: "Inter, sans-serif",
                   fontWeight: 700,
                   fontSize: "1rem",
                   textDecoration: "none",
-                  boxShadow: "0 24px 80px rgba(124, 58, 237, 0.4)",
+                  boxShadow: "0 24px 80px rgba(184, 147, 75, 0.4)",
                   letterSpacing: "0.01em",
                 }}
               >
@@ -2429,8 +2429,8 @@ function CTASection() {
                   gap: "10px",
                   padding: "17px 44px",
                   background: "transparent",
-                  border: "1px solid rgba(255,255,255,0.1)",
-                  color: "#F8FAFC",
+                  border: "1px solid var(--color-border)",
+                  color: "var(--color-text-primary)",
                   borderRadius: "100px",
                   fontFamily: "Inter, sans-serif",
                   fontWeight: 500,
@@ -2464,7 +2464,7 @@ function CTASection() {
                   style={{ display: "flex", alignItems: "center", gap: "8px" }}
                 >
                   <span style={{ fontSize: "1rem" }}>{item.icon}</span>
-                  <span style={{ fontFamily: "Inter, sans-serif", fontSize: "0.8rem", color: "#475569" }}>
+                  <span style={{ fontFamily: "Inter, sans-serif", fontSize: "0.8rem", color: "var(--color-text-secondary)" }}>
                     {item.text}
                   </span>
                 </div>

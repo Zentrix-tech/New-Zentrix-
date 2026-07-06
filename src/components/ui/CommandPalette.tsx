@@ -105,10 +105,10 @@ export default function CommandPalette() {
                 alignItems: "center",
                 gap: "12px",
                 padding: "16px 20px",
-                borderBottom: "1px solid rgba(255,255,255,0.06)",
+                borderBottom: "1px solid var(--color-surface-2)",
               }}
             >
-              <Search size={18} style={{ color: "#475569", flexShrink: 0 }} />
+              <Search size={18} style={{ color: "var(--color-text-secondary)", flexShrink: 0 }} />
               <input
                 ref={inputRef}
                 value={query}
@@ -122,12 +122,12 @@ export default function CommandPalette() {
                   background: "none",
                   border: "none",
                   outline: "none",
-                  color: "#F8FAFC",
+                  color: "var(--color-text-primary)",
                   fontFamily: "Inter, sans-serif",
                   fontSize: "1rem",
                 }}
               />
-              <button onClick={close} style={{ color: "#475569", cursor: "pointer", background: "none", border: "none" }}>
+              <button onClick={close} style={{ color: "var(--color-text-secondary)", cursor: "pointer", background: "none", border: "none" }}>
                 <X size={18} />
               </button>
             </div>
@@ -143,7 +143,7 @@ export default function CommandPalette() {
                       fontWeight: 600,
                       letterSpacing: "0.1em",
                       textTransform: "uppercase",
-                      color: "#475569",
+                      color: "var(--color-text-secondary)",
                     }}
                   >
                     {category}
@@ -166,8 +166,8 @@ export default function CommandPalette() {
                             width: "100%",
                             padding: "10px 12px",
                             borderRadius: "10px",
-                            background: globalIndex === selected ? "rgba(124, 58, 237, 0.15)" : "transparent",
-                            border: globalIndex === selected ? "1px solid rgba(124, 58, 237, 0.3)" : "1px solid transparent",
+                            background: globalIndex === selected ? "rgba(184, 147, 75, 0.15)" : "transparent",
+                            border: globalIndex === selected ? "1px solid rgba(184, 147, 75, 0.3)" : "1px solid transparent",
                             cursor: "pointer",
                             transition: "all 0.15s ease",
                             textAlign: "left",
@@ -178,19 +178,19 @@ export default function CommandPalette() {
                               width: 32,
                               height: 32,
                               borderRadius: 8,
-                              background: globalIndex === selected ? "rgba(124, 58, 237, 0.2)" : "rgba(255,255,255,0.04)",
+                              background: globalIndex === selected ? "rgba(184, 147, 75, 0.2)" : "var(--color-surface)",
                               display: "flex",
                               alignItems: "center",
                               justifyContent: "center",
                               flexShrink: 0,
                             }}
                           >
-                            <Icon size={16} style={{ color: globalIndex === selected ? "#A855F7" : "#94A3B8" }} />
+                            <Icon size={16} style={{ color: globalIndex === selected ? "#B8934B" : "var(--color-text-muted)" }} />
                           </div>
-                          <span style={{ flex: 1, color: "#F8FAFC", fontSize: "0.9rem", fontFamily: "Inter, sans-serif" }}>
+                          <span style={{ flex: 1, color: "var(--color-text-primary)", fontSize: "0.9rem", fontFamily: "Inter, sans-serif" }}>
                             {cmd.label}
                           </span>
-                          {globalIndex === selected && <ArrowRight size={14} style={{ color: "#A855F7" }} />}
+                          {globalIndex === selected && <ArrowRight size={14} style={{ color: "#B8934B" }} />}
                         </motion.button>
                       );
                     })}
@@ -201,7 +201,7 @@ export default function CommandPalette() {
                   style={{
                     padding: "40px 20px",
                     textAlign: "center",
-                    color: "#475569",
+                    color: "var(--color-text-secondary)",
                     fontFamily: "Inter, sans-serif",
                   }}
                 >
@@ -214,11 +214,11 @@ export default function CommandPalette() {
             <div
               style={{
                 padding: "10px 20px",
-                borderTop: "1px solid rgba(255,255,255,0.06)",
+                borderTop: "1px solid var(--color-surface-2)",
                 display: "flex",
                 gap: "16px",
                 fontSize: "0.7rem",
-                color: "#475569",
+                color: "var(--color-text-secondary)",
                 fontFamily: "Inter, sans-serif",
               }}
             >

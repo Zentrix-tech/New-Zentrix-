@@ -46,9 +46,9 @@ const projectTypes = [
 ];
 
 const reviews = [
-  { name: "Arun Kumar", role: "CEO, HealthFirst Clinic", text: "Zentrix delivered an incredible HMS that transformed our hospital. The quality and attention to detail is extraordinary. 100% recommended!", rating: 5, color: "#7C3AED" },
+  { name: "Arun Kumar", role: "CEO, HealthFirst Clinic", text: "Zentrix delivered an incredible HMS that transformed our hospital. The quality and attention to detail is extraordinary. 100% recommended!", rating: 5, color: "#6C4E31" },
   { name: "Priya Sharma", role: "Director, Excel School", text: "The school management system they built is world-class. Parents, teachers, and admin all love it. They exceeded every expectation.", rating: 5, color: "#06B6D4" },
-  { name: "Rajesh Nair", role: "Founder, AutoFlow", text: "Their AI automation cut our manual work by 80%. Delivered on time, under budget. The team is incredibly professional and responsive.", rating: 5, color: "#A855F7" },
+  { name: "Rajesh Nair", role: "Founder, AutoFlow", text: "Their AI automation cut our manual work by 80%. Delivered on time, under budget. The team is incredibly professional and responsive.", rating: 5, color: "#B8934B" },
   { name: "Kavitha Devi", role: "CTO, RetailPro", text: "Best agency we've worked with. The website and inventory system they built drives real results every day. True partners, not just vendors.", rating: 5, color: "#10B981" },
   { name: "Mohammed Farhan", role: "MD, FarhanTraders", text: "The billing and inventory software they built for us is perfect. Saved us hours every day. Professional, fast, and excellent support.", rating: 5, color: "#F59E0B" },
   { name: "Sangeetha R.", role: "Principal, Bright Future", text: "Our school's digital transformation was seamless thanks to Zentrix. The parent app especially has been a game-changer for communication.", rating: 5, color: "#EC4899" },
@@ -65,8 +65,8 @@ function ReviewCard({ review, index }: { review: typeof reviews[0]; index: numbe
       transition={{ duration: 0.7, delay: index * 0.08, ease: [0.16, 1, 0.3, 1] }}
       style={{
         padding: "28px",
-        background: "rgba(255,255,255,0.02)",
-        border: "1px solid rgba(255,255,255,0.06)",
+        background: "var(--color-surface)",
+        border: "1px solid var(--color-surface-2)",
         borderRadius: "20px",
         transition: "all 0.3s ease",
       }}
@@ -75,8 +75,8 @@ function ReviewCard({ review, index }: { review: typeof reviews[0]; index: numbe
         e.currentTarget.style.background = `${review.color}05`;
       }}
       onMouseLeave={(e) => {
-        e.currentTarget.style.borderColor = "rgba(255,255,255,0.06)";
-        e.currentTarget.style.background = "rgba(255,255,255,0.02)";
+        e.currentTarget.style.borderColor = "var(--color-surface-2)";
+        e.currentTarget.style.background = "var(--color-surface)";
       }}
     >
       <div style={{ display: "flex", gap: "3px", marginBottom: "14px" }}>
@@ -84,7 +84,7 @@ function ReviewCard({ review, index }: { review: typeof reviews[0]; index: numbe
           <Star key={i} size={14} style={{ color: "#F59E0B", fill: "#F59E0B" }} />
         ))}
       </div>
-      <p style={{ fontFamily: "Inter, sans-serif", fontSize: "0.9rem", color: "#94A3B8", lineHeight: 1.7, marginBottom: "20px", fontStyle: "italic" }}>
+      <p style={{ fontFamily: "Inter, sans-serif", fontSize: "0.9rem", color: "var(--color-text-muted)", lineHeight: 1.7, marginBottom: "20px", fontStyle: "italic" }}>
         &ldquo;{review.text}&rdquo;
       </p>
       <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
@@ -106,8 +106,8 @@ function ReviewCard({ review, index }: { review: typeof reviews[0]; index: numbe
           {review.name[0]}
         </div>
         <div>
-          <div style={{ fontFamily: "Syne, sans-serif", fontWeight: 600, fontSize: "0.875rem", color: "#F8FAFC" }}>{review.name}</div>
-          <div style={{ fontFamily: "Inter, sans-serif", fontSize: "0.75rem", color: "#475569" }}>{review.role}</div>
+          <div style={{ fontFamily: "Syne, sans-serif", fontWeight: 600, fontSize: "0.875rem", color: "var(--color-text-primary)" }}>{review.name}</div>
+          <div style={{ fontFamily: "Inter, sans-serif", fontSize: "0.75rem", color: "var(--color-text-secondary)" }}>{review.role}</div>
         </div>
       </div>
     </motion.div>
@@ -163,8 +163,8 @@ export default function ContactPage() {
             position: "absolute",
             inset: 0,
             background: `
-              radial-gradient(ellipse at 30% 50%, rgba(124,58,237,0.12) 0%, transparent 60%),
-              radial-gradient(ellipse at 70% 30%, rgba(6,182,212,0.08) 0%, transparent 50%)
+              radial-gradient(ellipse at 30% 50%, rgba(184,147,75,0.12) 0%, transparent 60%),
+              radial-gradient(ellipse at 70% 30%, rgba(108,78,49,0.08) 0%, transparent 50%)
             `,
           }}
         />
@@ -177,14 +177,14 @@ export default function ContactPage() {
               alignItems: "center",
               gap: "8px",
               padding: "6px 16px",
-              border: "1px solid rgba(124,58,237,0.3)",
+              border: "1px solid rgba(184,147,75,0.3)",
               borderRadius: "100px",
               marginBottom: "24px",
-              background: "rgba(124,58,237,0.08)",
+              background: "rgba(184,147,75,0.08)",
             }}
           >
-            <span style={{ width: 6, height: 6, borderRadius: "50%", background: "#A855F7", animation: "pulse-glow 2s ease-in-out infinite" }} />
-            <span style={{ fontFamily: "Inter, sans-serif", fontSize: "0.75rem", fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase", color: "#A855F7" }}>
+            <span style={{ width: 6, height: 6, borderRadius: "50%", background: "#B8934B", animation: "pulse-glow 2s ease-in-out infinite" }} />
+            <span style={{ fontFamily: "Inter, sans-serif", fontSize: "0.75rem", fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase", color: "#B8934B" }}>
               Let&apos;s Build Together
             </span>
           </motion.div>
@@ -202,11 +202,11 @@ export default function ContactPage() {
               marginBottom: "24px",
             }}
           >
-            <span style={{ color: "#F8FAFC" }}>Start Your</span>
+            <span style={{ color: "var(--color-text-primary)" }}>Start Your</span>
             <br />
             <span
               style={{
-                background: "linear-gradient(135deg, #7C3AED, #A855F7, #06B6D4)",
+                background: "linear-gradient(135deg, #6C4E31, #B8934B, #06B6D4)",
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
                 backgroundClip: "text",
@@ -223,7 +223,7 @@ export default function ContactPage() {
             style={{
               fontFamily: "Inter, sans-serif",
               fontSize: "clamp(0.95rem, 2vw, 1.15rem)",
-              color: "#94A3B8",
+              color: "var(--color-text-muted)",
               lineHeight: 1.7,
               maxWidth: "560px",
               margin: "0 auto",
@@ -254,13 +254,13 @@ export default function ContactPage() {
               transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
               style={{
                 padding: "32px",
-                background: "rgba(124,58,237,0.06)",
-                border: "1px solid rgba(124,58,237,0.2)",
+                background: "rgba(184,147,75,0.06)",
+                border: "1px solid rgba(184,147,75,0.2)",
                 borderRadius: "20px",
                 marginBottom: "16px",
               }}
             >
-              <h3 style={{ fontFamily: "Syne, sans-serif", fontWeight: 700, fontSize: "1.1rem", color: "#F8FAFC", marginBottom: "20px" }}>
+              <h3 style={{ fontFamily: "Syne, sans-serif", fontWeight: 700, fontSize: "1.1rem", color: "var(--color-text-primary)", marginBottom: "20px" }}>
                 Get in Touch
               </h3>
               {[
@@ -285,19 +285,19 @@ export default function ContactPage() {
                       width: 36,
                       height: 36,
                       borderRadius: "10px",
-                      background: "rgba(124,58,237,0.12)",
-                      border: "1px solid rgba(124,58,237,0.2)",
+                      background: "rgba(184,147,75,0.12)",
+                      border: "1px solid rgba(184,147,75,0.2)",
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
                       flexShrink: 0,
                     }}
                   >
-                    <Icon size={15} style={{ color: "#A855F7" }} />
+                    <Icon size={15} style={{ color: "#B8934B" }} />
                   </div>
                   <div>
-                    <div style={{ fontFamily: "Inter, sans-serif", fontSize: "0.7rem", color: "#475569", marginBottom: "2px" }}>{label}</div>
-                    <div style={{ fontFamily: "Inter, sans-serif", fontSize: "0.85rem", color: "#94A3B8" }}>{value}</div>
+                    <div style={{ fontFamily: "Inter, sans-serif", fontSize: "0.7rem", color: "var(--color-text-secondary)", marginBottom: "2px" }}>{label}</div>
+                    <div style={{ fontFamily: "Inter, sans-serif", fontSize: "0.85rem", color: "var(--color-text-muted)" }}>{value}</div>
                   </div>
                 </a>
               ))}
@@ -341,8 +341,8 @@ export default function ContactPage() {
                 <MessageSquare size={18} style={{ color: "#25D366" }} />
               </div>
               <div>
-                <div style={{ fontFamily: "Syne, sans-serif", fontWeight: 600, fontSize: "0.9rem", color: "#F8FAFC" }}>WhatsApp Us</div>
-                <div style={{ fontFamily: "Inter, sans-serif", fontSize: "0.75rem", color: "#475569" }}>Quick response guaranteed</div>
+                <div style={{ fontFamily: "Syne, sans-serif", fontWeight: 600, fontSize: "0.9rem", color: "var(--color-text-primary)" }}>WhatsApp Us</div>
+                <div style={{ fontFamily: "Inter, sans-serif", fontSize: "0.75rem", color: "var(--color-text-secondary)" }}>Quick response guaranteed</div>
               </div>
             </motion.a>
 
@@ -353,8 +353,8 @@ export default function ContactPage() {
               transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
               style={{
                 padding: "20px",
-                background: "rgba(255,255,255,0.02)",
-                border: "1px solid rgba(255,255,255,0.06)",
+                background: "var(--color-surface)",
+                border: "1px solid var(--color-surface-2)",
                 borderRadius: "16px",
               }}
             >
@@ -365,7 +365,7 @@ export default function ContactPage() {
               ].map(({ icon: Icon, text, color }) => (
                 <div key={text} style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "12px" }}>
                   <Icon size={14} style={{ color }} />
-                  <span style={{ fontFamily: "Inter, sans-serif", fontSize: "0.8rem", color: "#94A3B8" }}>{text}</span>
+                  <span style={{ fontFamily: "Inter, sans-serif", fontSize: "0.8rem", color: "var(--color-text-muted)" }}>{text}</span>
                 </div>
               ))}
             </motion.div>
@@ -377,8 +377,8 @@ export default function ContactPage() {
             animate={inView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
             style={{
-              background: "rgba(255,255,255,0.02)",
-              border: "1px solid rgba(124,58,237,0.15)",
+              background: "var(--color-surface)",
+              border: "1px solid rgba(184,147,75,0.15)",
               borderRadius: "24px",
               padding: "clamp(24px,4vw,48px)",
               backdropFilter: "blur(20px)",
@@ -387,10 +387,10 @@ export default function ContactPage() {
             {submitted ? (
               <div style={{ textAlign: "center", padding: "60px 20px" }}>
                 <div style={{ fontSize: "4rem", marginBottom: "20px" }}>🎉</div>
-                <h3 style={{ fontFamily: "Syne, sans-serif", fontWeight: 700, fontSize: "1.5rem", color: "#F8FAFC", marginBottom: "12px" }}>
+                <h3 style={{ fontFamily: "Syne, sans-serif", fontWeight: 700, fontSize: "1.5rem", color: "var(--color-text-primary)", marginBottom: "12px" }}>
                   Message Sent!
                 </h3>
-                <p style={{ fontFamily: "Inter, sans-serif", fontSize: "1rem", color: "#94A3B8", marginBottom: "24px" }}>
+                <p style={{ fontFamily: "Inter, sans-serif", fontSize: "1rem", color: "var(--color-text-muted)", marginBottom: "24px" }}>
                   Thank you for reaching out. We&apos;ll review your project and get back to you within 24 hours.
                 </p>
                 <Link
@@ -400,7 +400,7 @@ export default function ContactPage() {
                     alignItems: "center",
                     gap: "8px",
                     padding: "12px 24px",
-                    background: "linear-gradient(135deg, #7C3AED, #A855F7)",
+                    background: "linear-gradient(135deg, #6C4E31, #B8934B)",
                     color: "#fff",
                     borderRadius: "100px",
                     fontFamily: "Inter, sans-serif",
@@ -413,14 +413,14 @@ export default function ContactPage() {
               </div>
             ) : (
               <form onSubmit={handleSubmit(onSubmit)}>
-                <h3 style={{ fontFamily: "Syne, sans-serif", fontWeight: 700, fontSize: "1.3rem", color: "#F8FAFC", marginBottom: "28px" }}>
+                <h3 style={{ fontFamily: "Syne, sans-serif", fontWeight: 700, fontSize: "1.3rem", color: "var(--color-text-primary)", marginBottom: "28px" }}>
                   Tell us about your project
                 </h3>
 
                 {/* Name + Company row */}
                 <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px", marginBottom: "16px" }}>
                   <div>
-                    <label style={{ fontFamily: "Inter, sans-serif", fontSize: "0.8rem", color: "#94A3B8", display: "block", marginBottom: "6px" }}>
+                    <label style={{ fontFamily: "Inter, sans-serif", fontSize: "0.8rem", color: "var(--color-text-muted)", display: "block", marginBottom: "6px" }}>
                       Full Name *
                     </label>
                     <input
@@ -429,11 +429,11 @@ export default function ContactPage() {
                       className="input-zentrix"
                       style={{
                         width: "100%",
-                        background: "rgba(255,255,255,0.03)",
-                        border: errors.name ? "1px solid #EF4444" : "1px solid rgba(255,255,255,0.06)",
+                        background: "var(--color-surface)",
+                        border: errors.name ? "1px solid #EF4444" : "1px solid var(--color-surface-2)",
                         borderRadius: "10px",
                         padding: "12px 16px",
-                        color: "#F8FAFC",
+                        color: "var(--color-text-primary)",
                         fontFamily: "Inter, sans-serif",
                         fontSize: "0.9rem",
                         outline: "none",
@@ -442,7 +442,7 @@ export default function ContactPage() {
                     {errors.name && <p style={{ fontFamily: "Inter, sans-serif", fontSize: "0.75rem", color: "#EF4444", marginTop: "4px" }}>{errors.name.message}</p>}
                   </div>
                   <div>
-                    <label style={{ fontFamily: "Inter, sans-serif", fontSize: "0.8rem", color: "#94A3B8", display: "block", marginBottom: "6px" }}>
+                    <label style={{ fontFamily: "Inter, sans-serif", fontSize: "0.8rem", color: "var(--color-text-muted)", display: "block", marginBottom: "6px" }}>
                       Company (optional)
                     </label>
                     <input
@@ -450,11 +450,11 @@ export default function ContactPage() {
                       placeholder="Company name"
                       style={{
                         width: "100%",
-                        background: "rgba(255,255,255,0.03)",
-                        border: "1px solid rgba(255,255,255,0.06)",
+                        background: "var(--color-surface)",
+                        border: "1px solid var(--color-surface-2)",
                         borderRadius: "10px",
                         padding: "12px 16px",
-                        color: "#F8FAFC",
+                        color: "var(--color-text-primary)",
                         fontFamily: "Inter, sans-serif",
                         fontSize: "0.9rem",
                         outline: "none",
@@ -466,18 +466,18 @@ export default function ContactPage() {
                 {/* Email + Phone */}
                 <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px", marginBottom: "16px" }}>
                   <div>
-                    <label style={{ fontFamily: "Inter, sans-serif", fontSize: "0.8rem", color: "#94A3B8", display: "block", marginBottom: "6px" }}>Email *</label>
+                    <label style={{ fontFamily: "Inter, sans-serif", fontSize: "0.8rem", color: "var(--color-text-muted)", display: "block", marginBottom: "6px" }}>Email *</label>
                     <input
                       {...register("email")}
                       type="email"
                       placeholder="you@company.com"
                       style={{
                         width: "100%",
-                        background: "rgba(255,255,255,0.03)",
-                        border: errors.email ? "1px solid #EF4444" : "1px solid rgba(255,255,255,0.06)",
+                        background: "var(--color-surface)",
+                        border: errors.email ? "1px solid #EF4444" : "1px solid var(--color-surface-2)",
                         borderRadius: "10px",
                         padding: "12px 16px",
-                        color: "#F8FAFC",
+                        color: "var(--color-text-primary)",
                         fontFamily: "Inter, sans-serif",
                         fontSize: "0.9rem",
                         outline: "none",
@@ -486,17 +486,17 @@ export default function ContactPage() {
                     {errors.email && <p style={{ fontFamily: "Inter, sans-serif", fontSize: "0.75rem", color: "#EF4444", marginTop: "4px" }}>{errors.email.message}</p>}
                   </div>
                   <div>
-                    <label style={{ fontFamily: "Inter, sans-serif", fontSize: "0.8rem", color: "#94A3B8", display: "block", marginBottom: "6px" }}>Phone / WhatsApp *</label>
+                    <label style={{ fontFamily: "Inter, sans-serif", fontSize: "0.8rem", color: "var(--color-text-muted)", display: "block", marginBottom: "6px" }}>Phone / WhatsApp *</label>
                     <input
                       {...register("phone")}
                       placeholder="+91 98765 43210"
                       style={{
                         width: "100%",
-                        background: "rgba(255,255,255,0.03)",
-                        border: errors.phone ? "1px solid #EF4444" : "1px solid rgba(255,255,255,0.06)",
+                        background: "var(--color-surface)",
+                        border: errors.phone ? "1px solid #EF4444" : "1px solid var(--color-surface-2)",
                         borderRadius: "10px",
                         padding: "12px 16px",
-                        color: "#F8FAFC",
+                        color: "var(--color-text-primary)",
                         fontFamily: "Inter, sans-serif",
                         fontSize: "0.9rem",
                         outline: "none",
@@ -514,16 +514,16 @@ export default function ContactPage() {
                     { label: "Timeline *", name: "timeline" as const, options: timelineOptions },
                   ].map(({ label, name, options }) => (
                     <div key={name}>
-                      <label style={{ fontFamily: "Inter, sans-serif", fontSize: "0.8rem", color: "#94A3B8", display: "block", marginBottom: "6px" }}>{label}</label>
+                      <label style={{ fontFamily: "Inter, sans-serif", fontSize: "0.8rem", color: "var(--color-text-muted)", display: "block", marginBottom: "6px" }}>{label}</label>
                       <select
                         {...register(name)}
                         style={{
                           width: "100%",
                           background: "var(--color-bg-secondary)",
-                          border: errors[name] ? "1px solid #EF4444" : "1px solid rgba(255,255,255,0.06)",
+                          border: errors[name] ? "1px solid #EF4444" : "1px solid var(--color-surface-2)",
                           borderRadius: "10px",
                           padding: "12px 16px",
-                          color: "#94A3B8",
+                          color: "var(--color-text-muted)",
                           fontFamily: "Inter, sans-serif",
                           fontSize: "0.875rem",
                           outline: "none",
@@ -539,7 +539,7 @@ export default function ContactPage() {
 
                 {/* Services */}
                 <div style={{ marginBottom: "20px" }}>
-                  <label style={{ fontFamily: "Inter, sans-serif", fontSize: "0.8rem", color: "#94A3B8", display: "block", marginBottom: "10px" }}>
+                  <label style={{ fontFamily: "Inter, sans-serif", fontSize: "0.8rem", color: "var(--color-text-muted)", display: "block", marginBottom: "10px" }}>
                     Services Interested In * (select all that apply)
                   </label>
                   <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}>
@@ -552,12 +552,12 @@ export default function ContactPage() {
                           padding: "7px 14px",
                           borderRadius: "100px",
                           border: selectedServices.includes(service)
-                            ? "1px solid rgba(124,58,237,0.5)"
-                            : "1px solid rgba(255,255,255,0.06)",
+                            ? "1px solid rgba(184,147,75,0.5)"
+                            : "1px solid var(--color-surface-2)",
                           background: selectedServices.includes(service)
-                            ? "rgba(124,58,237,0.15)"
-                            : "rgba(255,255,255,0.03)",
-                          color: selectedServices.includes(service) ? "#A855F7" : "#94A3B8",
+                            ? "rgba(184,147,75,0.15)"
+                            : "var(--color-surface)",
+                          color: selectedServices.includes(service) ? "#B8934B" : "var(--color-text-muted)",
                           fontFamily: "Inter, sans-serif",
                           fontSize: "0.8rem",
                           fontWeight: 500,
@@ -574,7 +574,7 @@ export default function ContactPage() {
 
                 {/* Message */}
                 <div style={{ marginBottom: "24px" }}>
-                  <label style={{ fontFamily: "Inter, sans-serif", fontSize: "0.8rem", color: "#94A3B8", display: "block", marginBottom: "6px" }}>
+                  <label style={{ fontFamily: "Inter, sans-serif", fontSize: "0.8rem", color: "var(--color-text-muted)", display: "block", marginBottom: "6px" }}>
                     Project Details *
                   </label>
                   <textarea
@@ -583,11 +583,11 @@ export default function ContactPage() {
                     placeholder="Tell us about your project — what you're building, key requirements, any existing systems, and your goals..."
                     style={{
                       width: "100%",
-                      background: "rgba(255,255,255,0.03)",
-                      border: errors.message ? "1px solid #EF4444" : "1px solid rgba(255,255,255,0.06)",
+                      background: "var(--color-surface)",
+                      border: errors.message ? "1px solid #EF4444" : "1px solid var(--color-surface-2)",
                       borderRadius: "10px",
                       padding: "14px 16px",
-                      color: "#F8FAFC",
+                      color: "var(--color-text-primary)",
                       fontFamily: "Inter, sans-serif",
                       fontSize: "0.9rem",
                       outline: "none",
@@ -605,7 +605,7 @@ export default function ContactPage() {
                   style={{
                     width: "100%",
                     padding: "16px",
-                    background: submitting ? "rgba(124,58,237,0.5)" : "linear-gradient(135deg, #7C3AED, #A855F7)",
+                    background: submitting ? "rgba(184,147,75,0.5)" : "linear-gradient(135deg, #6C4E31, #B8934B)",
                     color: "#fff",
                     border: "none",
                     borderRadius: "12px",
@@ -617,7 +617,7 @@ export default function ContactPage() {
                     alignItems: "center",
                     justifyContent: "center",
                     gap: "10px",
-                    boxShadow: submitting ? "none" : "0 16px 40px rgba(124,58,237,0.35)",
+                    boxShadow: submitting ? "none" : "0 16px 40px rgba(184,147,75,0.35)",
                     transition: "all 0.3s ease",
                   }}
                 >
@@ -653,7 +653,7 @@ export default function ContactPage() {
         style={{
           padding: "clamp(60px,8vw,100px) 0",
           background: "var(--color-bg)",
-          borderTop: "1px solid rgba(255,255,255,0.04)",
+          borderTop: "1px solid var(--color-surface)",
         }}
         id="reviews"
       >
@@ -670,7 +670,7 @@ export default function ContactPage() {
                 fontFamily: "Syne, sans-serif",
                 fontSize: "clamp(2rem,4vw,3rem)",
                 fontWeight: 800,
-                color: "#F8FAFC",
+                color: "var(--color-text-primary)",
                 letterSpacing: "-0.03em",
                 marginBottom: "12px",
               }}
@@ -685,7 +685,7 @@ export default function ContactPage() {
               ].map((s) => (
                 <div key={s.l} style={{ textAlign: "center" }}>
                   <div style={{ fontFamily: "Syne, sans-serif", fontSize: "1.6rem", fontWeight: 800, color: "#F59E0B" }}>{s.v}</div>
-                  <div style={{ fontFamily: "Inter, sans-serif", fontSize: "0.75rem", color: "#475569" }}>{s.l}</div>
+                  <div style={{ fontFamily: "Inter, sans-serif", fontSize: "0.75rem", color: "var(--color-text-secondary)" }}>{s.l}</div>
                 </div>
               ))}
             </div>

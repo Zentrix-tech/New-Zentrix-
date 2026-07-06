@@ -19,7 +19,7 @@ const projects = [
     year: "2026",
     link: "https://www.avscollegeomalur.edu.in/",
     color: "#8B5CF6",
-    gradient: "linear-gradient(135deg, rgba(139,92,246,0.15), rgba(139,92,246,0.03))",
+    gradient: "linear-gradient(135deg, rgba(184,147,75,0.15), rgba(184,147,75,0.03))",
     description: "Official institutional web platform and student portal for AVS College of Arts & Science, providing access to academic resources, admissions, and college news.",
     problem: "The institution required a modernized, highly performant, and secure platform to represent the college online and handle heavy student traffic during admissions.",
     solution: "Designed and engineered a premium web portal with fast page loads, clean interface architecture, administrative portal endpoints, and complete mobile responsiveness.",
@@ -40,7 +40,7 @@ const projects = [
     year: "2026",
     link: "https://www.sakthikailashcollege.org/",
     color: "#EC4899",
-    gradient: "linear-gradient(135deg, rgba(236,72,153,0.15), rgba(236,72,153,0.03))",
+    gradient: "linear-gradient(135deg, rgba(108,78,49,0.15), rgba(108,78,49,0.03))",
     description: "Custom institutional website for Sakthi Kailash Women's College, highlighting courses, placement records, achievements, and departments.",
     problem: "Outdated website design that did not represent the premium infrastructure and placement quality of the institution.",
     solution: "Built a stunning, accessible web experience showcasing placement success, departmental profiles, and student campus achievements with dynamic gallery nodes.",
@@ -61,7 +61,7 @@ const projects = [
     year: "2026",
     link: "https://www.vallihospital.in/",
     color: "#06B6D4",
-    gradient: "linear-gradient(135deg, rgba(6,182,212,0.15), rgba(6,182,212,0.03))",
+    gradient: "linear-gradient(135deg, rgba(108,78,49,0.15), rgba(108,78,49,0.03))",
     description: "A comprehensive online presence and patient booking consultation portal for Valli Hospital, facilitating seamless healthcare access.",
     problem: "Patients faced long queues for consultation appointments, and details on hospital specializations were scattered.",
     solution: "Created a clean, modern medical portal with patient booking features, doctor profiles, dynamic specialization pages, and emergency hotline connections.",
@@ -102,8 +102,8 @@ const projects = [
     category: "Education",
     year: "2026",
     link: "https://www.avsenggcollege.ac.in/",
-    color: "#A855F7",
-    gradient: "linear-gradient(135deg, rgba(168,85,247,0.15), rgba(168,85,247,0.03))",
+    color: "#B8934B",
+    gradient: "linear-gradient(135deg, rgba(108,78,49,0.15), rgba(108,78,49,0.03))",
     description: "Comprehensive web infrastructure for AVS Engineering College, supporting academic notices, placement portals, online admissions, and department sites.",
     problem: "An old legacy PHP site that was difficult to maintain and had sluggish load times.",
     solution: "Re-engineered the entire core platform on a modern, high-performance tech stack, simplifying management and boosting page speed by 75%.",
@@ -176,8 +176,8 @@ function ProjectCard({ project, index }: { project: typeof projects[0]; index: n
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       style={{
-        background: hovered ? project.gradient : "rgba(255,255,255,0.02)",
-        border: `1px solid ${hovered ? project.color + "35" : "rgba(255,255,255,0.06)"}`,
+        background: hovered ? project.gradient : "var(--color-surface)",
+        border: `1px solid ${hovered ? project.color + "35" : "var(--color-surface-2)"}`,
         borderRadius: "24px",
         overflow: "hidden",
         transition: "all 0.4s cubic-bezier(0.16,1,0.3,1)",
@@ -201,7 +201,7 @@ function ProjectCard({ project, index }: { project: typeof projects[0]; index: n
           style={{
             position: "absolute",
             inset: 0,
-            backgroundImage: `linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px)`,
+            backgroundImage: `linear-gradient(var(--color-surface) 1px, transparent 1px), linear-gradient(90deg, var(--color-surface) 1px, transparent 1px)`,
             backgroundSize: "30px 30px",
           }}
         />
@@ -248,12 +248,12 @@ function ProjectCard({ project, index }: { project: typeof projects[0]; index: n
             top: "16px",
             right: "16px",
             padding: "4px 12px",
-            background: "rgba(255,255,255,0.06)",
-            border: "1px solid rgba(255,255,255,0.08)",
+            background: "var(--color-surface-2)",
+            border: "1px solid var(--color-border)",
             borderRadius: "100px",
             fontFamily: "JetBrains Mono, monospace",
             fontSize: "0.7rem",
-            color: "#94A3B8",
+            color: "var(--color-text-muted)",
           }}
         >
           {project.year}
@@ -262,7 +262,7 @@ function ProjectCard({ project, index }: { project: typeof projects[0]; index: n
 
       {/* Content */}
       <div style={{ padding: "28px" }}>
-        <div style={{ fontFamily: "Inter, sans-serif", fontSize: "0.8rem", color: "#475569", marginBottom: "6px" }}>
+        <div style={{ fontFamily: "Inter, sans-serif", fontSize: "0.8rem", color: "var(--color-text-secondary)", marginBottom: "6px" }}>
           {project.client}
         </div>
         <h3
@@ -270,7 +270,7 @@ function ProjectCard({ project, index }: { project: typeof projects[0]; index: n
             fontFamily: "Syne, sans-serif",
             fontWeight: 700,
             fontSize: "1.2rem",
-            color: "#F8FAFC",
+            color: "var(--color-text-primary)",
             letterSpacing: "-0.01em",
             marginBottom: "10px",
           }}
@@ -281,7 +281,7 @@ function ProjectCard({ project, index }: { project: typeof projects[0]; index: n
           style={{
             fontFamily: "Inter, sans-serif",
             fontSize: "0.85rem",
-            color: "#94A3B8",
+            color: "var(--color-text-muted)",
             lineHeight: 1.65,
             marginBottom: "20px",
           }}
@@ -305,7 +305,7 @@ function ProjectCard({ project, index }: { project: typeof projects[0]; index: n
               <div style={{ fontFamily: "Syne, sans-serif", fontWeight: 800, fontSize: "1.1rem", color: project.color }}>
                 {m.value}
               </div>
-              <div style={{ fontFamily: "Inter, sans-serif", fontSize: "0.65rem", color: "#475569" }}>
+              <div style={{ fontFamily: "Inter, sans-serif", fontSize: "0.65rem", color: "var(--color-text-secondary)" }}>
                 {m.label}
               </div>
             </div>
@@ -319,12 +319,12 @@ function ProjectCard({ project, index }: { project: typeof projects[0]; index: n
               key={t}
               style={{
                 padding: "3px 10px",
-                background: "rgba(255,255,255,0.04)",
-                border: "1px solid rgba(255,255,255,0.06)",
+                background: "var(--color-surface)",
+                border: "1px solid var(--color-surface-2)",
                 borderRadius: "100px",
                 fontFamily: "Inter, sans-serif",
                 fontSize: "0.7rem",
-                color: "#94A3B8",
+                color: "var(--color-text-muted)",
               }}
             >
               {t}
@@ -377,8 +377,8 @@ export default function WorksPage() {
             position: "absolute",
             inset: 0,
             background: `
-              radial-gradient(ellipse at 40% 40%, rgba(6,182,212,0.1) 0%, transparent 60%),
-              radial-gradient(ellipse at 70% 70%, rgba(124,58,237,0.08) 0%, transparent 50%)
+              radial-gradient(ellipse at 40% 40%, rgba(108,78,49,0.1) 0%, transparent 60%),
+              radial-gradient(ellipse at 70% 70%, rgba(184,147,75,0.08) 0%, transparent 50%)
             `,
           }}
         />
@@ -392,10 +392,10 @@ export default function WorksPage() {
               alignItems: "center",
               gap: "8px",
               padding: "6px 16px",
-              border: "1px solid rgba(6,182,212,0.3)",
+              border: "1px solid rgba(108,78,49,0.3)",
               borderRadius: "100px",
               marginBottom: "24px",
-              background: "rgba(6,182,212,0.06)",
+              background: "rgba(108,78,49,0.06)",
             }}
           >
             <span style={{ width: 6, height: 6, borderRadius: "50%", background: "#06B6D4" }} />
@@ -417,11 +417,11 @@ export default function WorksPage() {
               marginBottom: "24px",
             }}
           >
-            <span style={{ color: "#F8FAFC" }}>Work That</span>
+            <span style={{ color: "var(--color-text-primary)" }}>Work That</span>
             <br />
             <span
               style={{
-                background: "linear-gradient(135deg, #06B6D4, #22D3EE, #7C3AED)",
+                background: "linear-gradient(135deg, #06B6D4, #22D3EE, #6C4E31)",
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
                 backgroundClip: "text",
@@ -438,7 +438,7 @@ export default function WorksPage() {
             style={{
               fontFamily: "Inter, sans-serif",
               fontSize: "clamp(0.95rem, 2vw, 1.15rem)",
-              color: "#94A3B8",
+              color: "var(--color-text-muted)",
               lineHeight: 1.7,
               maxWidth: "560px",
               margin: "0 auto 48px",
@@ -461,7 +461,7 @@ export default function WorksPage() {
             ].map((s) => (
               <div key={s.l} style={{ textAlign: "center" }}>
                 <div style={{ fontFamily: "Syne, sans-serif", fontSize: "2rem", fontWeight: 800, color: "#06B6D4" }}>{s.v}</div>
-                <div style={{ fontFamily: "Inter, sans-serif", fontSize: "0.8rem", color: "#475569" }}>{s.l}</div>
+                <div style={{ fontFamily: "Inter, sans-serif", fontSize: "0.8rem", color: "var(--color-text-secondary)" }}>{s.l}</div>
               </div>
             ))}
           </motion.div>
@@ -476,7 +476,7 @@ export default function WorksPage() {
           zIndex: 10,
           background: "rgba(5,5,8,0.9)",
           backdropFilter: "blur(40px)",
-          borderBottom: "1px solid rgba(255,255,255,0.04)",
+          borderBottom: "1px solid var(--color-surface)",
           padding: "16px 0",
         }}
       >
@@ -489,9 +489,9 @@ export default function WorksPage() {
                 style={{
                   padding: "8px 18px",
                   borderRadius: "100px",
-                  border: activeFilter === cat ? "1px solid rgba(6,182,212,0.5)" : "1px solid rgba(255,255,255,0.06)",
-                  background: activeFilter === cat ? "rgba(6,182,212,0.12)" : "transparent",
-                  color: activeFilter === cat ? "#06B6D4" : "#94A3B8",
+                  border: activeFilter === cat ? "1px solid rgba(108,78,49,0.5)" : "1px solid var(--color-surface-2)",
+                  background: activeFilter === cat ? "rgba(108,78,49,0.12)" : "transparent",
+                  color: activeFilter === cat ? "#06B6D4" : "var(--color-text-muted)",
                   fontFamily: "Inter, sans-serif",
                   fontWeight: 500,
                   fontSize: "0.85rem",
@@ -537,7 +537,7 @@ export default function WorksPage() {
           padding: "clamp(60px,8vw,100px) 0",
           background: "var(--color-bg)",
           textAlign: "center",
-          borderTop: "1px solid rgba(255,255,255,0.04)",
+          borderTop: "1px solid var(--color-surface)",
         }}
       >
         <div className="container-zentrix">
@@ -546,14 +546,14 @@ export default function WorksPage() {
               fontFamily: "Syne, sans-serif",
               fontSize: "clamp(1.8rem, 4vw, 3rem)",
               fontWeight: 800,
-              color: "#F8FAFC",
+              color: "var(--color-text-primary)",
               marginBottom: "16px",
               letterSpacing: "-0.02em",
             }}
           >
             Ready to be our next success story?
           </h2>
-          <p style={{ fontFamily: "Inter, sans-serif", fontSize: "1.05rem", color: "#94A3B8", marginBottom: "32px" }}>
+          <p style={{ fontFamily: "Inter, sans-serif", fontSize: "1.05rem", color: "var(--color-text-muted)", marginBottom: "32px" }}>
             Let&apos;s discuss your project and build something remarkable together.
           </p>
           <Link
@@ -563,14 +563,14 @@ export default function WorksPage() {
               alignItems: "center",
               gap: "10px",
               padding: "16px 40px",
-              background: "linear-gradient(135deg, #7C3AED, #A855F7)",
+              background: "linear-gradient(135deg, #6C4E31, #B8934B)",
               color: "#fff",
               borderRadius: "100px",
               fontFamily: "Inter, sans-serif",
               fontWeight: 700,
               fontSize: "1rem",
               textDecoration: "none",
-              boxShadow: "0 20px 60px rgba(124,58,237,0.35)",
+              boxShadow: "0 20px 60px rgba(184,147,75,0.35)",
             }}
           >
             <Zap size={18} /> Start a Project

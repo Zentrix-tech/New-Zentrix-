@@ -76,7 +76,7 @@ function ConstellationCanvas() {
 
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(168, 85, 247, ${p.opacity})`;
+        ctx.fillStyle = `rgba(108, 78, 49, ${p.opacity})`;
         ctx.fill();
       });
 
@@ -90,7 +90,7 @@ function ConstellationCanvas() {
             ctx.beginPath();
             ctx.moveTo(particles[i].x, particles[i].y);
             ctx.lineTo(particles[j].x, particles[j].y);
-            ctx.strokeStyle = `rgba(124, 58, 237, ${0.15 * (1 - dist / 100)})`;
+            ctx.strokeStyle = `rgba(184, 147, 75, ${0.15 * (1 - dist / 100)})`;
             ctx.lineWidth = 0.5;
             ctx.stroke();
           }
@@ -127,8 +127,8 @@ export default function Footer() {
     <footer
       style={{
         position: "relative",
-        background: "#050508",
-        borderTop: "1px solid rgba(255,255,255,0.04)",
+        background: "var(--color-bg)",
+        borderTop: "1px solid var(--color-surface)",
         overflow: "hidden",
       }}
     >
@@ -144,7 +144,7 @@ export default function Footer() {
           width: "600px",
           height: "300px",
           borderRadius: "50%",
-          background: "radial-gradient(circle, rgba(124, 58, 237, 0.15) 0%, transparent 70%)",
+          background: "radial-gradient(circle, rgba(184, 147, 75, 0.15) 0%, transparent 70%)",
           filter: "blur(60px)",
           pointerEvents: "none",
         }}
@@ -164,8 +164,8 @@ export default function Footer() {
           style={{
             padding: "clamp(48px, 8vw, 80px) clamp(24px, 4vw, 60px)",
             margin: "0 -20px",
-            background: "linear-gradient(135deg, rgba(124,58,237,0.1) 0%, rgba(6,182,212,0.05) 100%)",
-            border: "1px solid rgba(124,58,237,0.2)",
+            background: "linear-gradient(135deg, rgba(184,147,75,0.1) 0%, rgba(108,78,49,0.05) 100%)",
+            border: "1px solid rgba(184,147,75,0.2)",
             borderRadius: "32px",
             textAlign: "center",
             marginBottom: "60px",
@@ -181,7 +181,7 @@ export default function Footer() {
               transform: "translateX(-50%)",
               width: "400px",
               height: "200px",
-              background: "radial-gradient(circle, rgba(124,58,237,0.3) 0%, transparent 70%)",
+              background: "radial-gradient(circle, rgba(184,147,75,0.3) 0%, transparent 70%)",
               filter: "blur(40px)",
             }}
           />
@@ -189,7 +189,7 @@ export default function Footer() {
             style={{
               fontFamily: "Inter, sans-serif",
               fontSize: "0.875rem",
-              color: "#A855F7",
+              color: "#B8934B",
               letterSpacing: "0.15em",
               textTransform: "uppercase",
               fontWeight: 600,
@@ -203,7 +203,7 @@ export default function Footer() {
               fontFamily: "Syne, sans-serif",
               fontSize: "clamp(2rem, 4vw, 3.5rem)",
               fontWeight: 800,
-              color: "#F8FAFC",
+              color: "var(--color-text-primary)",
               lineHeight: 1.05,
               letterSpacing: "-0.03em",
               marginBottom: "24px",
@@ -267,7 +267,7 @@ export default function Footer() {
                 }}
               />
             </div>
-            <p style={{ fontFamily: "Inter, sans-serif", fontSize: "0.875rem", color: "#475569", lineHeight: 1.7, maxWidth: "300px", marginBottom: "24px" }}>
+            <p style={{ fontFamily: "Inter, sans-serif", fontSize: "0.875rem", color: "var(--color-text-secondary)", lineHeight: 1.7, maxWidth: "300px", marginBottom: "24px" }}>
               {siteConfig.shortDescription}
             </p>
             {/* Contact info */}
@@ -284,14 +284,14 @@ export default function Footer() {
                     display: "flex",
                     alignItems: "center",
                     gap: "10px",
-                    color: "#94A3B8",
+                    color: "var(--color-text-muted)",
                     fontFamily: "Inter, sans-serif",
                     fontSize: "0.8125rem",
                     textDecoration: "none",
                     transition: "color 0.2s ease",
                   }}
-                  onMouseEnter={(e) => (e.currentTarget.style.color = "#F8FAFC")}
-                  onMouseLeave={(e) => (e.currentTarget.style.color = "#94A3B8")}
+                  onMouseEnter={(e) => (e.currentTarget.style.color = "var(--color-text-primary)")}
+                  onMouseLeave={(e) => (e.currentTarget.style.color = "var(--color-text-muted)")}
                 >
                   <Icon size={14} style={{ color: "var(--color-violet)", flexShrink: 0 }} />
                   {text}
@@ -311,23 +311,23 @@ export default function Footer() {
                     width: 36,
                     height: 36,
                     borderRadius: "8px",
-                    background: "rgba(255,255,255,0.04)",
-                    border: "1px solid rgba(255,255,255,0.06)",
+                    background: "var(--color-surface)",
+                    border: "1px solid var(--color-surface-2)",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    color: "#94A3B8",
+                    color: "var(--color-text-muted)",
                     transition: "all 0.2s ease",
                   }}
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.background = "rgba(124, 58, 237, 0.15)";
-                    e.currentTarget.style.borderColor = "rgba(124, 58, 237, 0.3)";
-                    e.currentTarget.style.color = "#A855F7";
+                    e.currentTarget.style.background = "rgba(184, 147, 75, 0.15)";
+                    e.currentTarget.style.borderColor = "rgba(184, 147, 75, 0.3)";
+                    e.currentTarget.style.color = "#B8934B";
                   }}
                   onMouseLeave={(e) => {
-                    e.currentTarget.style.background = "rgba(255,255,255,0.04)";
-                    e.currentTarget.style.borderColor = "rgba(255,255,255,0.06)";
-                    e.currentTarget.style.color = "#94A3B8";
+                    e.currentTarget.style.background = "var(--color-surface)";
+                    e.currentTarget.style.borderColor = "var(--color-surface-2)";
+                    e.currentTarget.style.color = "var(--color-text-muted)";
                   }}
                 >
                   <Icon />
@@ -338,7 +338,7 @@ export default function Footer() {
 
           {/* Company links */}
           <div>
-            <h4 style={{ fontFamily: "Syne, sans-serif", fontWeight: 600, fontSize: "0.875rem", color: "#F8FAFC", marginBottom: "16px", letterSpacing: "0.05em" }}>
+            <h4 style={{ fontFamily: "Syne, sans-serif", fontWeight: 600, fontSize: "0.875rem", color: "var(--color-text-primary)", marginBottom: "16px", letterSpacing: "0.05em" }}>
               Company
             </h4>
             <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: "10px" }}>
@@ -349,15 +349,15 @@ export default function Footer() {
                     style={{
                       fontFamily: "Inter, sans-serif",
                       fontSize: "0.8125rem",
-                      color: "#475569",
+                      color: "var(--color-text-secondary)",
                       textDecoration: "none",
                       transition: "color 0.2s ease",
                       display: "flex",
                       alignItems: "center",
                       gap: "6px",
                     }}
-                    onMouseEnter={(e) => (e.currentTarget.style.color = "#94A3B8")}
-                    onMouseLeave={(e) => (e.currentTarget.style.color = "#475569")}
+                    onMouseEnter={(e) => (e.currentTarget.style.color = "var(--color-text-muted)")}
+                    onMouseLeave={(e) => (e.currentTarget.style.color = "var(--color-text-secondary)")}
                   >
                     {link.name}
                   </Link>
@@ -368,7 +368,7 @@ export default function Footer() {
 
           {/* Services links */}
           <div>
-            <h4 style={{ fontFamily: "Syne, sans-serif", fontWeight: 600, fontSize: "0.875rem", color: "#F8FAFC", marginBottom: "16px", letterSpacing: "0.05em" }}>
+            <h4 style={{ fontFamily: "Syne, sans-serif", fontWeight: 600, fontSize: "0.875rem", color: "var(--color-text-primary)", marginBottom: "16px", letterSpacing: "0.05em" }}>
               Services
             </h4>
             <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: "10px" }}>
@@ -379,12 +379,12 @@ export default function Footer() {
                     style={{
                       fontFamily: "Inter, sans-serif",
                       fontSize: "0.8125rem",
-                      color: "#475569",
+                      color: "var(--color-text-secondary)",
                       textDecoration: "none",
                       transition: "color 0.2s ease",
                     }}
-                    onMouseEnter={(e) => (e.currentTarget.style.color = "#94A3B8")}
-                    onMouseLeave={(e) => (e.currentTarget.style.color = "#475569")}
+                    onMouseEnter={(e) => (e.currentTarget.style.color = "var(--color-text-muted)")}
+                    onMouseLeave={(e) => (e.currentTarget.style.color = "var(--color-text-secondary)")}
                   >
                     {link.name}
                   </Link>
@@ -395,7 +395,7 @@ export default function Footer() {
 
           {/* Legal links */}
           <div>
-            <h4 style={{ fontFamily: "Syne, sans-serif", fontWeight: 600, fontSize: "0.875rem", color: "#F8FAFC", marginBottom: "16px", letterSpacing: "0.05em" }}>
+            <h4 style={{ fontFamily: "Syne, sans-serif", fontWeight: 600, fontSize: "0.875rem", color: "var(--color-text-primary)", marginBottom: "16px", letterSpacing: "0.05em" }}>
               Legal
             </h4>
             <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: "10px" }}>
@@ -406,12 +406,12 @@ export default function Footer() {
                     style={{
                       fontFamily: "Inter, sans-serif",
                       fontSize: "0.8125rem",
-                      color: "#475569",
+                      color: "var(--color-text-secondary)",
                       textDecoration: "none",
                       transition: "color 0.2s ease",
                     }}
-                    onMouseEnter={(e) => (e.currentTarget.style.color = "#94A3B8")}
-                    onMouseLeave={(e) => (e.currentTarget.style.color = "#475569")}
+                    onMouseEnter={(e) => (e.currentTarget.style.color = "var(--color-text-muted)")}
+                    onMouseLeave={(e) => (e.currentTarget.style.color = "var(--color-text-secondary)")}
                   >
                     {link.name}
                   </Link>
@@ -424,7 +424,7 @@ export default function Footer() {
         {/* Bottom bar */}
         <div
           style={{
-            borderTop: "1px solid rgba(255,255,255,0.04)",
+            borderTop: "1px solid var(--color-surface)",
             paddingTop: "24px",
             paddingBottom: "24px",
             display: "flex",

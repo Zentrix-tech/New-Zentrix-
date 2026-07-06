@@ -9,41 +9,41 @@
    ═══════════════════════════════════════════════ */
 
 :root {
-  /* Color Palette - Uniform Premium Beige & Gold (Ultra Luxury) Theme */
-  --color-bg: #F5F2EB;
-  --color-bg-secondary: #EFECE6;
+  /* Color Palette - Uniform Premium Alabaster Beige & Satin Gold Theme */
+  --color-bg: #FAF7F2;
+  --color-bg-secondary: #F2EBE1;
   --color-surface: #FFFFFF;
   --color-surface-2: #FAF9F6;
-  --color-border: rgba(108, 78, 49, 0.08);
-  --color-border-hover: rgba(108, 78, 49, 0.18);
+  --color-border: rgba(110, 85, 40, 0.08);
+  --color-border-hover: rgba(110, 85, 40, 0.18);
 
-  /* Brand Colors - Gold, Accent */
-  --color-violet: #B8934B;
-  --color-violet-light: #6C4E31;
-  --color-violet-glow: rgba(184, 147, 75, 0.08);
-  --color-cyan: #B8934B;
-  --color-cyan-light: #6C4E31;
-  --color-cyan-glow: rgba(184, 147, 75, 0.08);
-  --color-pink: #6C4E31;
-  --color-pink-glow: rgba(108, 78, 49, 0.08);
+  /* Brand Colors - Satin Gold, Accent Bronze */
+  --color-violet: #A37E36;
+  --color-violet-light: #6E5528;
+  --color-violet-glow: rgba(163, 126, 54, 0.08);
+  --color-cyan: #A37E36;
+  --color-cyan-light: #6E5528;
+  --color-cyan-glow: rgba(163, 126, 54, 0.08);
+  --color-pink: #6E5528;
+  --color-pink-glow: rgba(110, 85, 40, 0.08);
 
-  /* Text Colors */
-  --color-text-primary: #1C1812;
-  --color-text-secondary: #5C5243;
-  --color-text-muted: #8E806A;
+  /* Text Colors - High Legibility Warm Charcoal */
+  --color-text-primary: #1A1612;
+  --color-text-secondary: #554B3E;
+  --color-text-muted: #8E8271;
 
   /* Semantic */
   --color-success: #10B981;
-  --color-warning: #B8934B;
+  --color-warning: #A37E36;
   --color-error: #EF4444;
 
   /* Gradients */
-  --gradient-primary: linear-gradient(135deg, #6C4E31 0%, #B8934B 50%, #C8A96A 100%);
-  --gradient-hero: radial-gradient(ellipse at 20% 50%, rgba(184, 147, 75, 0.06) 0%, transparent 60%),
-                   radial-gradient(ellipse at 80% 20%, rgba(184, 147, 75, 0.04) 0%, transparent 50%),
-                   radial-gradient(ellipse at 50% 80%, rgba(108, 78, 49, 0.03) 0%, transparent 50%);
-  --gradient-card: linear-gradient(135deg, rgba(184, 147, 75, 0.03) 0%, rgba(184, 147, 75, 0.01) 100%);
-  --gradient-glow: radial-gradient(circle at center, rgba(184, 147, 75, 0.15) 0%, transparent 70%);
+  --gradient-primary: linear-gradient(135deg, #6E5528 0%, #A37E36 50%, #C4A15E 100%);
+  --gradient-hero: radial-gradient(ellipse at 20% 50%, rgba(163, 126, 54, 0.05) 0%, transparent 60%),
+                   radial-gradient(ellipse at 80% 20%, rgba(163, 126, 54, 0.04) 0%, transparent 50%),
+                   radial-gradient(ellipse at 50% 80%, rgba(110, 85, 40, 0.03) 0%, transparent 50%);
+  --gradient-card: linear-gradient(135deg, rgba(163, 126, 54, 0.03) 0%, rgba(163, 126, 54, 0.01) 100%);
+  --gradient-glow: radial-gradient(circle at center, rgba(163, 126, 54, 0.15) 0%, transparent 70%);
 
   /* Spacing */
   --section-padding: clamp(80px, 10vw, 140px);

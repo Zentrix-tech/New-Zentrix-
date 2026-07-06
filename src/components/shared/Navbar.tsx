@@ -59,8 +59,8 @@ export default function Navbar() {
             maxWidth: isScrolled ? "1100px" : "1400px",
             borderRadius: isScrolled ? "20px" : "24px",
             background: isScrolled
-              ? "rgba(245, 242, 235, 0.85)"
-              : "rgba(245, 242, 235, 0.65)",
+              ? "rgba(250, 247, 242, 0.85)"
+              : "rgba(250, 247, 242, 0.65)",
             backdropFilter: "blur(30px)",
             WebkitBackdropFilter: "blur(30px)",
             border: isScrolled
@@ -334,7 +334,7 @@ export default function Navbar() {
               left: "24px",
               right: "24px",
               zIndex: 999,
-              background: "rgba(245, 242, 235, 0.98)",
+              background: "rgba(250, 247, 242, 0.98)",
               backdropFilter: "blur(40px)",
               border: "1px solid rgba(184, 147, 75, 0.2)",
               borderRadius: "20px",

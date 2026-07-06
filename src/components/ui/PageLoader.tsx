@@ -123,7 +123,7 @@ export default function PageLoader() {
             fontFamily: "var(--font-display)",
             fontSize: "clamp(1.2rem, 3vw, 1.8rem)",
             fontWeight: 500,
-            color: "#F8FAFC",
+            color: "var(--color-text-primary)",
             letterSpacing: "0.1em",
             textTransform: "uppercase",
           }}
@@ -149,7 +149,7 @@ export default function PageLoader() {
         <div
           style={{
             height: "2px",
-            background: "rgba(255,255,255,0.06)",
+            background: "var(--color-surface-2)",
             borderRadius: "2px",
             overflow: "hidden",
           }}

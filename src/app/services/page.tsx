@@ -15,7 +15,7 @@ const services = [
   {
     id: "web-development",
     icon: Globe,
-    color: "#7C3AED",
+    color: "#6C4E31",
     gradient: "from-violet-600/10 to-violet-900/5",
     category: "Development",
     title: "Web Development",
@@ -87,7 +87,7 @@ const services = [
   {
     id: "school-management",
     icon: GraduationCap,
-    color: "#A855F7",
+    color: "#B8934B",
     gradient: "from-violet-500/10 to-violet-900/5",
     category: "Education",
     title: "School Management System",
@@ -123,7 +123,7 @@ const services = [
   {
     id: "ai-automation",
     icon: Bot,
-    color: "#7C3AED",
+    color: "#6C4E31",
     gradient: "from-violet-600/10 to-violet-900/5",
     category: "AI & Automation",
     title: "AI Automation",
@@ -171,7 +171,7 @@ const services = [
   {
     id: "devops",
     icon: Server,
-    color: "#A855F7",
+    color: "#B8934B",
     gradient: "from-violet-500/10 to-violet-900/5",
     category: "Cloud & DevOps",
     title: "DevOps",
@@ -207,7 +207,7 @@ const services = [
   {
     id: "meta-ads",
     icon: Megaphone,
-    color: "#7C3AED",
+    color: "#6C4E31",
     gradient: "from-violet-600/10 to-violet-900/5",
     category: "Design & Marketing",
     title: "Meta Ads Management",
@@ -243,7 +243,7 @@ const services = [
   {
     id: "video-editing",
     icon: Video,
-    color: "#A855F7",
+    color: "#B8934B",
     gradient: "from-violet-500/10 to-violet-900/5",
     category: "Design & Marketing",
     title: "Video Editing",
@@ -267,7 +267,7 @@ const services = [
   {
     id: "motion-graphics",
     icon: Film,
-    color: "#7C3AED",
+    color: "#6C4E31",
     gradient: "from-violet-600/10 to-violet-900/5",
     category: "Design & Marketing",
     title: "Motion Graphics",
@@ -300,8 +300,8 @@ function ServiceCard({
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       style={{
-        background: hovered ? `linear-gradient(135deg, ${service.color}10, ${service.color}04)` : "rgba(255,255,255,0.02)",
-        border: `1px solid ${hovered ? service.color + "35" : "rgba(255,255,255,0.06)"}`,
+        background: hovered ? `linear-gradient(135deg, ${service.color}10, ${service.color}04)` : "var(--color-surface)",
+        border: `1px solid ${hovered ? service.color + "35" : "var(--color-surface-2)"}`,
         borderRadius: "24px",
         padding: "36px",
         transition: "all 0.4s cubic-bezier(0.16, 1, 0.3, 1)",
@@ -355,7 +355,7 @@ function ServiceCard({
           fontFamily: "Syne, sans-serif",
           fontWeight: 700,
           fontSize: "1.25rem",
-          color: "#F8FAFC",
+          color: "var(--color-text-primary)",
           marginBottom: "6px",
           letterSpacing: "-0.01em",
         }}
@@ -380,7 +380,7 @@ function ServiceCard({
         style={{
           fontFamily: "Inter, sans-serif",
           fontSize: "0.875rem",
-          color: "#94A3B8",
+          color: "var(--color-text-muted)",
           lineHeight: 1.65,
           marginBottom: "20px",
         }}
@@ -393,7 +393,7 @@ function ServiceCard({
         {service.features.map((f) => (
           <div key={f} style={{ display: "flex", alignItems: "center", gap: "5px" }}>
             <Check size={12} style={{ color: service.color }} />
-            <span style={{ fontFamily: "Inter, sans-serif", fontSize: "0.75rem", color: "#94A3B8" }}>{f}</span>
+            <span style={{ fontFamily: "Inter, sans-serif", fontSize: "0.75rem", color: "var(--color-text-muted)" }}>{f}</span>
           </div>
         ))}
       </div>
@@ -442,8 +442,8 @@ export default function ServicesPage() {
             position: "absolute",
             inset: 0,
             background: `
-              radial-gradient(ellipse at 30% 40%, rgba(124,58,237,0.12) 0%, transparent 60%),
-              radial-gradient(ellipse at 70% 60%, rgba(6,182,212,0.08) 0%, transparent 50%)
+              radial-gradient(ellipse at 30% 40%, rgba(184,147,75,0.12) 0%, transparent 60%),
+              radial-gradient(ellipse at 70% 60%, rgba(108,78,49,0.08) 0%, transparent 50%)
             `,
           }}
         />
@@ -467,14 +467,14 @@ export default function ServicesPage() {
               alignItems: "center",
               gap: "8px",
               padding: "6px 16px",
-              border: "1px solid rgba(124, 58, 237, 0.3)",
+              border: "1px solid rgba(184, 147, 75, 0.3)",
               borderRadius: "100px",
               marginBottom: "24px",
-              background: "rgba(124, 58, 237, 0.08)",
+              background: "rgba(184, 147, 75, 0.08)",
             }}
           >
-            <span style={{ width: 6, height: 6, borderRadius: "50%", background: "#A855F7" }} />
-            <span style={{ fontFamily: "Inter, sans-serif", fontSize: "0.75rem", fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase", color: "#A855F7" }}>
+            <span style={{ width: 6, height: 6, borderRadius: "50%", background: "#B8934B" }} />
+            <span style={{ fontFamily: "Inter, sans-serif", fontSize: "0.75rem", fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase", color: "#B8934B" }}>
               22 Premium Services
             </span>
           </motion.div>
@@ -492,11 +492,11 @@ export default function ServicesPage() {
               marginBottom: "24px",
             }}
           >
-            <span style={{ color: "#F8FAFC" }}>Everything You Need</span>
+            <span style={{ color: "var(--color-text-primary)" }}>Everything You Need</span>
             <br />
             <span
               style={{
-                background: "linear-gradient(135deg, #7C3AED, #A855F7, #06B6D4)",
+                background: "linear-gradient(135deg, #6C4E31, #B8934B, #06B6D4)",
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
                 backgroundClip: "text",
@@ -513,7 +513,7 @@ export default function ServicesPage() {
             style={{
               fontFamily: "Inter, sans-serif",
               fontSize: "clamp(0.95rem, 2vw, 1.15rem)",
-              color: "#94A3B8",
+              color: "var(--color-text-muted)",
               lineHeight: 1.7,
               maxWidth: "580px",
               margin: "0 auto 48px",
@@ -540,8 +540,8 @@ export default function ServicesPage() {
               { value: "100%", label: "Satisfaction Rate" },
             ].map((s) => (
               <div key={s.label} style={{ textAlign: "center" }}>
-                <div style={{ fontFamily: "Syne, sans-serif", fontSize: "2rem", fontWeight: 800, color: "#A855F7" }}>{s.value}</div>
-                <div style={{ fontFamily: "Inter, sans-serif", fontSize: "0.8rem", color: "#475569" }}>{s.label}</div>
+                <div style={{ fontFamily: "Syne, sans-serif", fontSize: "2rem", fontWeight: 800, color: "#B8934B" }}>{s.value}</div>
+                <div style={{ fontFamily: "Inter, sans-serif", fontSize: "0.8rem", color: "var(--color-text-secondary)" }}>{s.label}</div>
               </div>
             ))}
           </motion.div>
@@ -556,7 +556,7 @@ export default function ServicesPage() {
           zIndex: 10,
           background: "rgba(5,5,8,0.9)",
           backdropFilter: "blur(40px)",
-          borderBottom: "1px solid rgba(255,255,255,0.04)",
+          borderBottom: "1px solid var(--color-surface)",
           padding: "16px 0",
         }}
       >
@@ -569,9 +569,9 @@ export default function ServicesPage() {
                 style={{
                   padding: "8px 18px",
                   borderRadius: "100px",
-                  border: activeCategory === cat ? "1px solid rgba(124,58,237,0.5)" : "1px solid rgba(255,255,255,0.06)",
-                  background: activeCategory === cat ? "rgba(124,58,237,0.15)" : "transparent",
-                  color: activeCategory === cat ? "#A855F7" : "#94A3B8",
+                  border: activeCategory === cat ? "1px solid rgba(184,147,75,0.5)" : "1px solid var(--color-surface-2)",
+                  background: activeCategory === cat ? "rgba(184,147,75,0.15)" : "transparent",
+                  color: activeCategory === cat ? "#B8934B" : "var(--color-text-muted)",
                   fontFamily: "Inter, sans-serif",
                   fontWeight: 500,
                   fontSize: "0.85rem",
@@ -610,7 +610,7 @@ export default function ServicesPage() {
           padding: "clamp(60px,8vw,100px) 0",
           background: "var(--color-bg)",
           textAlign: "center",
-          borderTop: "1px solid rgba(255,255,255,0.04)",
+          borderTop: "1px solid var(--color-surface)",
         }}
       >
         <div className="container-zentrix">
@@ -619,7 +619,7 @@ export default function ServicesPage() {
               fontFamily: "Syne, sans-serif",
               fontSize: "clamp(2rem, 4vw, 3.5rem)",
               fontWeight: 800,
-              color: "#F8FAFC",
+              color: "var(--color-text-primary)",
               lineHeight: 1.05,
               letterSpacing: "-0.03em",
               marginBottom: "16px",
@@ -627,7 +627,7 @@ export default function ServicesPage() {
           >
             Not sure which service you need?
           </h2>
-          <p style={{ fontFamily: "Inter, sans-serif", fontSize: "1.05rem", color: "#94A3B8", marginBottom: "32px" }}>
+          <p style={{ fontFamily: "Inter, sans-serif", fontSize: "1.05rem", color: "var(--color-text-muted)", marginBottom: "32px" }}>
             Let&apos;s have a free consultation call — we&apos;ll map out the perfect solution for your business.
           </p>
           <Link
@@ -637,14 +637,14 @@ export default function ServicesPage() {
               alignItems: "center",
               gap: "10px",
               padding: "16px 40px",
-              background: "linear-gradient(135deg, #7C3AED, #A855F7)",
+              background: "linear-gradient(135deg, #6C4E31, #B8934B)",
               color: "#fff",
               borderRadius: "100px",
               fontFamily: "Inter, sans-serif",
               fontWeight: 700,
               fontSize: "1rem",
               textDecoration: "none",
-              boxShadow: "0 20px 60px rgba(124,58,237,0.35)",
+              boxShadow: "0 20px 60px rgba(184,147,75,0.35)",
             }}
           >
             <Zap size={18} /> Book Free Consultation

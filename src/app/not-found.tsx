@@ -36,8 +36,8 @@ export default function NotFound() {
           position: "absolute",
           inset: 0,
           background: `
-            radial-gradient(ellipse at 30% 40%, rgba(124,58,237,0.12) 0%, transparent 60%),
-            radial-gradient(ellipse at 70% 60%, rgba(6,182,212,0.08) 0%, transparent 50%)
+            radial-gradient(ellipse at 30% 40%, rgba(184,147,75,0.12) 0%, transparent 60%),
+            radial-gradient(ellipse at 70% 60%, rgba(108,78,49,0.08) 0%, transparent 50%)
           `,
         }}
       />
@@ -45,7 +45,7 @@ export default function NotFound() {
         style={{
           position: "absolute",
           inset: 0,
-          backgroundImage: `linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px)`,
+          backgroundImage: `linear-gradient(var(--color-surface) 1px, transparent 1px), linear-gradient(90deg, var(--color-surface) 1px, transparent 1px)`,
           backgroundSize: "60px 60px",
           maskImage: "radial-gradient(ellipse at center, black 40%, transparent 80%)",
         }}
@@ -63,7 +63,7 @@ export default function NotFound() {
             fontWeight: 900,
             lineHeight: 0.9,
             letterSpacing: "-0.06em",
-            background: "linear-gradient(135deg, rgba(124,58,237,0.2), rgba(168,85,247,0.2), rgba(6,182,212,0.15))",
+            background: "linear-gradient(135deg, rgba(184,147,75,0.2), rgba(108,78,49,0.2), rgba(108,78,49,0.15))",
             WebkitBackgroundClip: "text",
             WebkitTextFillColor: "transparent",
             backgroundClip: "text",
@@ -82,7 +82,7 @@ export default function NotFound() {
             fontFamily: "Syne, sans-serif",
             fontSize: "clamp(1.5rem, 4vw, 2.5rem)",
             fontWeight: 800,
-            color: "#F8FAFC",
+            color: "var(--color-text-primary)",
             letterSpacing: "-0.03em",
             marginBottom: "12px",
           }}
@@ -97,7 +97,7 @@ export default function NotFound() {
           style={{
             fontFamily: "Inter, sans-serif",
             fontSize: "1rem",
-            color: "#94A3B8",
+            color: "var(--color-text-muted)",
             maxWidth: "400px",
             margin: "0 auto 40px",
             lineHeight: 1.65,
@@ -120,14 +120,14 @@ export default function NotFound() {
               alignItems: "center",
               gap: "8px",
               padding: "14px 28px",
-              background: "linear-gradient(135deg, #7C3AED, #A855F7)",
+              background: "linear-gradient(135deg, #6C4E31, #B8934B)",
               color: "#fff",
               borderRadius: "100px",
               fontFamily: "Inter, sans-serif",
               fontWeight: 700,
               fontSize: "0.95rem",
               textDecoration: "none",
-              boxShadow: "0 16px 40px rgba(124,58,237,0.35)",
+              boxShadow: "0 16px 40px rgba(184,147,75,0.35)",
             }}
           >
             <Home size={16} /> Go Home
@@ -140,8 +140,8 @@ export default function NotFound() {
               gap: "8px",
               padding: "13px 28px",
               background: "transparent",
-              border: "1px solid rgba(255,255,255,0.1)",
-              color: "#94A3B8",
+              border: "1px solid var(--color-border)",
+              color: "var(--color-text-muted)",
               borderRadius: "100px",
               fontFamily: "Inter, sans-serif",
               fontWeight: 500,
@@ -186,15 +186,15 @@ export default function NotFound() {
 
       <style>{`
         .not-found-link {
-          background: rgba(255,255,255,0.02);
-          border: 1px solid rgba(255,255,255,0.06);
-          color: #94A3B8;
+          background: var(--color-surface);
+          border: 1px solid var(--color-surface-2);
+          color: var(--color-text-muted);
           transition: all 0.2s ease;
         }
         .not-found-link:hover {
-          border-color: rgba(124,58,237,0.4);
-          color: #A855F7;
-          background: rgba(124,58,237,0.06);
+          border-color: rgba(184,147,75,0.4);
+          color: #B8934B;
+          background: rgba(184,147,75,0.06);
         }
       `}</style>
     </div>

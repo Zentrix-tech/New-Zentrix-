@@ -6,9 +6,9 @@ import { useInView } from "react-intersection-observer";
 import { ArrowRight, Zap, Award, Users, Target, Heart, MapPin, Calendar, Globe, Shield } from "lucide-react";
 
 const milestones = [
-  { year: "2026", month: "January", title: "Zentrix Technology Founded", desc: "Born in Salem, Tamil Nadu with a clear mission — to democratize premium software engineering for businesses of all sizes.", color: "#7C3AED" },
+  { year: "2026", month: "January", title: "Zentrix Technology Founded", desc: "Born in Salem, Tamil Nadu with a clear mission — to democratize premium software engineering for businesses of all sizes.", color: "#6C4E31" },
   { year: "2026", month: "February", title: "Innovation Lab Launched", desc: "Dedicated research division created to explore AI, IoT, and emerging technologies.", color: "#06B6D4" },
-  { year: "2026", month: "March", title: "First Enterprise Client", desc: "Delivered our first HMS project — a complete hospital management system that transformed clinical operations.", color: "#A855F7" },
+  { year: "2026", month: "March", title: "First Enterprise Client", desc: "Delivered our first HMS project — a complete hospital management system that transformed clinical operations.", color: "#B8934B" },
   { year: "2026", month: "April", title: "School ERP Delivered", desc: "Completed an all-in-one School Management System serving 500+ students across multiple branches.", color: "#10B981" },
   { year: "2026", month: "May", title: "AI Division Launched", desc: "Launched dedicated AI/ML services — deploying automation solutions that saved clients 80% manual work.", color: "#F59E0B" },
   { year: "2026", month: "July", title: "7+ Projects, Growing Fast", desc: "7 projects delivered, 5 innovation lab experiments active, and growing toward becoming Tamil Nadu's #1 software company.", color: "#EC4899" },
@@ -19,7 +19,7 @@ const values = [
     icon: "⚡",
     title: "Velocity with Quality",
     desc: "We move fast without breaking things. Every sprint delivers tested, production-ready code that your users will love.",
-    color: "#7C3AED",
+    color: "#6C4E31",
   },
   {
     icon: "🧠",
@@ -31,7 +31,7 @@ const values = [
     icon: "💎",
     title: "Premium or Nothing",
     desc: "We don't build mediocre products. Every pixel, every API, every line of code reflects our commitment to excellence.",
-    color: "#A855F7",
+    color: "#B8934B",
   },
   {
     icon: "🤝",
@@ -89,7 +89,7 @@ function MilestoneTimeline() {
           top: 0,
           bottom: 0,
           width: "2px",
-          background: "linear-gradient(180deg, #7C3AED, #06B6D4, #A855F7, #10B981, #F59E0B, #EC4899, transparent)",
+          background: "linear-gradient(180deg, #6C4E31, #06B6D4, #B8934B, #10B981, #F59E0B, #EC4899, transparent)",
           transform: "translateX(-50%)",
         }}
       />
@@ -113,7 +113,7 @@ function MilestoneTimeline() {
               {i % 2 === 0 ? (
                 <div
                   style={{
-                    background: "rgba(255,255,255,0.02)",
+                    background: "var(--color-surface)",
                     border: `1px solid ${m.color}25`,
                     borderRadius: "16px",
                     padding: "20px 24px",
@@ -123,8 +123,8 @@ function MilestoneTimeline() {
                   <div style={{ fontFamily: "JetBrains Mono, monospace", fontSize: "0.7rem", color: m.color, marginBottom: "6px" }}>
                     {m.month} {m.year}
                   </div>
-                  <h4 style={{ fontFamily: "Syne, sans-serif", fontWeight: 700, fontSize: "1rem", color: "#F8FAFC", marginBottom: "6px" }}>{m.title}</h4>
-                  <p style={{ fontFamily: "Inter, sans-serif", fontSize: "0.8rem", color: "#94A3B8", lineHeight: 1.6 }}>{m.desc}</p>
+                  <h4 style={{ fontFamily: "Syne, sans-serif", fontWeight: 700, fontSize: "1rem", color: "var(--color-text-primary)", marginBottom: "6px" }}>{m.title}</h4>
+                  <p style={{ fontFamily: "Inter, sans-serif", fontSize: "0.8rem", color: "var(--color-text-muted)", lineHeight: 1.6 }}>{m.desc}</p>
                 </div>
               ) : null}
             </div>
@@ -149,7 +149,7 @@ function MilestoneTimeline() {
               {i % 2 !== 0 ? (
                 <div
                   style={{
-                    background: "rgba(255,255,255,0.02)",
+                    background: "var(--color-surface)",
                     border: `1px solid ${m.color}25`,
                     borderRadius: "16px",
                     padding: "20px 24px",
@@ -158,8 +158,8 @@ function MilestoneTimeline() {
                   <div style={{ fontFamily: "JetBrains Mono, monospace", fontSize: "0.7rem", color: m.color, marginBottom: "6px" }}>
                     {m.month} {m.year}
                   </div>
-                  <h4 style={{ fontFamily: "Syne, sans-serif", fontWeight: 700, fontSize: "1rem", color: "#F8FAFC", marginBottom: "6px" }}>{m.title}</h4>
-                  <p style={{ fontFamily: "Inter, sans-serif", fontSize: "0.8rem", color: "#94A3B8", lineHeight: 1.6 }}>{m.desc}</p>
+                  <h4 style={{ fontFamily: "Syne, sans-serif", fontWeight: 700, fontSize: "1rem", color: "var(--color-text-primary)", marginBottom: "6px" }}>{m.title}</h4>
+                  <p style={{ fontFamily: "Inter, sans-serif", fontSize: "0.8rem", color: "var(--color-text-muted)", lineHeight: 1.6 }}>{m.desc}</p>
                 </div>
               ) : null}
             </div>
@@ -191,8 +191,8 @@ export default function AboutPage() {
             position: "absolute",
             inset: 0,
             background: `
-              radial-gradient(ellipse at 30% 50%, rgba(124,58,237,0.12) 0%, transparent 60%),
-              radial-gradient(ellipse at 70% 30%, rgba(6,182,212,0.08) 0%, transparent 50%)
+              radial-gradient(ellipse at 30% 50%, rgba(184,147,75,0.12) 0%, transparent 60%),
+              radial-gradient(ellipse at 70% 30%, rgba(108,78,49,0.08) 0%, transparent 50%)
             `,
           }}
         />
@@ -205,14 +205,14 @@ export default function AboutPage() {
               alignItems: "center",
               gap: "8px",
               padding: "6px 16px",
-              border: "1px solid rgba(124,58,237,0.3)",
+              border: "1px solid rgba(184,147,75,0.3)",
               borderRadius: "100px",
               marginBottom: "24px",
-              background: "rgba(124,58,237,0.08)",
+              background: "rgba(184,147,75,0.08)",
             }}
           >
-            <span style={{ width: 6, height: 6, borderRadius: "50%", background: "#A855F7" }} />
-            <span style={{ fontFamily: "Inter, sans-serif", fontSize: "0.75rem", fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase", color: "#A855F7" }}>
+            <span style={{ width: 6, height: 6, borderRadius: "50%", background: "#B8934B" }} />
+            <span style={{ fontFamily: "Inter, sans-serif", fontSize: "0.75rem", fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase", color: "#B8934B" }}>
               Our Story
             </span>
           </motion.div>
@@ -230,11 +230,11 @@ export default function AboutPage() {
               marginBottom: "28px",
             }}
           >
-            <span style={{ color: "#F8FAFC" }}>Built from</span>
+            <span style={{ color: "var(--color-text-primary)" }}>Built from</span>
             <br />
             <span
               style={{
-                background: "linear-gradient(135deg, #7C3AED, #A855F7, #06B6D4)",
+                background: "linear-gradient(135deg, #6C4E31, #B8934B, #06B6D4)",
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
                 backgroundClip: "text",
@@ -251,7 +251,7 @@ export default function AboutPage() {
             style={{
               fontFamily: "Inter, sans-serif",
               fontSize: "clamp(0.95rem, 2vw, 1.2rem)",
-              color: "#94A3B8",
+              color: "var(--color-text-muted)",
               lineHeight: 1.7,
               maxWidth: "640px",
               margin: "0 auto 48px",
@@ -268,9 +268,9 @@ export default function AboutPage() {
             style={{ display: "flex", gap: "16px", justifyContent: "center", flexWrap: "wrap" }}
           >
             {[
-              { icon: MapPin, text: "Salem, Tamil Nadu", color: "#7C3AED" },
+              { icon: MapPin, text: "Salem, Tamil Nadu", color: "#6C4E31" },
               { icon: Calendar, text: "Founded 2026", color: "#06B6D4" },
-              { icon: Users, text: "5+ Team Members", color: "#A855F7" },
+              { icon: Users, text: "5+ Team Members", color: "#B8934B" },
               { icon: Globe, text: "Serving India & Beyond", color: "#10B981" },
             ].map(({ icon: Icon, text, color }) => (
               <div
@@ -280,13 +280,13 @@ export default function AboutPage() {
                   alignItems: "center",
                   gap: "8px",
                   padding: "8px 16px",
-                  background: "rgba(255,255,255,0.03)",
-                  border: "1px solid rgba(255,255,255,0.06)",
+                  background: "var(--color-surface)",
+                  border: "1px solid var(--color-surface-2)",
                   borderRadius: "100px",
                 }}
               >
                 <Icon size={14} style={{ color }} />
-                <span style={{ fontFamily: "Inter, sans-serif", fontSize: "0.825rem", color: "#94A3B8" }}>{text}</span>
+                <span style={{ fontFamily: "Inter, sans-serif", fontSize: "0.825rem", color: "var(--color-text-muted)" }}>{text}</span>
               </div>
             ))}
           </motion.div>
@@ -308,7 +308,7 @@ export default function AboutPage() {
                 emoji: "🎯",
                 title: "Our Mission",
                 text: "To empower businesses across India with world-class software — making enterprise-grade technology accessible, affordable, and transformative.",
-                color: "#7C3AED",
+                color: "#6C4E31",
               },
               {
                 emoji: "🔭",
@@ -320,7 +320,7 @@ export default function AboutPage() {
                 emoji: "⚡",
                 title: "Our Philosophy",
                 text: "\"Where Vision Meets Velocity\" — we believe great software is the intersection of ambitious ideas and relentless execution. No shortcuts, no compromises.",
-                color: "#A855F7",
+                color: "#B8934B",
               },
             ].map((card) => (
               <div
@@ -344,10 +344,10 @@ export default function AboutPage() {
                 }}
               >
                 <div style={{ fontSize: "2.5rem", marginBottom: "16px" }}>{card.emoji}</div>
-                <h3 style={{ fontFamily: "Syne, sans-serif", fontWeight: 700, fontSize: "1.2rem", color: "#F8FAFC", marginBottom: "12px" }}>
+                <h3 style={{ fontFamily: "Syne, sans-serif", fontWeight: 700, fontSize: "1.2rem", color: "var(--color-text-primary)", marginBottom: "12px" }}>
                   {card.title}
                 </h3>
-                <p style={{ fontFamily: "Inter, sans-serif", fontSize: "0.9rem", color: "#94A3B8", lineHeight: 1.7 }}>{card.text}</p>
+                <p style={{ fontFamily: "Inter, sans-serif", fontSize: "0.9rem", color: "var(--color-text-muted)", lineHeight: 1.7 }}>{card.text}</p>
               </div>
             ))}
           </div>
@@ -359,7 +359,7 @@ export default function AboutPage() {
         style={{
           padding: "clamp(60px,8vw,100px) 0",
           background: "var(--color-bg)",
-          borderTop: "1px solid rgba(255,255,255,0.04)",
+          borderTop: "1px solid var(--color-surface)",
         }}
       >
         <div className="container-zentrix" ref={valuesRef}>
@@ -369,7 +369,7 @@ export default function AboutPage() {
                 fontFamily: "Syne, sans-serif",
                 fontSize: "clamp(2rem,4vw,3rem)",
                 fontWeight: 800,
-                color: "#F8FAFC",
+                color: "var(--color-text-primary)",
                 letterSpacing: "-0.03em",
               }}
             >
@@ -391,8 +391,8 @@ export default function AboutPage() {
                 transition={{ duration: 0.7, delay: i * 0.08, ease: [0.16, 1, 0.3, 1] }}
                 style={{
                   padding: "28px 24px",
-                  background: "rgba(255,255,255,0.02)",
-                  border: "1px solid rgba(255,255,255,0.05)",
+                  background: "var(--color-surface)",
+                  border: "1px solid var(--color-border)",
                   borderRadius: "20px",
                   transition: "all 0.3s ease",
                 }}
@@ -402,16 +402,16 @@ export default function AboutPage() {
                   e.currentTarget.style.transform = "translateY(-4px)";
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.background = "rgba(255,255,255,0.02)";
-                  e.currentTarget.style.borderColor = "rgba(255,255,255,0.05)";
+                  e.currentTarget.style.background = "var(--color-surface)";
+                  e.currentTarget.style.borderColor = "var(--color-border)";
                   e.currentTarget.style.transform = "translateY(0)";
                 }}
               >
                 <div style={{ fontSize: "2rem", marginBottom: "14px" }}>{v.icon}</div>
-                <h4 style={{ fontFamily: "Syne, sans-serif", fontWeight: 700, fontSize: "1.05rem", color: "#F8FAFC", marginBottom: "8px" }}>
+                <h4 style={{ fontFamily: "Syne, sans-serif", fontWeight: 700, fontSize: "1.05rem", color: "var(--color-text-primary)", marginBottom: "8px" }}>
                   {v.title}
                 </h4>
-                <p style={{ fontFamily: "Inter, sans-serif", fontSize: "0.85rem", color: "#94A3B8", lineHeight: 1.65 }}>{v.desc}</p>
+                <p style={{ fontFamily: "Inter, sans-serif", fontSize: "0.85rem", color: "var(--color-text-muted)", lineHeight: 1.65 }}>{v.desc}</p>
               </motion.div>
             ))}
           </div>
@@ -427,14 +427,14 @@ export default function AboutPage() {
                 fontFamily: "Syne, sans-serif",
                 fontSize: "clamp(2rem,4vw,3rem)",
                 fontWeight: 800,
-                color: "#F8FAFC",
+                color: "var(--color-text-primary)",
                 letterSpacing: "-0.03em",
                 marginBottom: "12px",
               }}
             >
               The Zentrix Journey
             </h2>
-            <p style={{ fontFamily: "Inter, sans-serif", fontSize: "1rem", color: "#94A3B8" }}>
+            <p style={{ fontFamily: "Inter, sans-serif", fontSize: "1rem", color: "var(--color-text-muted)" }}>
               From day one to where we are today — every milestone, every breakthrough.
             </p>
           </div>
@@ -447,7 +447,7 @@ export default function AboutPage() {
         style={{
           padding: "clamp(60px,8vw,100px) 0",
           background: "var(--color-bg)",
-          borderTop: "1px solid rgba(255,255,255,0.04)",
+          borderTop: "1px solid var(--color-surface)",
         }}
       >
         <div className="container-zentrix" ref={teamRef}>
@@ -457,7 +457,7 @@ export default function AboutPage() {
                 fontFamily: "Syne, sans-serif",
                 fontSize: "clamp(2rem,4vw,3rem)",
                 fontWeight: 800,
-                color: "#F8FAFC",
+                color: "var(--color-text-primary)",
                 letterSpacing: "-0.03em",
               }}
             >
@@ -479,8 +479,8 @@ export default function AboutPage() {
                 transition={{ duration: 0.7, delay: i * 0.1, ease: [0.16, 1, 0.3, 1] }}
                 style={{
                   padding: "32px",
-                  background: "rgba(255,255,255,0.02)",
-                  border: "1px solid rgba(255,255,255,0.06)",
+                  background: "var(--color-surface)",
+                  border: "1px solid var(--color-surface-2)",
                   borderRadius: "24px",
                   textAlign: "center",
                   transition: "all 0.3s ease",
@@ -491,8 +491,8 @@ export default function AboutPage() {
                   e.currentTarget.style.transform = "translateY(-6px)";
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.background = "rgba(255,255,255,0.02)";
-                  e.currentTarget.style.borderColor = "rgba(255,255,255,0.06)";
+                  e.currentTarget.style.background = "var(--color-surface)";
+                  e.currentTarget.style.borderColor = "var(--color-surface-2)";
                   e.currentTarget.style.transform = "translateY(0)";
                 }}
               >
@@ -528,13 +528,13 @@ export default function AboutPage() {
                     <span style={{ fontSize: "2.5rem" }}>{member.emoji}</span>
                   )}
                 </div>
-                <h4 style={{ fontFamily: "var(--font-display)", fontWeight: 600, fontSize: "1.25rem", color: "#F8FAFC", marginBottom: "4px" }}>
+                <h4 style={{ fontFamily: "var(--font-display)", fontWeight: 600, fontSize: "1.25rem", color: "var(--color-text-primary)", marginBottom: "4px" }}>
                   {member.name}
                 </h4>
                 <div style={{ fontFamily: "var(--font-body)", fontSize: "0.8rem", color: member.color, fontWeight: 600, marginBottom: "16px" }}>
                   {member.role}
                 </div>
-                <p style={{ fontFamily: "var(--font-body)", fontSize: "0.85rem", color: "#94A3B8", lineHeight: 1.65, marginBottom: "20px" }}>
+                <p style={{ fontFamily: "var(--font-body)", fontSize: "0.85rem", color: "var(--color-text-muted)", lineHeight: 1.65, marginBottom: "20px" }}>
                   {member.bio}
                 </p>
                 <div style={{ display: "flex", gap: "6px", flexWrap: "wrap", justifyContent: "center", marginBottom: "20px" }}>
@@ -588,10 +588,10 @@ export default function AboutPage() {
       {/* CTA */}
       <section style={{ padding: "clamp(60px,8vw,100px) 0", textAlign: "center" }}>
         <div className="container-zentrix">
-          <h2 style={{ fontFamily: "Syne, sans-serif", fontSize: "clamp(1.8rem,4vw,3rem)", fontWeight: 800, color: "#F8FAFC", marginBottom: "16px", letterSpacing: "-0.02em" }}>
+          <h2 style={{ fontFamily: "Syne, sans-serif", fontSize: "clamp(1.8rem,4vw,3rem)", fontWeight: 800, color: "var(--color-text-primary)", marginBottom: "16px", letterSpacing: "-0.02em" }}>
             Join the Zentrix journey
           </h2>
-          <p style={{ fontFamily: "Inter, sans-serif", fontSize: "1.05rem", color: "#94A3B8", marginBottom: "32px" }}>
+          <p style={{ fontFamily: "Inter, sans-serif", fontSize: "1.05rem", color: "var(--color-text-muted)", marginBottom: "32px" }}>
             Whether as a client, collaborator, or team member — we&apos;d love to connect.
           </p>
           <div style={{ display: "flex", gap: "16px", justifyContent: "center", flexWrap: "wrap" }}>
@@ -602,14 +602,14 @@ export default function AboutPage() {
                 alignItems: "center",
                 gap: "10px",
                 padding: "16px 36px",
-                background: "linear-gradient(135deg, #7C3AED, #A855F7)",
+                background: "linear-gradient(135deg, #6C4E31, #B8934B)",
                 color: "#fff",
                 borderRadius: "100px",
                 fontFamily: "Inter, sans-serif",
                 fontWeight: 700,
                 fontSize: "1rem",
                 textDecoration: "none",
-                boxShadow: "0 20px 60px rgba(124,58,237,0.35)",
+                boxShadow: "0 20px 60px rgba(184,147,75,0.35)",
               }}
             >
               <Zap size={18} /> Let&apos;s Work Together
@@ -622,8 +622,8 @@ export default function AboutPage() {
                 gap: "10px",
                 padding: "15px 36px",
                 background: "transparent",
-                border: "1px solid rgba(255,255,255,0.1)",
-                color: "#F8FAFC",
+                border: "1px solid var(--color-border)",
+                color: "var(--color-text-primary)",
                 borderRadius: "100px",
                 fontFamily: "Inter, sans-serif",
                 fontWeight: 500,

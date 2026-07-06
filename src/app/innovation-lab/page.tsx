@@ -14,7 +14,7 @@ const innovations = [
     statusColor: "#10B981",
     year: "2026",
     emoji: "⚡",
-    color: "#7C3AED",
+    color: "#6C4E31",
     description: "Custom performance-oriented web platform built as part of our research into blazing fast rendering engines and clean metadata caching.",
     link: "https://agmd.vercel.app/",
     techStack: ["Next.js", "React", "Tailwind CSS", "Framer Motion"],
@@ -42,7 +42,7 @@ const innovations = [
     statusColor: "#10B981",
     year: "2026",
     emoji: "🎮",
-    color: "#A855F7",
+    color: "#B8934B",
     description: "Digital entertainment hub with interactive mini-games, dynamic media grids, and premium responsive user experiences.",
     link: "https://tgfunhub.vercel.app/",
     techStack: ["React", "Tailwind CSS", "GSAP", "Vite"],
@@ -93,9 +93,9 @@ const innovations = [
 ];
 
 const timelineItems = [
-  { year: "Jan 2026", event: "Zentrix Technology founded in Salem", color: "#7C3AED" },
+  { year: "Jan 2026", event: "Zentrix Technology founded in Salem", color: "#6C4E31" },
   { year: "Feb 2026", event: "Innovation Lab officially launched", color: "#06B6D4" },
-  { year: "Mar 2026", event: "First AI automation project deployed", color: "#A855F7" },
+  { year: "Mar 2026", event: "First AI automation project deployed", color: "#B8934B" },
   { year: "Apr 2026", event: "HMS & School ERP projects completed", color: "#10B981" },
   { year: "May 2026", event: "Computer Vision QA system in beta", color: "#F59E0B" },
   { year: "Jul 2026", event: "5+ active innovation lab projects", color: "#EC4899" },
@@ -111,8 +111,8 @@ function InnovationCard({ item, index }: { item: typeof innovations[0]; index: n
       animate={inView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.8, delay: index * 0.12, ease: [0.16, 1, 0.3, 1] }}
       style={{
-        background: "rgba(255,255,255,0.02)",
-        border: "1px solid rgba(255,255,255,0.06)",
+        background: "var(--color-surface)",
+        border: "1px solid var(--color-surface-2)",
         borderRadius: "24px",
         padding: "32px",
         transition: "all 0.4s ease",
@@ -129,8 +129,8 @@ function InnovationCard({ item, index }: { item: typeof innovations[0]; index: n
         e.currentTarget.style.boxShadow = `0 20px 60px ${item.color}15`;
       }}
       onMouseLeave={(e) => {
-        e.currentTarget.style.borderColor = "rgba(255,255,255,0.06)";
-        e.currentTarget.style.background = "rgba(255,255,255,0.02)";
+        e.currentTarget.style.borderColor = "var(--color-surface-2)";
+        e.currentTarget.style.background = "var(--color-surface)";
         e.currentTarget.style.transform = "translateY(0)";
         e.currentTarget.style.boxShadow = "none";
       }}
@@ -185,7 +185,7 @@ function InnovationCard({ item, index }: { item: typeof innovations[0]; index: n
           fontFamily: "Syne, sans-serif",
           fontWeight: 700,
           fontSize: "1.15rem",
-          color: "#F8FAFC",
+          color: "var(--color-text-primary)",
           letterSpacing: "-0.01em",
           marginBottom: "10px",
         }}
@@ -197,7 +197,7 @@ function InnovationCard({ item, index }: { item: typeof innovations[0]; index: n
         style={{
           fontFamily: "Inter, sans-serif",
           fontSize: "0.875rem",
-          color: "#94A3B8",
+          color: "var(--color-text-muted)",
           lineHeight: 1.65,
           marginBottom: "20px",
         }}
@@ -219,7 +219,7 @@ function InnovationCard({ item, index }: { item: typeof innovations[0]; index: n
             }}
           >
             <div style={{ fontFamily: "Syne, sans-serif", fontWeight: 800, fontSize: "1rem", color: item.color }}>{m.v}</div>
-            <div style={{ fontFamily: "Inter, sans-serif", fontSize: "0.65rem", color: "#475569" }}>{m.k}</div>
+            <div style={{ fontFamily: "Inter, sans-serif", fontSize: "0.65rem", color: "var(--color-text-secondary)" }}>{m.k}</div>
           </div>
         ))}
       </div>
@@ -232,12 +232,12 @@ function InnovationCard({ item, index }: { item: typeof innovations[0]; index: n
               key={t}
               style={{
                 padding: "3px 10px",
-                background: "rgba(255,255,255,0.04)",
-                border: "1px solid rgba(255,255,255,0.06)",
+                background: "var(--color-surface)",
+                border: "1px solid var(--color-surface-2)",
                 borderRadius: "100px",
                 fontFamily: "Inter, sans-serif",
                 fontSize: "0.7rem",
-                color: "#94A3B8",
+                color: "var(--color-text-muted)",
               }}
             >
               {t}
@@ -292,7 +292,7 @@ export default function InnovationLabPage() {
           style={{
             position: "absolute",
             inset: 0,
-            backgroundImage: `linear-gradient(rgba(124,58,237,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(124,58,237,0.04) 1px, transparent 1px)`,
+            backgroundImage: `linear-gradient(rgba(184,147,75,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(184,147,75,0.04) 1px, transparent 1px)`,
             backgroundSize: "40px 40px",
           }}
         />
@@ -301,8 +301,8 @@ export default function InnovationLabPage() {
             position: "absolute",
             inset: 0,
             background: `
-              radial-gradient(ellipse at 50% 30%, rgba(124,58,237,0.2) 0%, transparent 60%),
-              radial-gradient(ellipse at 20% 80%, rgba(6,182,212,0.1) 0%, transparent 50%)
+              radial-gradient(ellipse at 50% 30%, rgba(184,147,75,0.2) 0%, transparent 60%),
+              radial-gradient(ellipse at 20% 80%, rgba(108,78,49,0.1) 0%, transparent 50%)
             `,
           }}
         />
@@ -316,14 +316,14 @@ export default function InnovationLabPage() {
               alignItems: "center",
               gap: "8px",
               padding: "8px 20px",
-              border: "1px solid rgba(124,58,237,0.4)",
+              border: "1px solid rgba(184,147,75,0.4)",
               borderRadius: "100px",
               marginBottom: "28px",
-              background: "rgba(124,58,237,0.1)",
+              background: "rgba(184,147,75,0.1)",
             }}
           >
-            <FlaskConical size={14} style={{ color: "#A855F7" }} />
-            <span style={{ fontFamily: "Inter, sans-serif", fontSize: "0.8rem", fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase", color: "#A855F7" }}>
+            <FlaskConical size={14} style={{ color: "#B8934B" }} />
+            <span style={{ fontFamily: "Inter, sans-serif", fontSize: "0.8rem", fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase", color: "#B8934B" }}>
               Innovation Lab — Zentrix Technology
             </span>
           </motion.div>
@@ -341,11 +341,11 @@ export default function InnovationLabPage() {
               marginBottom: "28px",
             }}
           >
-            <span style={{ color: "#F8FAFC" }}>Where the</span>
+            <span style={{ color: "var(--color-text-primary)" }}>Where the</span>
             <br />
             <span
               style={{
-                background: "linear-gradient(135deg, #7C3AED, #A855F7, #06B6D4, #22D3EE)",
+                background: "linear-gradient(135deg, #6C4E31, #B8934B, #06B6D4, #22D3EE)",
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
                 backgroundClip: "text",
@@ -362,7 +362,7 @@ export default function InnovationLabPage() {
             style={{
               fontFamily: "Inter, sans-serif",
               fontSize: "clamp(0.95rem, 2vw, 1.2rem)",
-              color: "#94A3B8",
+              color: "var(--color-text-muted)",
               lineHeight: 1.7,
               maxWidth: "600px",
               margin: "0 auto 56px",
@@ -379,9 +379,9 @@ export default function InnovationLabPage() {
             style={{ display: "flex", gap: "clamp(16px,4vw,48px)", justifyContent: "center", flexWrap: "wrap" }}
           >
             {[
-              { v: "5+", l: "Active Projects", icon: FlaskConical, c: "#7C3AED" },
+              { v: "5+", l: "Active Projects", icon: FlaskConical, c: "#6C4E31" },
               { v: "10+", l: "Technologies Explored", icon: Globe, c: "#06B6D4" },
-              { v: "2026", l: "Founded", icon: Clock, c: "#A855F7" },
+              { v: "2026", l: "Founded", icon: Clock, c: "#B8934B" },
               { v: "∞", l: "Ideas in Queue", icon: Zap, c: "#F59E0B" },
             ].map((s) => {
               const Icon = s.icon;
@@ -389,7 +389,7 @@ export default function InnovationLabPage() {
                 <div key={s.l} style={{ textAlign: "center" }}>
                   <Icon size={20} style={{ color: s.c, margin: "0 auto 6px" }} />
                   <div style={{ fontFamily: "Syne, sans-serif", fontSize: "1.8rem", fontWeight: 800, color: s.c }}>{s.v}</div>
-                  <div style={{ fontFamily: "Inter, sans-serif", fontSize: "0.75rem", color: "#475569" }}>{s.l}</div>
+                  <div style={{ fontFamily: "Inter, sans-serif", fontSize: "0.75rem", color: "var(--color-text-secondary)" }}>{s.l}</div>
                 </div>
               );
             })}
@@ -406,7 +406,7 @@ export default function InnovationLabPage() {
                 fontFamily: "Syne, sans-serif",
                 fontSize: "clamp(2rem, 4vw, 3rem)",
                 fontWeight: 800,
-                color: "#F8FAFC",
+                color: "var(--color-text-primary)",
                 letterSpacing: "-0.03em",
               }}
             >
@@ -432,7 +432,7 @@ export default function InnovationLabPage() {
         style={{
           padding: "clamp(60px,8vw,100px) 0",
           background: "var(--color-bg)",
-          borderTop: "1px solid rgba(255,255,255,0.04)",
+          borderTop: "1px solid var(--color-surface)",
         }}
       >
         <div className="container-zentrix" ref={timelineRef}>
@@ -442,7 +442,7 @@ export default function InnovationLabPage() {
                 fontFamily: "Syne, sans-serif",
                 fontSize: "clamp(2rem, 4vw, 3rem)",
                 fontWeight: 800,
-                color: "#F8FAFC",
+                color: "var(--color-text-primary)",
                 letterSpacing: "-0.03em",
               }}
             >
@@ -459,7 +459,7 @@ export default function InnovationLabPage() {
                 top: 0,
                 bottom: 0,
                 width: "2px",
-                background: "linear-gradient(180deg, #7C3AED, #06B6D4, transparent)",
+                background: "linear-gradient(180deg, #6C4E31, #06B6D4, transparent)",
               }}
             />
 
@@ -489,7 +489,7 @@ export default function InnovationLabPage() {
                     <div style={{ fontFamily: "JetBrains Mono, monospace", fontSize: "0.75rem", color: item.color, fontWeight: 600, marginBottom: "4px" }}>
                       {item.year}
                     </div>
-                    <div style={{ fontFamily: "Inter, sans-serif", fontSize: "0.95rem", color: "#94A3B8", lineHeight: 1.5 }}>
+                    <div style={{ fontFamily: "Inter, sans-serif", fontSize: "0.95rem", color: "var(--color-text-muted)", lineHeight: 1.5 }}>
                       {item.event}
                     </div>
                   </div>
@@ -508,14 +508,14 @@ export default function InnovationLabPage() {
               fontFamily: "Syne, sans-serif",
               fontSize: "clamp(1.8rem,4vw,3rem)",
               fontWeight: 800,
-              color: "#F8FAFC",
+              color: "var(--color-text-primary)",
               marginBottom: "16px",
               letterSpacing: "-0.02em",
             }}
           >
             Have a wild idea? Let&apos;s explore it.
           </h2>
-          <p style={{ fontFamily: "Inter, sans-serif", fontSize: "1.05rem", color: "#94A3B8", marginBottom: "32px" }}>
+          <p style={{ fontFamily: "Inter, sans-serif", fontSize: "1.05rem", color: "var(--color-text-muted)", marginBottom: "32px" }}>
             We love ambitious, innovative projects. Bring us your toughest problems.
           </p>
           <Link
@@ -525,14 +525,14 @@ export default function InnovationLabPage() {
               alignItems: "center",
               gap: "10px",
               padding: "16px 40px",
-              background: "linear-gradient(135deg, #7C3AED, #A855F7)",
+              background: "linear-gradient(135deg, #6C4E31, #B8934B)",
               color: "#fff",
               borderRadius: "100px",
               fontFamily: "Inter, sans-serif",
               fontWeight: 700,
               fontSize: "1rem",
               textDecoration: "none",
-              boxShadow: "0 20px 60px rgba(124,58,237,0.35)",
+              boxShadow: "0 20px 60px rgba(184,147,75,0.35)",
             }}
           >
             <FlaskConical size={18} /> Pitch Your Idea

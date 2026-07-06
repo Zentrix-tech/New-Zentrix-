@@ -15,7 +15,7 @@ const posts = [
     excerpt: "From document intelligence to predictive analytics — how AI is moving from experimental tech to a core business necessity, and how Zentrix is leading this transformation.",
     readTime: "8 min read",
     date: "July 1, 2026",
-    color: "#7C3AED",
+    color: "#6C4E31",
     featured: true,
   },
   {
@@ -59,7 +59,7 @@ const posts = [
     excerpt: "Choosing a school ERP is a long-term decision. This guide covers everything — from key modules to questions to ask your vendor before signing.",
     readTime: "9 min read",
     date: "June 15, 2026",
-    color: "#A855F7",
+    color: "#B8934B",
     featured: false,
   },
   {
@@ -109,8 +109,8 @@ function PostCard({ post, index, featured = false }: { post: typeof posts[0]; in
       animate={inView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.7, delay: index * 0.08, ease: [0.16, 1, 0.3, 1] }}
       style={{
-        background: "rgba(255,255,255,0.02)",
-        border: "1px solid rgba(255,255,255,0.06)",
+        background: "var(--color-surface)",
+        border: "1px solid var(--color-surface-2)",
         borderRadius: featured ? "24px" : "20px",
         overflow: "hidden",
         transition: "all 0.4s cubic-bezier(0.16,1,0.3,1)",
@@ -123,8 +123,8 @@ function PostCard({ post, index, featured = false }: { post: typeof posts[0]; in
         e.currentTarget.style.boxShadow = `0 20px 60px ${post.color}15`;
       }}
       onMouseLeave={(e) => {
-        e.currentTarget.style.borderColor = "rgba(255,255,255,0.06)";
-        e.currentTarget.style.background = "rgba(255,255,255,0.02)";
+        e.currentTarget.style.borderColor = "var(--color-surface-2)";
+        e.currentTarget.style.background = "var(--color-surface)";
         e.currentTarget.style.transform = "translateY(0)";
         e.currentTarget.style.boxShadow = "none";
       }}
@@ -146,7 +146,7 @@ function PostCard({ post, index, featured = false }: { post: typeof posts[0]; in
           style={{
             position: "absolute",
             inset: 0,
-            backgroundImage: `linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px)`,
+            backgroundImage: `linear-gradient(var(--color-surface) 1px, transparent 1px), linear-gradient(90deg, var(--color-surface) 1px, transparent 1px)`,
             backgroundSize: "30px 30px",
           }}
         />
@@ -173,8 +173,8 @@ function PostCard({ post, index, featured = false }: { post: typeof posts[0]; in
             {post.category}
           </span>
           <div style={{ display: "flex", alignItems: "center", gap: "5px" }}>
-            <Clock size={12} style={{ color: "#475569" }} />
-            <span style={{ fontFamily: "Inter, sans-serif", fontSize: "0.75rem", color: "#475569" }}>{post.readTime}</span>
+            <Clock size={12} style={{ color: "var(--color-text-secondary)" }} />
+            <span style={{ fontFamily: "Inter, sans-serif", fontSize: "0.75rem", color: "var(--color-text-secondary)" }}>{post.readTime}</span>
           </div>
           <span style={{ fontFamily: "Inter, sans-serif", fontSize: "0.75rem", color: "#334155" }}>{post.date}</span>
         </div>
@@ -184,7 +184,7 @@ function PostCard({ post, index, featured = false }: { post: typeof posts[0]; in
             fontFamily: "Syne, sans-serif",
             fontWeight: 700,
             fontSize: featured && index === 0 ? "1.35rem" : "1.05rem",
-            color: "#F8FAFC",
+            color: "var(--color-text-primary)",
             lineHeight: 1.3,
             letterSpacing: "-0.01em",
             marginBottom: "12px",
@@ -197,7 +197,7 @@ function PostCard({ post, index, featured = false }: { post: typeof posts[0]; in
           style={{
             fontFamily: "Inter, sans-serif",
             fontSize: "0.875rem",
-            color: "#94A3B8",
+            color: "var(--color-text-muted)",
             lineHeight: 1.65,
             marginBottom: "20px",
           }}
@@ -252,8 +252,8 @@ export default function BlogPage() {
             position: "absolute",
             inset: 0,
             background: `
-              radial-gradient(ellipse at 30% 40%, rgba(124,58,237,0.1) 0%, transparent 60%),
-              radial-gradient(ellipse at 70% 60%, rgba(6,182,212,0.07) 0%, transparent 50%)
+              radial-gradient(ellipse at 30% 40%, rgba(184,147,75,0.1) 0%, transparent 60%),
+              radial-gradient(ellipse at 70% 60%, rgba(108,78,49,0.07) 0%, transparent 50%)
             `,
           }}
         />
@@ -266,14 +266,14 @@ export default function BlogPage() {
               alignItems: "center",
               gap: "8px",
               padding: "6px 16px",
-              border: "1px solid rgba(124,58,237,0.3)",
+              border: "1px solid rgba(184,147,75,0.3)",
               borderRadius: "100px",
               marginBottom: "24px",
-              background: "rgba(124,58,237,0.08)",
+              background: "rgba(184,147,75,0.08)",
             }}
           >
-            <BookOpen size={13} style={{ color: "#A855F7" }} />
-            <span style={{ fontFamily: "Inter, sans-serif", fontSize: "0.75rem", fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase", color: "#A855F7" }}>
+            <BookOpen size={13} style={{ color: "#B8934B" }} />
+            <span style={{ fontFamily: "Inter, sans-serif", fontSize: "0.75rem", fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase", color: "#B8934B" }}>
               Zentrix Insights
             </span>
           </motion.div>
@@ -291,11 +291,11 @@ export default function BlogPage() {
               marginBottom: "20px",
             }}
           >
-            <span style={{ color: "#F8FAFC" }}>Knowledge That</span>
+            <span style={{ color: "var(--color-text-primary)" }}>Knowledge That</span>
             <br />
             <span
               style={{
-                background: "linear-gradient(135deg, #7C3AED, #A855F7, #06B6D4)",
+                background: "linear-gradient(135deg, #6C4E31, #B8934B, #06B6D4)",
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
                 backgroundClip: "text",
@@ -312,7 +312,7 @@ export default function BlogPage() {
             style={{
               fontFamily: "Inter, sans-serif",
               fontSize: "1.1rem",
-              color: "#94A3B8",
+              color: "var(--color-text-muted)",
               lineHeight: 1.7,
               maxWidth: "520px",
               margin: "0 auto 36px",
@@ -330,7 +330,7 @@ export default function BlogPage() {
           >
             <Search
               size={16}
-              style={{ position: "absolute", left: "16px", top: "50%", transform: "translateY(-50%)", color: "#475569", zIndex: 1 }}
+              style={{ position: "absolute", left: "16px", top: "50%", transform: "translateY(-50%)", color: "var(--color-text-secondary)", zIndex: 1 }}
             />
             <input
               type="text"
@@ -340,10 +340,10 @@ export default function BlogPage() {
               style={{
                 width: "100%",
                 padding: "13px 16px 13px 44px",
-                background: "rgba(255,255,255,0.04)",
-                border: "1px solid rgba(255,255,255,0.08)",
+                background: "var(--color-surface)",
+                border: "1px solid var(--color-border)",
                 borderRadius: "100px",
-                color: "#F8FAFC",
+                color: "var(--color-text-primary)",
                 fontFamily: "Inter, sans-serif",
                 fontSize: "0.9rem",
                 outline: "none",
@@ -361,7 +361,7 @@ export default function BlogPage() {
           zIndex: 10,
           background: "rgba(5,5,8,0.9)",
           backdropFilter: "blur(40px)",
-          borderBottom: "1px solid rgba(255,255,255,0.04)",
+          borderBottom: "1px solid var(--color-surface)",
           padding: "14px 0",
         }}
       >
@@ -374,9 +374,9 @@ export default function BlogPage() {
                 style={{
                   padding: "6px 16px",
                   borderRadius: "100px",
-                  border: activeCategory === cat ? "1px solid rgba(124,58,237,0.5)" : "1px solid rgba(255,255,255,0.06)",
-                  background: activeCategory === cat ? "rgba(124,58,237,0.15)" : "transparent",
-                  color: activeCategory === cat ? "#A855F7" : "#94A3B8",
+                  border: activeCategory === cat ? "1px solid rgba(184,147,75,0.5)" : "1px solid var(--color-surface-2)",
+                  background: activeCategory === cat ? "rgba(184,147,75,0.15)" : "transparent",
+                  color: activeCategory === cat ? "#B8934B" : "var(--color-text-muted)",
                   fontFamily: "Inter, sans-serif",
                   fontWeight: 500,
                   fontSize: "0.8rem",
@@ -396,7 +396,7 @@ export default function BlogPage() {
       <section style={{ padding: "48px 0 clamp(80px,10vw,120px)" }}>
         <div className="container-zentrix">
           {filtered.length === 0 ? (
-            <div style={{ textAlign: "center", padding: "80px 0", color: "#475569", fontFamily: "Inter, sans-serif" }}>
+            <div style={{ textAlign: "center", padding: "80px 0", color: "var(--color-text-secondary)", fontFamily: "Inter, sans-serif" }}>
               No articles found. Try a different search or category.
             </div>
           ) : (
@@ -429,15 +429,15 @@ export default function BlogPage() {
         style={{
           padding: "clamp(60px,8vw,100px) 0",
           background: "var(--color-bg)",
-          borderTop: "1px solid rgba(255,255,255,0.04)",
+          borderTop: "1px solid var(--color-surface)",
           textAlign: "center",
         }}
       >
         <div className="container-zentrix">
-          <h2 style={{ fontFamily: "Syne, sans-serif", fontSize: "clamp(1.8rem,4vw,3rem)", fontWeight: 800, color: "#F8FAFC", marginBottom: "12px", letterSpacing: "-0.02em" }}>
+          <h2 style={{ fontFamily: "Syne, sans-serif", fontSize: "clamp(1.8rem,4vw,3rem)", fontWeight: 800, color: "var(--color-text-primary)", marginBottom: "12px", letterSpacing: "-0.02em" }}>
             Stay ahead of the curve
           </h2>
-          <p style={{ fontFamily: "Inter, sans-serif", fontSize: "1rem", color: "#94A3B8", marginBottom: "28px" }}>
+          <p style={{ fontFamily: "Inter, sans-serif", fontSize: "1rem", color: "var(--color-text-muted)", marginBottom: "28px" }}>
             Get the latest insights, case studies, and tech news from Zentrix — straight to your inbox.
           </p>
           <div style={{ display: "flex", gap: "12px", maxWidth: "440px", margin: "0 auto" }}>
@@ -447,10 +447,10 @@ export default function BlogPage() {
               style={{
                 flex: 1,
                 padding: "13px 18px",
-                background: "rgba(255,255,255,0.04)",
-                border: "1px solid rgba(255,255,255,0.08)",
+                background: "var(--color-surface)",
+                border: "1px solid var(--color-border)",
                 borderRadius: "100px",
-                color: "#F8FAFC",
+                color: "var(--color-text-primary)",
                 fontFamily: "Inter, sans-serif",
                 fontSize: "0.9rem",
                 outline: "none",
@@ -459,7 +459,7 @@ export default function BlogPage() {
             <button
               style={{
                 padding: "13px 24px",
-                background: "linear-gradient(135deg, #7C3AED, #A855F7)",
+                background: "linear-gradient(135deg, #6C4E31, #B8934B)",
                 color: "#fff",
                 border: "none",
                 borderRadius: "100px",
