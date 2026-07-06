@@ -525,56 +525,18 @@ h1, h2, h3, h4, h5, h6 {
    CUSTOM CURSOR
    ═══════════════════════════════════════ */
 
-.cursor-dot {
-  position: fixed;
-  width: 6px;
-  height: 6px;
-  background: #ffffff;
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: var(--z-cursor);
-  transform: translate(-50%, -50%);
-  mix-blend-mode: difference;
-  transition: width 0.2s ease, height 0.2s ease, transform 0.1s ease;
+/* Hide default cursor on desktop screens (with fine pointers) to allow custom cursor */
+@media (pointer: fine) {
+  html, body, a, button, input, textarea, select, label, [data-cursor="hover"], .project-row-anim, .service-card {
+    cursor: none !important;
+  }
 }
 
-.cursor-ring {
-  position: fixed;
-  width: 38px;
-  height: 38px;
-  border: 1px solid rgba(255, 255, 255, 0.4);
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: var(--z-cursor);
-  transform: translate(-50%, -50%);
-  mix-blend-mode: difference;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: width 0.3s var(--ease-out-expo), height 0.3s var(--ease-out-expo), border-color 0.3s ease, background-color 0.3s ease;
-}
-
-.cursor-ring.hover {
-  width: 68px;
-  height: 68px;
-  border-color: #ffffff;
-  background-color: #ffffff;
-}
-
-.cursor-label {
-  font-family: var(--font-mono);
-  font-size: 8px;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  color: #000000;
-  opacity: 0;
-  transition: opacity 0.2s ease;
-  text-transform: uppercase;
-  white-space: nowrap;
-}
-
-.cursor-ring.hover .cursor-label {
-  opacity: 1;
+/* Ensure touch devices restore standard pointer */
+@media (pointer: coarse) {
+  html, body, a, button, input, textarea, select, label, [data-cursor="hover"], .project-row-anim, .service-card {
+    cursor: auto !important;
+  }
 }
 
 /* ═══════════════════════════════════════

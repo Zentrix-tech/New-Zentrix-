@@ -3,164 +3,360 @@
 import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 
-export default function CustomCursor() {
-  const dotRef = useRef<HTMLDivElement>(null);
-  const ringRef = useRef<HTMLDivElement>(null);
-  const labelRef = useRef<HTMLSpanElement>(null);
+interface Particle {
+  x: number;
+  y: number;
+  vx: number;
+  vy: number;
+  alpha: number;
+  size: number;
+  color: string;
+}
 
-  const [cursorText, setCursorText] = useState("");
-  const mousePos = useRef({ x: -100, y: -100 });
+interface Ripple {
+  x: number;
+  y: number;
+  radius: number;
+  alpha: number;
+  maxRadius: number;
+}
+
+export default function CustomCursor() {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const logoRef = useRef<HTMLDivElement>(null);
+  const ringRef = useRef<HTMLDivElement>(null);
+
+  const [isTouchDevice, setIsTouchDevice] = useState(true);
+  const [isHovered, setIsHovered] = useState(false);
+
+  // Mouse coordinate tracking
+  const mouse = useRef({ x: -100, y: -100 });
+  const pos = useRef({ x: -100, y: -100 });
   const ringPos = useRef({ x: -100, y: -100 });
+  const vel = useRef({ x: 0, y: 0 });
+  
+  // Animation state refs
+  const particles = useRef<Particle[]>([]);
+  const ripples = useRef<Ripple[]>([]);
   const requestRef = useRef<number>(0);
+  const idleTimer = useRef<number>(0);
+  const isTabActive = useRef<boolean>(true);
+  const prefersReducedMotion = useRef<boolean>(false);
 
   useEffect(() => {
-    const dot = dotRef.current;
-    const ring = ringRef.current;
-    const label = labelRef.current;
-    if (!dot || !ring || !label) return;
-
-    // Track mouse coordinates
-    const onMouseMove = (e: MouseEvent) => {
-      mousePos.current = { x: e.clientX, y: e.clientY };
-      gsap.set(dot, { x: e.clientX, y: e.clientY });
+    // 1. Detect touch screen/pointer support
+    const checkTouch = () => {
+      const touchSupport =
+        "ontouchstart" in window ||
+        navigator.maxTouchPoints > 0 ||
+        window.matchMedia("(pointer: coarse)").matches;
+      setIsTouchDevice(touchSupport);
     };
 
-    // Smooth spring interpolation for the outer ring
-    const animateRing = () => {
-      const ease = 0.15; // Spring intensity
-      ringPos.current.x += (mousePos.current.x - ringPos.current.x) * ease;
-      ringPos.current.y += (mousePos.current.y - ringPos.current.y) * ease;
+    checkTouch();
+    window.addEventListener("resize", checkTouch, { passive: true });
 
-      gsap.set(ring, { x: ringPos.current.x, y: ringPos.current.y });
-      requestRef.current = requestAnimationFrame(animateRing);
-    };
-
-    // Event handlers for interactive hovers
-    const onMouseEnterInteractive = (e: Event) => {
-      const target = e.currentTarget as HTMLElement;
-      ring.classList.add("hover");
-      gsap.to(dot, { scale: 0, duration: 0.15 });
-
-      // Check for custom cursor text (e.g. data-cursor-text="VIEW")
-      const text = target.getAttribute("data-cursor-text") || "";
-      setCursorText(text);
-    };
-
-    const onMouseLeaveInteractive = () => {
-      ring.classList.remove("hover");
-      gsap.to(dot, { scale: 1, duration: 0.2 });
-      setCursorText("");
-    };
-
-    const onMouseDown = () => {
-      gsap.to(ring, { scale: 0.85, duration: 0.1 });
-    };
-
-    const onMouseUp = () => {
-      gsap.to(ring, { scale: 1, duration: 0.2, ease: "back.out(2)" });
-    };
-
-    window.addEventListener("mousemove", onMouseMove);
-    window.addEventListener("mousedown", onMouseDown);
-    window.addEventListener("mouseup", onMouseUp);
-
-    // Magnetic pull setup
-    const handleMagneticElements = () => {
-      const magneticElements = document.querySelectorAll("[data-magnetic]");
-      magneticElements.forEach((el) => {
-        const htmlEl = el as HTMLElement;
-        const bound = htmlEl.getBoundingClientRect();
-        const centerX = bound.left + bound.width / 2;
-        const centerY = bound.top + bound.height / 2;
-
-        const onMouseMoveMagnetic = (e: MouseEvent) => {
-          const distanceX = e.clientX - centerX;
-          const distanceY = e.clientY - centerY;
-
-          // Pull intensity
-          gsap.to(htmlEl, {
-            x: distanceX * 0.35,
-            y: distanceY * 0.35,
-            duration: 0.3,
-            ease: "power2.out",
-          });
-
-          // Attract cursor dot slightly towards center
-          mousePos.current = {
-            x: centerX + distanceX * 0.5,
-            y: centerY + distanceY * 0.5,
-          };
-        };
-
-        const onMouseLeaveMagnetic = () => {
-          gsap.to(htmlEl, {
-            x: 0,
-            y: 0,
-            duration: 0.5,
-            ease: "elastic.out(1, 0.3)",
-          });
-        };
-
-        htmlEl.addEventListener("mousemove", onMouseMoveMagnetic);
-        htmlEl.addEventListener("mouseleave", onMouseLeaveMagnetic);
-      });
-    };
-
-    // Attach hover animations to links and interactive elements
-    const updateInteractiveElements = () => {
-      const interactives = document.querySelectorAll(
-        "a, button, [data-cursor='hover'], input, textarea, select, label"
-      );
-      interactives.forEach((el) => {
-        el.addEventListener("mouseenter", onMouseEnterInteractive);
-        el.addEventListener("mouseleave", onMouseLeaveInteractive);
-      });
-    };
-
-    updateInteractiveElements();
-    handleMagneticElements();
-    requestRef.current = requestAnimationFrame(animateRing);
-
-    // Re-scan dynamically loaded DOM nodes periodically
-    const interval = setInterval(() => {
-      updateInteractiveElements();
-      handleMagneticElements();
-    }, 2000);
+    // Respect user motion accessibility preference
+    prefersReducedMotion.current = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
     return () => {
-      window.removeEventListener("mousemove", onMouseMove);
-      window.removeEventListener("mousedown", onMouseDown);
-      window.removeEventListener("mouseup", onMouseUp);
-      cancelAnimationFrame(requestRef.current);
-      clearInterval(interval);
+      window.removeEventListener("resize", checkTouch);
     };
   }, []);
 
+  useEffect(() => {
+    if (isTouchDevice) return;
+
+    const canvas = canvasRef.current;
+    const logoContainer = logoRef.current;
+    const ring = ringRef.current;
+    if (!canvas || !logoContainer || !ring) return;
+
+    // Set canvas dimensions to viewport size
+    const resizeCanvas = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    };
+    resizeCanvas();
+    window.addEventListener("resize", resizeCanvas, { passive: true });
+
+    // Track mouse coordinates
+    const onMouseMove = (e: MouseEvent) => {
+      mouse.current = { x: e.clientX, y: e.clientY };
+    };
+
+    // Global capture group interactive hover detection (mouseover/mouseout bubble)
+    const onMouseOver = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      if (!target) return;
+      const interactive = target.closest(
+        "a, button, [data-cursor='hover'], input, textarea, select, label, .project-row-anim, .service-card, .clickable-element, .interactive-hover"
+      );
+      if (interactive) {
+        setIsHovered(true);
+      }
+    };
+
+    const onMouseOut = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      if (!target) return;
+      const relatedTarget = e.relatedTarget as HTMLElement;
+      const interactive = target.closest(
+        "a, button, [data-cursor='hover'], input, textarea, select, label, .project-row-anim, .service-card, .clickable-element, .interactive-hover"
+      );
+      if (interactive && (!relatedTarget || !relatedTarget.closest(
+        "a, button, [data-cursor='hover'], input, textarea, select, label, .project-row-anim, .service-card, .clickable-element, .interactive-hover"
+      ))) {
+        setIsHovered(false);
+      }
+    };
+
+    // Emit click particles and ripple burst
+    const onMouseDown = (e: MouseEvent) => {
+      const x = e.clientX;
+      const y = e.clientY;
+
+      // Add ripple
+      ripples.current.push({
+        x,
+        y,
+        radius: 4,
+        alpha: 1.0,
+        maxRadius: 46,
+      });
+
+      // Add 12-16 custom particles in brand colors (Gold, Bronze, Sand)
+      const colors = ["#A37E36", "#6E5528", "#C4A15E", "#FAF7F2"];
+      const particleCount = prefersReducedMotion.current ? 4 : 14;
+      for (let i = 0; i < particleCount; i++) {
+        const angle = Math.random() * Math.PI * 2;
+        const speed = 1.8 + Math.random() * 3.5;
+        particles.current.push({
+          x,
+          y,
+          vx: Math.cos(angle) * speed,
+          vy: Math.sin(angle) * speed,
+          alpha: 1.0,
+          size: 2.5 + Math.random() * 3,
+          color: colors[Math.floor(Math.random() * colors.length)],
+        });
+      }
+
+      // Squeeze compression effect
+      gsap.to(logoContainer, {
+        scale: 0.82,
+        duration: 0.1,
+        overwrite: "auto",
+        onComplete: () => {
+          gsap.to(logoContainer, {
+            scale: isHovered ? 1.3 : 1.0,
+            duration: 0.45,
+            ease: "back.out(2)",
+            overwrite: "auto",
+          });
+        },
+      });
+    };
+
+    // Track tab visibility changes to pause loops
+    const handleVisibilityChange = () => {
+      isTabActive.current = !document.hidden;
+    };
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
+    // Register primary mouse event listeners
+    window.addEventListener("mousemove", onMouseMove, { passive: true });
+    window.addEventListener("mouseover", onMouseOver, { passive: true });
+    window.addEventListener("mouseout", onMouseOut, { passive: true });
+    window.addEventListener("mousedown", onMouseDown, { passive: true });
+
+    // Buttery smooth animation loops
+    const tick = () => {
+      if (!isTabActive.current) {
+        requestRef.current = requestAnimationFrame(tick);
+        return;
+      }
+
+      // 1. Lerp cursor positions
+      // Fine-tuned smooth interpolation values for high-end feel
+      const lerpVal = prefersReducedMotion.current ? 0.35 : 0.15;
+      const dx = mouse.current.x - pos.current.x;
+      const dy = mouse.current.y - pos.current.y;
+      
+      pos.current.x += dx * lerpVal;
+      pos.current.y += dy * lerpVal;
+
+      const speed = Math.sqrt(dx * dx + dy * dy);
+
+      // 2. Idle floating sine animation
+      let idleY = 0;
+      if (speed < 0.35 && !prefersReducedMotion.current) {
+        idleTimer.current += 16.7; // assuming ~60fps frame delta
+        if (idleTimer.current > 400) {
+          idleY = Math.sin(Date.now() * 0.0035) * 3;
+        }
+      } else {
+        idleTimer.current = 0;
+      }
+
+      // 3. Movement tilt/rotation
+      let angle = 0;
+      if (speed > 1.2 && !prefersReducedMotion.current) {
+        angle = Math.atan2(dy, dx) * (180 / Math.PI);
+        // Map to a subtle max 12 degree tilt
+        angle = Math.max(-12, Math.min(12, angle * 0.12));
+      }
+
+      // 4. Squash and stretch calculations based on speed
+      const stretch = prefersReducedMotion.current ? 1.0 : Math.min(1.15, 1 + speed * 0.002);
+      const squash = prefersReducedMotion.current ? 1.0 : Math.max(0.85, 1 - speed * 0.002);
+
+      // Apply transforms on logo container
+      logoContainer.style.transform = `translate3d(${pos.current.x}px, ${pos.current.y + idleY}px, 0) rotate(${angle}deg) scale(${isHovered ? 1.3 : 1}) scale3d(${stretch}, ${squash}, 1)`;
+
+      // 5. Outer glowing ring follows slightly slower for fluid trailing
+      const ringLerpVal = prefersReducedMotion.current ? 0.35 : 0.08;
+      ringPos.current.x += (pos.current.x - ringPos.current.x) * ringLerpVal;
+      ringPos.current.y += (pos.current.y - ringPos.current.y) * ringLerpVal;
+      
+      ring.style.transform = `translate3d(${ringPos.current.x}px, ${ringPos.current.y}px, 0) scale(${isHovered ? 1.0 : 0})`;
+
+      // 6. Draw particles and ripples on canvas
+      const ctx = canvas.getContext("2d");
+      if (ctx) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // Update & Render Particles
+        for (let i = particles.current.length - 1; i >= 0; i--) {
+          const p = particles.current[i];
+          p.x += p.vx;
+          p.y += p.vy;
+          p.vy += 0.045; // subtle gravity pull
+          p.vx *= 0.97;  // friction
+          p.vy *= 0.97;
+          p.alpha -= 0.025;
+
+          if (p.alpha <= 0) {
+            particles.current.splice(i, 1);
+            continue;
+          }
+
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+          ctx.fillStyle = p.color;
+          ctx.globalAlpha = p.alpha;
+          ctx.fill();
+        }
+
+        // Update & Render Ripples
+        for (let i = ripples.current.length - 1; i >= 0; i--) {
+          const r = ripples.current[i];
+          r.radius += (r.maxRadius - r.radius) * 0.12;
+          r.alpha -= 0.035;
+
+          if (r.alpha <= 0) {
+            ripples.current.splice(i, 1);
+            continue;
+          }
+
+          ctx.beginPath();
+          ctx.arc(r.x, r.y, r.radius, 0, Math.PI * 2);
+          ctx.strokeStyle = "rgba(163, 126, 54, 0.4)";
+          ctx.lineWidth = 1.5;
+          ctx.globalAlpha = r.alpha;
+          ctx.stroke();
+        }
+
+        ctx.globalAlpha = 1.0;
+      }
+
+      requestRef.current = requestAnimationFrame(tick);
+    };
+
+    requestRef.current = requestAnimationFrame(tick);
+
+    return () => {
+      window.removeEventListener("resize", resizeCanvas);
+      window.removeEventListener("mousemove", onMouseMove);
+      window.removeEventListener("mouseover", onMouseOver);
+      window.removeEventListener("mouseout", onMouseOut);
+      window.removeEventListener("mousedown", onMouseDown);
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+      cancelAnimationFrame(requestRef.current);
+    };
+  }, [isTouchDevice, isHovered]);
+
+  if (isTouchDevice) {
+    return null;
+  }
+
   return (
     <>
-      <div
-        ref={dotRef}
-        className="cursor-dot"
+      {/* Fullscreen interactive particle & ripple canvas */}
+      <canvas
+        ref={canvasRef}
         style={{
           position: "fixed",
+          inset: 0,
+          width: "100%",
+          height: "100%",
           pointerEvents: "none",
-          zIndex: 9998,
-          transform: "translate(-50%, -50%)",
+          zIndex: 99999,
         }}
       />
+
+      {/* Floating Outer Glowing Ring */}
       <div
         ref={ringRef}
-        className="cursor-ring"
+        className="cursor-ring-glowing"
         style={{
           position: "fixed",
+          top: 0,
+          left: 0,
+          width: "54px",
+          height: "54px",
+          border: "1.5px solid rgba(163, 126, 54, 0.45)",
+          borderRadius: "50%",
           pointerEvents: "none",
-          zIndex: 9997,
-          transform: "translate(-50%, -50%)",
+          zIndex: 99997,
+          transform: "translate3d(-100px, -100px, 0) translate(-50%, -50%)",
+          boxShadow: "0 0 20px rgba(163, 126, 54, 0.15)",
+          transition: "transform 0.05s ease-out, scale 0.4s cubic-bezier(0.16, 1, 0.3, 1)",
+          willChange: "transform",
+        }}
+      />
+
+      {/* Main Brand Logo Cursor */}
+      <div
+        ref={logoRef}
+        style={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          width: "32px",
+          height: "32px",
+          pointerEvents: "none",
+          zIndex: 99998,
+          transform: "translate3d(-100px, -100px, 0) translate(-50%, -50%)",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          willChange: "transform",
         }}
       >
-        <span ref={labelRef} className="cursor-label">
-          {cursorText}
-        </span>
+        <img
+          src="/logo_main.png"
+          alt="Cursor Logo"
+          style={{
+            width: "100%",
+            height: "100%",
+            objectFit: "contain",
+            filter: "drop-shadow(0 2px 6px rgba(163, 126, 54, 0.15)) drop-shadow(0 4px 12px rgba(163, 126, 54, 0.1))",
+            mixBlendMode: "multiply",
+            transition: "transform 0.3s cubic-bezier(0.16, 1, 0.3, 1)",
+          }}
+          className="cursor-logo-img-hover"
+        />
       </div>
     </>
   );
