@@ -267,7 +267,7 @@ export default function PageLoader() {
           }}
         >
           <img
-            src="/logo_main.png"
+            src="/logo_main.webp"
             alt="Zentrix Logo"
             style={{ width: "100%", height: "100%", objectFit: "contain" }}
           />

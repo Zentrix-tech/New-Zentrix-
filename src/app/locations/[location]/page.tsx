@@ -158,7 +158,7 @@ export default async function LocationPage({ params }: PageProps) {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
     "name": `Zentrix Technology - ${location.name}`,
-    "image": `${siteConfig.url}/logo_main.png`,
+    "image": `${siteConfig.url}/logo_main.webp`,
     "telephone": location.phone,
     "email": siteConfig.contact.email,
     "address": {

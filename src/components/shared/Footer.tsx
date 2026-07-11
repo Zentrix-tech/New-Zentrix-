@@ -257,7 +257,7 @@ export default function Footer() {
           <div>
             <div style={{ display: "flex", alignItems: "center", marginBottom: "20px" }}>
               <img
-                src="/logo_main.png"
+                src="/logo_main.webp"
                 alt="Zentrix Technology"
                 style={{
                   height: "48px",

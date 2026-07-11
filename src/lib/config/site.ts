@@ -9,8 +9,8 @@ export const siteConfig = {
   description:
     "Zentrix Technology is a premium software engineering company from Salem, crafting enterprise software, AI solutions, automation systems, mobile applications, and digital experiences that redefine what's possible.",
   shortDescription: "Premium software engineering, AI solutions, and digital transformation.",
-  url: process.env.NEXT_PUBLIC_SITE_URL || "https://zentrix.vercel.app",
-  domain: "zentrix.vercel.app",
+  url: process.env.NEXT_PUBLIC_SITE_URL || "https://zentrixtechnology.zone.id",
+  domain: "zentrixtechnology.zone.id",
   permanentDomain: "zentrix.in",
   founded: 2026,
   location: {

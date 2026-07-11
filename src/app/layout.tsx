@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, Syne, JetBrains_Mono } from "next/font/google";
+import Script from "next/script";
 import "@/styles/globals.css";
 import { siteConfig } from "@/lib/config/site";
 import Navbar from "@/components/shared/Navbar";
@@ -38,7 +39,7 @@ const jetbrainsMono = JetBrains_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
   title: {
-    default: `${siteConfig.name} — ${siteConfig.tagline}`,
+    default: `${siteConfig.name} — Premium Software Engineering & AI Solutions`,
     template: `%s | ${siteConfig.name}`,
   },
   description: siteConfig.description,
@@ -188,6 +189,22 @@ export default function RootLayout({
 
         {/* WhatsApp floating button — Client Component (has event handlers) */}
         <WhatsAppButton />
+
+        {/* Google Analytics (GA4) Integration */}
+        <Script
+          src={`https://www.googletagmanager.com/gtag/js?id=${siteConfig.analytics.googleAnalyticsId || "G-K89374B06C"}`}
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '${siteConfig.analytics.googleAnalyticsId || "G-K89374B06C"}', {
+              page_path: window.location.pathname,
+            });
+          `}
+        </Script>
       </body>
     </html>
   );

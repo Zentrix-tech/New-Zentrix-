@@ -32,7 +32,7 @@ const serviceDetails: Record<string, ServiceDetail> = {
     tagline: "High-Performance Digital Flagships",
     description: "We engineer pixel-perfect, lightning-fast web applications. Utilizing modern SSR frameworks like Next.js and robust backend services, we ensure that your digital ecosystem is fast, responsive, and ready to scale with your business.",
     iconName: "Globe",
-    image: "/work_avs_engg.png",
+    image: "/work_avs_engg.webp",
     color: "#A37E36",
     tags: ["Next.js", "TypeScript", "Tailwind CSS", "Node.js", "GraphQL"],
     features: [
@@ -56,7 +56,7 @@ const serviceDetails: Record<string, ServiceDetail> = {
     tagline: "Native & Cross-Platform Mobile Architectures",
     description: "We build intuitive, high-performance mobile apps for iOS and Android. By leveraging tools like Flutter and React Native, we deliver native-speed performance with clean UX layouts, keeping your customers connected on the go.",
     iconName: "Smartphone",
-    image: "/work_sakthi_kailash.png",
+    image: "/work_sakthi_kailash.webp",
     color: "#EC4899",
     tags: ["Flutter", "React Native", "Swift", "Kotlin", "Firebase"],
     features: [
@@ -80,7 +80,7 @@ const serviceDetails: Record<string, ServiceDetail> = {
     tagline: "Workflow Acceleration & Cognitive Computing",
     description: "We automate complex business workflows using advanced AI and Machine Learning. From intelligent classification pipelines to automated content synthesis, we help you save thousands of operational hours.",
     iconName: "Bot",
-    image: "/work_speech_to_text.png",
+    image: "/work_speech_to_text.webp",
     color: "#10B981",
     tags: ["Python", "PyTorch", "HuggingFace", "FastAPI", "OpenAI"],
     features: [
@@ -104,7 +104,7 @@ const serviceDetails: Record<string, ServiceDetail> = {
     tagline: "Scalable Systems & Mission-Critical Architecture",
     description: "We engineer resilient, large-scale custom systems (ERP, CRM, and bespoke business infrastructure). We focus on database integrity, secure API integrations, and intuitive administrative panels.",
     iconName: "Building2",
-    image: "/work_valli_hospital.png",
+    image: "/work_valli_hospital.webp",
     color: "#3B82F6",
     tags: ["Java", "Go", "PostgreSQL", "Docker", "AWS"],
     features: [
@@ -128,7 +128,7 @@ const serviceDetails: Record<string, ServiceDetail> = {
     tagline: "High-End Visual Identity & Digital Finery",
     description: "We design websites and apps that wow at first glance. Using best practices in modern digital typography, layout geometry, custom motion frameworks, and interactive prototypes, we make your brand unforgettable.",
     iconName: "Eye",
-    image: "/work_avs_omalur.png",
+    image: "/work_avs_omalur.webp",
     color: "#F59E0B",
     tags: ["Figma", "Adobe CC", "Spline", "Principle", "Lottie"],
     features: [
@@ -152,7 +152,7 @@ const serviceDetails: Record<string, ServiceDetail> = {
     tagline: "Visibility, Lead Acceleration & Strategic Growth",
     description: "We boost search engine visibility and execute high-yielding lead generation campaigns. From deep technical SEO auditing to high-ROI Meta and Google Ads, we accelerate your digital traffic.",
     iconName: "TrendingUp",
-    image: "/work_valli_meta_ads.png",
+    image: "/work_valli_meta_ads.webp",
     color: "#EC4899",
     tags: ["SEO Core", "Meta Ads", "Google Ads", "Analytics", "Intake Pages"],
     features: [
@@ -176,7 +176,7 @@ const serviceDetails: Record<string, ServiceDetail> = {
     tagline: "Autonomous Cognitive Staff for 24/7 Operations",
     description: "We design and deploy autonomous AI agents capable of resolving tickets, qualifying buyers, scheduling appointments, and managing database updates. Our agents read context, follow business rules, and execute APIs with human-like reasoning.",
     iconName: "Cpu",
-    image: "/work_speech_to_text.png",
+    image: "/work_speech_to_text.webp",
     color: "#6C4E31",
     tags: ["LangChain", "OpenAI API", "Vector Databases", "Function Calling", "Python"],
     features: [
@@ -200,7 +200,7 @@ const serviceDetails: Record<string, ServiceDetail> = {
     tagline: "Human-grade AI Call Automation",
     description: "We deploy real-time voice AI agents that handle inbound support calls and execute outbound qualification calls. Replicating natural human speech patterns, tones, and interruptions, our voice bots ensure your business never misses a call.",
     iconName: "MessageSquare",
-    image: "/work_speech_to_text.png",
+    image: "/work_speech_to_text.webp",
     color: "#A37E36",
     tags: ["WebSockets", "Vapi / Retell", "ElevenLabs", "Twilio", "FastAPI"],
     features: [
@@ -224,7 +224,7 @@ const serviceDetails: Record<string, ServiceDetail> = {
     tagline: "Qualify Leads & Answer Questions on WhatsApp & Web",
     description: "We build smart customer support and sales qualification chatbots for WhatsApp, Instagram, Telegram, and websites. Fully customized to follow your brand guidelines, our bots guide users to checkout, capture contact details, and resolve FAQs instantly.",
     iconName: "Bot",
-    image: "/work_valli_meta_ads.png",
+    image: "/work_valli_meta_ads.webp",
     color: "#10B981",
     tags: ["WhatsApp API", "Tailwind CSS", "Vector Search", "FastAPI", "React"],
     features: [
@@ -248,7 +248,7 @@ const serviceDetails: Record<string, ServiceDetail> = {
     tagline: "Wipe Out Repetitive Admin Bottlenecks",
     description: "We connect your CRM, accounting tools, spreadsheets, and databases using automated workflows. From triggering immediate WhatsApp invoice alerts to routing leads to appropriate sales reps, we optimize your business operations.",
     iconName: "Layers",
-    image: "/work_valli_hospital.png",
+    image: "/work_valli_hospital.webp",
     color: "#06B6D4",
     tags: ["Make.com / n8n", "Zapier", "Rest APIs", "Node.js", "Serverless"],
     features: [
@@ -272,7 +272,7 @@ const serviceDetails: Record<string, ServiceDetail> = {
     tagline: "Custom Customer Relationship Pipelines Built for ROI",
     description: "We develop custom CRM solutions tailored specifically for your sales workflows, pipeline stages, and reporting metrics. Fully owned by you with zero monthly license fees, our CRMs convert leads faster.",
     iconName: "Users",
-    image: "/work_reiz.png",
+    image: "/work_reiz.webp",
     color: "#F59E0B",
     tags: ["React / Next.js", "PostgreSQL", "Tailwind CSS", "REST APIs", "NodeJS"],
     features: [
@@ -296,7 +296,7 @@ const serviceDetails: Record<string, ServiceDetail> = {
     tagline: "Consolidated Enterprise Dashboards Under One Roof",
     description: "We design and deploy custom ERP solutions covering raw materials procurement, manufacturing lines, warehouse stocks, HR payroll, and multi-branch accounting. Custom-built to give you full visibility.",
     iconName: "LayoutDashboard",
-    image: "/work_avs_omalur.png",
+    image: "/work_avs_omalur.webp",
     color: "#3B82F6",
     tags: ["NextJS", "Go / Golang", "Docker", "PostgreSQL", "AWS Sharding"],
     features: [
@@ -320,7 +320,7 @@ const serviceDetails: Record<string, ServiceDetail> = {
     tagline: "High-ROI Customer Acquisition Campaigns",
     description: "We plan, build, and optimize high-converting Meta (Facebook & Instagram) ad campaigns. From writing premium ad copy and designing creative assets to custom audience research, we scale inquiries.",
     iconName: "Megaphone",
-    image: "/work_valli_meta_ads.png",
+    image: "/work_valli_meta_ads.webp",
     color: "#EC4899",
     tags: ["Facebook Ads Manager", "Conversion APIs", "Custom Audiences", "A/B Testing", "Figma"],
     features: [
@@ -344,7 +344,7 @@ const serviceDetails: Record<string, ServiceDetail> = {
     tagline: "Target High-Intent Search Intent Buyers",
     description: "We optimize Google Ads search, performance max, and display campaigns. By targeting precise buyer intent keywords, we ensure your business lands at the top of search results the moment prospects search.",
     iconName: "Search",
-    image: "/work_valli_meta_ads.png",
+    image: "/work_valli_meta_ads.webp",
     color: "#C4A15E",
     tags: ["Google Keyword Planner", "Google Analytics 4", "Search Ads", "PMax Campaigns", "Conversion Setup"],
     features: [
@@ -396,7 +396,7 @@ export default async function ServicePage({ params }: PageProps) {
     "provider": {
       "@type": "LocalBusiness",
       "name": "Zentrix Technology",
-      "image": `${siteConfig.url}/logo_main.png`,
+      "image": `${siteConfig.url}/logo_main.webp`,
       "telephone": siteConfig.contact.phone
     },
     "description": service.description,

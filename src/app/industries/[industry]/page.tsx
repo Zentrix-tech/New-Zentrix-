@@ -249,7 +249,7 @@ export default async function IndustryPage({ params }: PageProps) {
     "provider": {
       "@type": "LocalBusiness",
       "name": "Zentrix Technology",
-      "image": `${siteConfig.url}/logo_main.png`,
+      "image": `${siteConfig.url}/logo_main.webp`,
       "telephone": siteConfig.contact.phone
     },
     "description": industry.description,

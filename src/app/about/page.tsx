@@ -61,7 +61,7 @@ const team = [
     color: "var(--color-violet)",
     emoji: "🚀",
     skills: ["Fullstack Dev", "UI/UX Motion", "Lead Gen Strategy", "Awwwards Style"],
-    image: "/founder_arif.png",
+    image: "/founder_arif.webp",
     portfolio: "https://arif.zone.id/",
   },
   {
@@ -71,7 +71,7 @@ const team = [
     color: "var(--color-cyan)",
     emoji: "⚙️",
     skills: ["System Architecture", "NodeJS / NextJS", "Database Design", "AI Integration"],
-    image: "/cofounder_gokul.png",
+    image: "/cofounder_gokul.webp",
     portfolio: "https://gokulprasath.vercel.app/",
   },
 ];

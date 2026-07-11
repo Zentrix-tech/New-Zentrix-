@@ -86,7 +86,7 @@ export default function Navbar() {
             {/* Logo */}
             <Link href="/" style={{ textDecoration: "none", display: "flex", alignItems: "center" }}>
               <img
-                src="/logo_main.png"
+                src="/logo_main.webp"
                 alt="Zentrix Technology"
                 style={{
                   height: isScrolled ? "38px" : "44px",
