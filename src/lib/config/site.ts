@@ -5,7 +5,7 @@
 export const siteConfig = {
   name: "Zentrix Technology",
   shortName: "Zentrix",
-  tagline: "#1 Proven Next.js, React & AI Software Engineering",
+  tagline: "#1 Proven Next.js & React",
   description:
     "Zentrix Technology is a Next.js, React, and Node.js software engineering company crafting custom enterprise systems, AI solutions, and mobile apps.",
   shortDescription: "Next.js, React, and Node.js software engineering company.",

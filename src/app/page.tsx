@@ -884,42 +884,42 @@ const featuredServices = [
     id: "web-development", icon: Globe, color: "#A37E36",
     gradient: "linear-gradient(135deg, rgba(163,126,54,0.15), rgba(196,161,94,0.05))",
     title: "Web Development",
-    description: "Next.js, React, full-stack applications built for performance and scale.",
+    description: "Specifically, we engineer premium Next.js and React full-stack applications. Consequently, our systems are optimized for blazing-fast speed.",
     features: ["React & Next.js", "SEO Optimized", "Blazing Fast"],
   },
   {
     id: "app-development", icon: Smartphone, color: "#6E5528",
     gradient: "linear-gradient(135deg, rgba(110,85,40,0.15), rgba(163,126,54,0.05))",
     title: "App Development",
-    description: "Cross-platform mobile apps with Flutter and React Native that feel native.",
+    description: "Specifically, we construct cross-platform mobile apps with Flutter and React Native. Moreover, we ensure a seamless native experience.",
     features: ["iOS & Android", "Flutter / RN", "App Store Ready"],
   },
   {
     id: "ai-automation", icon: Bot, color: "#C4A15E",
     gradient: "linear-gradient(135deg, rgba(196,161,94,0.15), rgba(163,126,54,0.05))",
     title: "AI Automation",
-    description: "Machine learning pipelines, intelligent workflows, and AI-powered systems.",
+    description: "In addition, we design machine learning pipelines and workflows. Consequently, this helps businesses automate complex admin processes.",
     features: ["ML Models", "Workflow Bots", "Data Analytics"],
   },
   {
     id: "enterprise-software", icon: Server, color: "#A37E36",
     gradient: "linear-gradient(135deg, rgba(163,126,54,0.15), rgba(110,85,40,0.05))",
     title: "Enterprise Software",
-    description: "Custom ERP, CRM, HMS, and management systems for growing businesses.",
+    description: "Ultimately, we customize ERP, CRM, HMS, and corporate system networks. Furthermore, our bespoke portals are engineered to scale.",
     features: ["ERP / CRM", "HMS / SMS", "Custom Systems"],
   },
   {
     id: "ui-ux-design", icon: Palette, color: "#C4A15E",
     gradient: "linear-gradient(135deg, rgba(196,161,94,0.15), rgba(163,126,54,0.05))",
     title: "UI/UX Design",
-    description: "Awwwards-caliber interfaces and brand identities that captivate users.",
+    description: "Specifically, we design Awwwards-caliber interfaces and brand systems. Consequently, we captivate users and boost brand conversions.",
     features: ["Figma Design", "Brand Identity", "Motion Graphics"],
   },
   {
     id: "cloud-solutions", icon: Cloud, color: "#6E5528",
     gradient: "linear-gradient(135deg, rgba(110,85,40,0.15), rgba(196,161,94,0.05))",
     title: "Cloud & DevOps",
-    description: "AWS, Docker, CI/CD pipelines and scalable infrastructure that never sleeps.",
+    description: "Additionally, we deploy AWS cloud architectures and Docker container instances. As a result, we maintain scalable structures.",
     features: ["AWS / GCP", "Docker / K8s", "CI/CD Pipelines"],
   },
 ];
@@ -1475,10 +1475,10 @@ function WorksSection() {
 // ─── PROCESS SECTION ──────────────────────────────────────────────────────────
 
 const processSteps = [
-  { step: "01", title: "Discovery", desc: "We dive deep into your vision, goals, and requirements to build a strategic roadmap.", icon: "🔍", color: "#6C4E31" },
-  { step: "02", title: "Design", desc: "Awwwards-caliber UI/UX design — wireframes, prototypes, and pixel-perfect visuals.", icon: "✦", color: "#B8934B" },
-  { step: "03", title: "Engineering", desc: "Clean, scalable code with modern architectures, CI/CD pipelines, and comprehensive testing.", icon: "⚡", color: "#A37E36" },
-  { step: "04", title: "Launch", desc: "Smooth deployment with monitoring, performance optimization, and post-launch support.", icon: "🚀", color: "#C4A15E" },
+  { step: "01", title: "Discovery", desc: "We dive deep into your vision, goals, and requirements to build a strategic roadmap. Specifically, we conduct thorough research to align your objectives with market opportunities.", icon: "🔍", color: "#6C4E31" },
+  { step: "02", title: "Design", desc: "Awwwards-caliber UI/UX design — wireframes, prototypes, and pixel-perfect visuals. Consequently, we ensure that every user journey feels intuitive and visually stunning.", icon: "✦", color: "#B8934B" },
+  { step: "03", title: "Engineering", desc: "Clean, scalable code with modern architectures, CI/CD pipelines, and comprehensive testing. Subsequently, we deploy robust features utilizing Next.js, React, and serverless technology.", icon: "⚡", color: "#A37E36" },
+  { step: "04", title: "Launch", desc: "Smooth deployment with monitoring, performance optimization, and post-launch support. Ultimately, we scale your platform to handle growing user traffic with zero downtime.", icon: "🚀", color: "#C4A15E" },
 ];
 
 function ProcessSection() {
@@ -1772,10 +1772,10 @@ function InnovationSection() {
   const { ref, inView } = useInViewObserver({ threshold: 0.1, triggerOnce: true });
 
   const innovations = [
-    { icon: "🤖", title: "AI Research", desc: "Computer vision, NLP, and predictive models for real-world applications.", color: "#6C4E31" },
-    { icon: "⚙️", title: "IoT & Automation", desc: "Smart systems connecting physical devices to intelligent software platforms.", color: "#A37E36" },
-    { icon: "🏥", title: "Healthcare Innovation", desc: "Experimental apps revolutionizing patient care and medical workflows.", color: "#10B981" },
-    { icon: "🌐", title: "Future Ideas", desc: "Internal products and experimental concepts pushing technology boundaries.", color: "#C4A15E" },
+    { icon: "🤖", title: "AI Research", desc: "Specifically, we develop computer vision, NLP, and predictive models for real-world applications.", color: "#6C4E31" },
+    { icon: "⚙️", title: "IoT & Automation", desc: "Consequently, we deploy smart systems connecting physical devices to intelligent software platforms.", color: "#A37E36" },
+    { icon: "🏥", title: "Healthcare Innovation", desc: "Additionally, we build experimental applications revolutionizing patient care and medical workflows.", color: "#10B981" },
+    { icon: "🌐", title: "Future Ideas", desc: "Ultimately, we test internal products and experimental concepts pushing technology boundaries.", color: "#C4A15E" },
   ];
 
   return (
@@ -1837,7 +1837,7 @@ function InnovationSection() {
                   marginBottom: 32, maxWidth: 480,
                 }}
               >
-                Our Innovation Lab is where we experiment with emerging technologies — from computer vision to IoT automation — creating tomorrow&apos;s solutions today.
+                Our Innovation Lab is where we experiment with emerging technologies — from computer vision to IoT automation. Consequently, we are constantly creating tomorrow&apos;s solutions today, thereby ensuring your business remains ahead of the curve.
               </motion.p>
 
               <motion.div

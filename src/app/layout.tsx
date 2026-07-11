@@ -39,7 +39,7 @@ const jetbrainsMono = JetBrains_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
   title: {
-    default: `${siteConfig.name} — #1 Proven Next.js, React & AI Software Engineering`,
+    default: `${siteConfig.name} — #1 Proven Next.js & React`,
     template: `%s | ${siteConfig.name}`,
   },
   description: siteConfig.description,
