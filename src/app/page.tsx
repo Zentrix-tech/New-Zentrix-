@@ -368,11 +368,11 @@ function HeroSection() {
       <div
         ref={contentRef}
         className="container-zentrix"
-        style={{ position: "relative", zIndex: 3, paddingTop: 120, paddingBottom: 80 }}
+        style={{ position: "relative", zIndex: 3, paddingTop: 140, paddingBottom: 80 }}
       >
-        <div style={{ display: "grid", gridTemplateColumns: "1fr auto", gap: "clamp(40px,6vw,80px)", alignItems: "center" }}>
-          {/* Left: hero text */}
-          <div style={{ textAlign: "left" }}>
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center", maxWidth: "880px", margin: "0 auto" }}>
+          {/* Centered hero text */}
+          <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
             {/* Badge */}
             <div
               ref={badgeRef}
@@ -390,7 +390,7 @@ function HeroSection() {
 
             {/* Headline — word by word */}
             <div style={{ perspective: "1000px", marginBottom: 8 }}>
-              <h1 style={{ fontFamily: "var(--font-display)", fontSize: "clamp(2.8rem,6.5vw,6.5rem)", fontWeight: 500, lineHeight: 1.04, letterSpacing: 0, display: "flex", flexWrap: "wrap", gap: "0.25em" }}>
+              <h1 style={{ fontFamily: "var(--font-display)", fontSize: "clamp(2.8rem,6.5vw,6.5rem)", fontWeight: 500, lineHeight: 1.04, letterSpacing: 0, display: "flex", flexWrap: "wrap", justifyContent: "center", gap: "0.25em" }}>
                 {heroWords1.map((word, i) => (
                   <span
                     key={`w1-${i}`}
@@ -403,7 +403,7 @@ function HeroSection() {
               </h1>
             </div>
             <div style={{ perspective: "1000px", marginBottom: 24 }}>
-              <h1 style={{ fontFamily: "var(--font-display)", fontSize: "clamp(2.8rem,6.5vw,6.5rem)", fontWeight: 500, lineHeight: 1.04, letterSpacing: 0, display: "flex", flexWrap: "wrap", gap: "0.25em" }}>
+              <h1 style={{ fontFamily: "var(--font-display)", fontSize: "clamp(2.8rem,6.5vw,6.5rem)", fontWeight: 500, lineHeight: 1.04, letterSpacing: 0, display: "flex", flexWrap: "wrap", justifyContent: "center", gap: "0.25em" }}>
                 {heroWords2.map((word, i) => (
                   <span
                     key={`w2-${i}`}
@@ -426,7 +426,7 @@ function HeroSection() {
             <div style={{
               fontFamily: "var(--font-mono)", fontSize: "clamp(0.85rem,1.8vw,1.1rem)",
               color: "var(--color-violet)", marginBottom: 18,
-              display: "flex", alignItems: "center", gap: 8,
+              display: "flex", justifyContent: "center", alignItems: "center", gap: 8,
             }}>
               <span style={{ color: "var(--color-text-muted)" }}>// Building with</span>
               <TypeAnimation
@@ -442,7 +442,7 @@ function HeroSection() {
               style={{
                 fontFamily: "var(--font-body)", fontSize: "clamp(1rem,2vw,1.2rem)",
                 color: "var(--color-text-secondary)", lineHeight: 1.8,
-                maxWidth: 620, marginBottom: 44,
+                maxWidth: 680, marginBottom: 44, textAlign: "center",
               }}
             >
               Premium software engineering from Salem — delivering enterprise systems, AI automation,
@@ -451,7 +451,7 @@ function HeroSection() {
             </p>
 
             {/* CTA buttons */}
-            <div ref={ctaRef} style={{ display: "flex", gap: 16, flexWrap: "wrap", marginBottom: 56 }}>
+            <div ref={ctaRef} style={{ display: "flex", justifyContent: "center", gap: 16, flexWrap: "wrap", marginBottom: 56 }}>
               <Link
                 href="/contact"
                 data-magnetic
@@ -497,7 +497,7 @@ function HeroSection() {
             </div>
 
             {/* Stats row */}
-            <div ref={statsRef} style={{ display: "flex", gap: "clamp(20px,4vw,48px)", flexWrap: "wrap" }}>
+            <div ref={statsRef} style={{ display: "flex", justifyContent: "center", gap: "clamp(20px,4vw,48px)", flexWrap: "wrap" }}>
               {heroStats.map((stat) => (
                 <div key={stat.label} style={{ textAlign: "center" }}>
                   <div style={{
@@ -516,57 +516,8 @@ function HeroSection() {
               ))}
             </div>
           </div>
-
-          {/* Right: Code typewriter */}
-          <div ref={codeRef} style={{ opacity: 0 }}>
-            <div
-              style={{
-                position: "relative",
-                background: "rgba(26,22,18,0.92)",
-                borderRadius: 16,
-                border: "1px solid rgba(163,126,54,0.2)",
-                boxShadow: "0 32px 80px rgba(108,78,49,0.25), 0 0 0 1px rgba(163,126,54,0.08)",
-                overflow: "hidden",
-                minWidth: 380,
-              }}
-            >
-              {/* Glow highlight on top edge */}
-              <div style={{ position: "absolute", top: 0, left: "10%", right: "10%", height: 1, background: "linear-gradient(90deg, transparent, rgba(163,126,54,0.5), transparent)" }} />
-              <CodeTypewriter />
-            </div>
-          </div>
         </div>
       </div>
-
-      {/* Scroll indicator */}
-      <div style={{
-        position: "absolute", bottom: 36, left: "50%", transform: "translateX(-50%)",
-        display: "flex", flexDirection: "column", alignItems: "center", gap: 10, pointerEvents: "none",
-      }}>
-        <span style={{ fontFamily: "var(--font-body)", fontSize: "0.72rem", color: "var(--color-text-muted)", letterSpacing: "0.18em", textTransform: "uppercase", fontWeight: 500 }}>
-          Scroll to explore
-        </span>
-        <motion.div
-          animate={{ y: [0, 10, 0] }}
-          transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
-          style={{
-            width: 24, height: 40,
-            border: "1.5px solid var(--color-border)",
-            borderRadius: 12,
-            display: "flex", justifyContent: "center", paddingTop: 6,
-          }}
-        >
-          <div style={{ width: 4, height: 8, background: "linear-gradient(180deg, var(--color-violet), transparent)", borderRadius: 2 }} />
-        </motion.div>
-      </div>
-
-      {/* Responsive grid fix */}
-      <style>{`
-        @media (max-width: 900px) {
-          .hero-grid { grid-template-columns: 1fr !important; }
-          .hero-code-panel { display: none !important; }
-        }
-      `}</style>
     </section>
   );
 }
@@ -701,7 +652,6 @@ function StatsSection() {
     { value: 100, suffix: "%", label: "Client Satisfaction", icon: Star, color: "#C4A15E", barWidth: 100 },
     { value: 99, suffix: ".9%", label: "Uptime Guarantee", icon: Shield, color: "#A37E36", barWidth: 99 },
     { value: 10, suffix: "K+", label: "Hours Saved via AI", icon: Clock, color: "#6E5528", barWidth: 80 },
-    { value: 3, suffix: "+", label: "Countries Served", icon: Globe, color: "#C4A15E", barWidth: 30 },
   ];
 
   useEffect(() => {
