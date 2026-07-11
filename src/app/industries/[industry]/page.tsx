@@ -1,3 +1,4 @@
+import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { siteConfig } from "@/lib/config/site";
 import IndustryClient from "./IndustryClient";
@@ -296,4 +297,30 @@ export async function generateStaticParams() {
     { industry: "construction" },
     { industry: "travel" }
   ];
+}
+
+export async function generateMetadata({ params }: { params: Promise<{ industry: string }> }): Promise<Metadata> {
+  const resolvedParams = await params;
+  const industrySlug = resolvedParams.industry;
+  const industry = industryDetails[industrySlug];
+  if (!industry) return {};
+
+  return {
+    title: `${industry.title} | ${siteConfig.name}`,
+    description: industry.description,
+    alternates: {
+      canonical: `${siteConfig.url}/industries/${industrySlug}`,
+    },
+    openGraph: {
+      title: `${industry.title} | ${siteConfig.name}`,
+      description: industry.description,
+      url: `${siteConfig.url}/industries/${industrySlug}`,
+      type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${industry.title} | ${siteConfig.name}`,
+      description: industry.description,
+    }
+  };
 }

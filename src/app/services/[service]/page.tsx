@@ -1,3 +1,4 @@
+import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { siteConfig } from "@/lib/config/site";
 import ServiceDetailClient from "./ServiceDetailClient";
@@ -451,4 +452,30 @@ export async function generateStaticParams() {
     { service: "custom-software" },
     { service: "digital-marketing" }
   ];
+}
+
+export async function generateMetadata({ params }: { params: Promise<{ service: string }> }): Promise<Metadata> {
+  const resolvedParams = await params;
+  const serviceSlug = resolvedParams.service;
+  const service = serviceDetails[serviceSlug];
+  if (!service) return {};
+
+  return {
+    title: `${service.title} — ${service.tagline} | ${siteConfig.name}`,
+    description: service.description,
+    alternates: {
+      canonical: `${siteConfig.url}/services/${serviceSlug}`,
+    },
+    openGraph: {
+      title: `${service.title} | ${siteConfig.name}`,
+      description: service.description,
+      url: `${siteConfig.url}/services/${serviceSlug}`,
+      type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${service.title} | ${siteConfig.name}`,
+      description: service.description,
+    }
+  };
 }

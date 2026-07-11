@@ -91,10 +91,6 @@ export const metadata: Metadata = {
   },
   alternates: {
     canonical: siteConfig.url,
-    languages: {
-      "en-IN": `${siteConfig.url}/en`,
-      "ta-IN": `${siteConfig.url}/ta`,
-    },
   },
   verification: {
     google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || "",

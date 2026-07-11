@@ -1,3 +1,4 @@
+import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { siteConfig } from "@/lib/config/site";
 import LocationClient from "./LocationClient";
@@ -226,4 +227,30 @@ export async function generateStaticParams() {
     { location: "kanchipuram" },
     { location: "cuddalore" }
   ];
+}
+
+export async function generateMetadata({ params }: { params: Promise<{ location: string }> }): Promise<Metadata> {
+  const resolvedParams = await params;
+  const locationSlug = resolvedParams.location;
+  const location = locationDetails[locationSlug];
+  if (!location) return {};
+
+  return {
+    title: `${location.title} | ${siteConfig.name}`,
+    description: location.description,
+    alternates: {
+      canonical: `${siteConfig.url}/locations/${locationSlug}`,
+    },
+    openGraph: {
+      title: `${location.title} | ${siteConfig.name}`,
+      description: location.description,
+      url: `${siteConfig.url}/locations/${locationSlug}`,
+      type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${location.title} | ${siteConfig.name}`,
+      description: location.description,
+    }
+  };
 }
