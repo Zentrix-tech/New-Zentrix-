@@ -1,19 +1,6 @@
-"use client";
-
-import { useEffect, useRef, use } from "react";
-import Link from "next/link";
 import { notFound } from "next/navigation";
-import { motion } from "framer-motion";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
-import {
-  Globe, Smartphone, Bot, Building2, Eye, TrendingUp,
-  Cpu, Shield, Sparkles, Layers, ArrowRight, Zap, Check
-} from "lucide-react";
-
-if (typeof window !== "undefined") {
-  gsap.registerPlugin(ScrollTrigger);
-}
+import { siteConfig } from "@/lib/config/site";
+import ServiceDetailClient from "./ServiceDetailClient";
 
 interface Feature {
   title: string;
@@ -29,12 +16,13 @@ interface ServiceDetail {
   title: string;
   tagline: string;
   description: string;
-  icon: any;
+  iconName: string;
   image: string;
   color: string;
   tags: string[];
   features: Feature[];
   metrics: Metric[];
+  faqs: { q: string; a: string }[];
 }
 
 const serviceDetails: Record<string, ServiceDetail> = {
@@ -42,8 +30,8 @@ const serviceDetails: Record<string, ServiceDetail> = {
     title: "Web Development",
     tagline: "High-Performance Digital Flagships",
     description: "We engineer pixel-perfect, lightning-fast web applications. Utilizing modern SSR frameworks like Next.js and robust backend services, we ensure that your digital ecosystem is fast, responsive, and ready to scale with your business.",
-    icon: Globe,
-    image: "/services/web_development.png",
+    iconName: "Globe",
+    image: "/work_avs_engg.png",
     color: "#A37E36",
     tags: ["Next.js", "TypeScript", "Tailwind CSS", "Node.js", "GraphQL"],
     features: [
@@ -56,14 +44,18 @@ const serviceDetails: Record<string, ServiceDetail> = {
       { label: "Performance Index", value: "99/100" },
       { label: "Load Velocity", value: "<0.8s" },
       { label: "Conversion Lift", value: "+32%" }
+    ],
+    faqs: [
+      { q: "What is your main technology stack for web development?", a: "We primarily build on Next.js, React, TypeScript, Node.js, and Tailwind CSS. This stack guarantees maximum performance and search visibility." },
+      { q: "Will our website be SEO optimized out of the box?", a: "Yes, every site we build features built-in structured JSON-LD schema, perfect Core Web Vitals scores, semantic HTML, and clean meta tag optimization." }
     ]
   },
   "app-development": {
     title: "App Development",
     tagline: "Native & Cross-Platform Mobile Architectures",
     description: "We build intuitive, high-performance mobile apps for iOS and Android. By leveraging tools like Flutter and React Native, we deliver native-speed performance with clean UX layouts, keeping your customers connected on the go.",
-    icon: Smartphone,
-    image: "/services/app_development.png",
+    iconName: "Smartphone",
+    image: "/work_sakthi_kailash.png",
     color: "#EC4899",
     tags: ["Flutter", "React Native", "Swift", "Kotlin", "Firebase"],
     features: [
@@ -76,14 +68,18 @@ const serviceDetails: Record<string, ServiceDetail> = {
       { label: "Crash-Free Rate", value: "99.9%" },
       { label: "App Store Rating", value: "4.8★" },
       { label: "Engagement Lift", value: "+45%" }
+    ],
+    faqs: [
+      { q: "Should we choose Flutter or React Native?", a: "Both are excellent. We recommend Flutter for highly customized design layouts, and React Native if you want to share code with an existing React web application." },
+      { q: "How do you handle App Store reviews and submissions?", a: "We manage the entire submission process, including building assets, writing descriptions, setting up privacy policies, and resolving App Store review requests." }
     ]
   },
   "ai-automation": {
     title: "AI Automation",
     tagline: "Workflow Acceleration & Cognitive Computing",
     description: "We automate complex business workflows using advanced AI and Machine Learning. From intelligent classification pipelines to automated content synthesis, we help you save thousands of operational hours.",
-    icon: Bot,
-    image: "/services/ai_automation.png",
+    iconName: "Bot",
+    image: "/work_speech_to_text.png",
     color: "#10B981",
     tags: ["Python", "PyTorch", "HuggingFace", "FastAPI", "OpenAI"],
     features: [
@@ -96,14 +92,18 @@ const serviceDetails: Record<string, ServiceDetail> = {
       { label: "Operation Overhead", value: "-60%" },
       { label: "Pipeline Speed", value: "10x" },
       { label: "Model Accuracy", value: "98.5%" }
+    ],
+    faqs: [
+      { q: "Can AI automation work with our existing ERP or database?", a: "Yes, we build custom bridge APIs and RPA connectors to allow modern AI models to read and write data to legacy local systems securely." },
+      { q: "What security measures do you take with company data?", a: "We run models locally on private servers or use enterprise API wrappers with strict zero-data-retention agreements to protect proprietary information." }
     ]
   },
   "enterprise-software": {
     title: "Enterprise Software",
     tagline: "Scalable Systems & Mission-Critical Architecture",
     description: "We engineer resilient, large-scale custom systems (ERP, CRM, and bespoke business infrastructure). We focus on database integrity, secure API integrations, and intuitive administrative panels.",
-    icon: Building2,
-    image: "/services/enterprise_software.png",
+    iconName: "Building2",
+    image: "/work_valli_hospital.png",
     color: "#3B82F6",
     tags: ["Java", "Go", "PostgreSQL", "Docker", "AWS"],
     features: [
@@ -116,14 +116,18 @@ const serviceDetails: Record<string, ServiceDetail> = {
       { label: "Uptime SLA Guarantee", value: "99.99%" },
       { label: "Throughput Capacity", value: "50K req/s" },
       { label: "Legacy Migration", value: "100% Sync" }
+    ],
+    faqs: [
+      { q: "What is the difference between custom software and off-the-shelf SaaS?", a: "Off-the-shelf software forces you to change your processes to match the tool. Custom software is built around your workflows, providing 10x the efficiency and eliminating monthly per-user licensing fees." },
+      { q: "How do you handle hosting and server scalability?", a: "We deploy on fully scalable cloud infrastructures (AWS/Azure) with auto-scaling rules and automatic database backups, backed by a 99.99% uptime SLA." }
     ]
   },
   "ui-ux-design": {
     title: "UI/UX Design",
     tagline: "High-End Visual Identity & Digital Finery",
     description: "We design websites and apps that wow at first glance. Using best practices in modern digital typography, layout geometry, custom motion frameworks, and interactive prototypes, we make your brand unforgettable.",
-    icon: Eye,
-    image: "/services/ui_ux_design.png",
+    iconName: "Eye",
+    image: "/work_avs_omalur.png",
     color: "#F59E0B",
     tags: ["Figma", "Adobe CC", "Spline", "Principle", "Lottie"],
     features: [
@@ -136,14 +140,18 @@ const serviceDetails: Record<string, ServiceDetail> = {
       { label: "Session Duration", value: "+240%" },
       { label: "User Delight Factor", value: "9.8/10" },
       { label: "Bounce Rate Reduction", value: "-35%" }
+    ],
+    faqs: [
+      { q: "Do we get edit access to design files?", a: "Yes, we work entirely within Figma. You will receive live access to the design canvas, allowing your team to review, comment, and inspect design components in real time." },
+      { q: "How many revisions do you allow?", a: "We believe in iterative collaboration. We don't restrict revisions; we refine the design until it perfectly aligns with your vision and brand direction." }
     ]
   },
   "seo": {
     title: "Digital Marketing & SEO",
     tagline: "Visibility, Lead Acceleration & Strategic Growth",
     description: "We boost search engine visibility and execute high-yielding lead generation campaigns. From deep technical SEO auditing to high-ROI Meta and Google Ads, we accelerate your digital traffic.",
-    icon: TrendingUp,
-    image: "/services/seo_marketing.png",
+    iconName: "TrendingUp",
+    image: "/work_valli_meta_ads.png",
     color: "#EC4899",
     tags: ["SEO Core", "Meta Ads", "Google Ads", "Analytics", "Intake Pages"],
     features: [
@@ -156,312 +164,291 @@ const serviceDetails: Record<string, ServiceDetail> = {
       { label: "Cost Per Lead Reduction", value: "-60%" },
       { label: "Organic Rank Lift", value: "3.5x" },
       { label: "Paid Campaign ROI", value: "4.8x" }
+    ],
+    faqs: [
+      { q: "How long does it take to see organic SEO results?", a: "Technical SEO optimizations can show indexation improvements within 2 to 4 weeks. High-intent competitive keyword rankings typically take 3 to 6 months of consistent optimization." },
+      { q: "Do you manage both search ads and social media ads?", a: "Yes, we coordinate unified search campaigns (Google Search, YouTube) and visual social campaigns (Meta, Instagram, LinkedIn) to maximize buyer touchpoints." }
+    ]
+  },
+  "ai-agents": {
+    title: "AI Agents",
+    tagline: "Autonomous Cognitive Staff for 24/7 Operations",
+    description: "We design and deploy autonomous AI agents capable of resolving tickets, qualifying buyers, scheduling appointments, and managing database updates. Our agents read context, follow business rules, and execute APIs with human-like reasoning.",
+    iconName: "Cpu",
+    image: "/work_speech_to_text.png",
+    color: "#6C4E31",
+    tags: ["LangChain", "OpenAI API", "Vector Databases", "Function Calling", "Python"],
+    features: [
+      { title: "Cognitive Reasoning", desc: "AI agents that understand context and resolve complex user issues." },
+      { title: "Action API Triggers", desc: "Allow agents to read/write database values, book calendars, or trigger emails." },
+      { title: "Knowledge Base Integration", desc: "Embed company PDFs, manuals, and FAQs for accurate responses." },
+      { title: "Self-Improving Logic", desc: "Feedback loop metrics that allow agent prompts to optimize over time." }
+    ],
+    metrics: [
+      { label: "Ticket Resolution Rate", value: "85%" },
+      { label: "Response Delay", value: "<1.2s" },
+      { label: "Operating Savings", value: "70%+" }
+    ],
+    faqs: [
+      { q: "What systems can your AI agents integrate with?", a: "Our agents connect to CRMs (Salesforce, HubSpot, custom), email systems, Slack, databases, and any tool that exposes an HTTP API." },
+      { q: "Can the AI agent be trained on our private documents?", a: "Yes, we use secure RAG (Retrieval-Augmented Generation) frameworks to feed your private guides, pricing sheets, and PDFs into the agent without exposing them to public models." }
+    ]
+  },
+  "voice-ai": {
+    title: "Voice AI Agents",
+    tagline: "Human-grade AI Call Automation",
+    description: "We deploy real-time voice AI agents that handle inbound support calls and execute outbound qualification calls. Replicating natural human speech patterns, tones, and interruptions, our voice bots ensure your business never misses a call.",
+    iconName: "MessageSquare",
+    image: "/work_speech_to_text.png",
+    color: "#A37E36",
+    tags: ["WebSockets", "Vapi / Retell", "ElevenLabs", "Twilio", "FastAPI"],
+    features: [
+      { title: "Ultra-Low Latency Calls", desc: "Under 800ms response time for natural-feeling dialogue." },
+      { title: "Emotion & Tone Control", desc: "Set warm, professional, or direct voices that handle frustrated buyers calmly." },
+      { title: "Live System Updates", desc: "Let voice agents log customer requirements directly in your ERP mid-call." },
+      { title: "Multi-Language Support", desc: "Deploy voice agents conversing fluently in English, Tamil, and Hindi." }
+    ],
+    metrics: [
+      { label: "Latency Lag", value: "<600ms" },
+      { label: "Call Abandonment", value: "-95%" },
+      { label: "Agent Booking Conversion", value: "+40%" }
+    ],
+    faqs: [
+      { q: "Does the voice bot sound like a robot?", a: "No, we use state-of-the-art voice synthesizers (ElevenLabs, Play.ht) that replicate natural breathing patterns, pauses, and speech modulations." },
+      { q: "Can we route calls from our existing phone lines?", a: "Yes, we integrate with your existing Twilio accounts or local SIP trunks to route calls seamlessly." }
+    ]
+  },
+  "chatbots": {
+    title: "Intelligent Chatbots",
+    tagline: "Qualify Leads & Answer Questions on WhatsApp & Web",
+    description: "We build smart customer support and sales qualification chatbots for WhatsApp, Instagram, Telegram, and websites. Fully customized to follow your brand guidelines, our bots guide users to checkout, capture contact details, and resolve FAQs instantly.",
+    iconName: "Bot",
+    image: "/work_valli_meta_ads.png",
+    color: "#10B981",
+    tags: ["WhatsApp API", "Tailwind CSS", "Vector Search", "FastAPI", "React"],
+    features: [
+      { title: "WhatsApp Business API", desc: "Send automated alerts, billing, and booking updates directly on chat." },
+      { title: "Interactive Rich Menus", desc: "Custom buttons, lists, and quick-reply options for frictionless chat." },
+      { title: "Hybrid Human-Agent Handoff", desc: "Instantly alert human staff when a high-value customer needs support." },
+      { title: "Unified Chat Dashboard", desc: "Monitor all user interactions across channels in one admin view." }
+    ],
+    metrics: [
+      { label: "Customer FAQ Resolved", value: "92%" },
+      { label: "Leads Qualified / day", value: "1000+" },
+      { label: "Support Wait Time", value: "0s" }
+    ],
+    faqs: [
+      { q: "Do you set up the WhatsApp Business API?", a: "Yes, we handle the Meta Business verification, display name setup, and message template approvals." },
+      { q: "Can the chatbot process payments?", a: "Yes, we build chatbots that generate UPI payment links and verify payments dynamically inside the chat window." }
+    ]
+  },
+  "workflow-automation": {
+    title: "Workflow Automation",
+    tagline: "Wipe Out Repetitive Admin Bottlenecks",
+    description: "We connect your CRM, accounting tools, spreadsheets, and databases using automated workflows. From triggering immediate WhatsApp invoice alerts to routing leads to appropriate sales reps, we optimize your business operations.",
+    iconName: "Layers",
+    image: "/work_valli_hospital.png",
+    color: "#06B6D4",
+    tags: ["Make.com / n8n", "Zapier", "Rest APIs", "Node.js", "Serverless"],
+    features: [
+      { title: "Lead Routing Automation", desc: "Instantly parse new leads and route to reps based on location." },
+      { title: "Auto-Invoicing", desc: "Trigger billing PDFs and payment link updates automatically." },
+      { title: "Data Synchronization", desc: "Eliminate double-entry by syncing spreadsheets, CRMs, and accounting." },
+      { title: "Operational Logs", desc: "Monitor all automation logs and flag any error runs instantly." }
+    ],
+    metrics: [
+      { label: "Manual Work Hours", value: "-80%" },
+      { label: "Data Entry Errors", value: "0%" },
+      { label: "Process Velocity", value: "Instant" }
+    ],
+    faqs: [
+      { q: "Should we use Make.com, n8n, or custom code?", a: "We choose based on cost and flexibility. Make.com is great for rapid deployment, n8n for privacy-focused self-hosting, and custom Node.js/Python for highly complex rules." },
+      { q: "How do we monitor if a workflow fails?", a: "We build automated monitoring alerts that ping your Slack or WhatsApp the second an API error is caught, ensuring zero lost leads." }
+    ]
+  },
+  "crm-development": {
+    title: "CRM Development",
+    tagline: "Custom Customer Relationship Pipelines Built for ROI",
+    description: "We develop custom CRM solutions tailored specifically for your sales workflows, pipeline stages, and reporting metrics. Fully owned by you with zero monthly license fees, our CRMs convert leads faster.",
+    iconName: "Users",
+    image: "/work_reiz.png",
+    color: "#F59E0B",
+    tags: ["React / Next.js", "PostgreSQL", "Tailwind CSS", "REST APIs", "NodeJS"],
+    features: [
+      { title: "Kanban Pipeline Tracker", desc: "Drag and drop leads across customized stages easily." },
+      { title: "Live Activity Tracking", desc: "Log every call, email, and meeting automatically." },
+      { title: "Dynamic Lead Assignment", desc: "Assign prospects using round-robin or value-based logic." },
+      { title: "Detailed Win/Loss Analytics", desc: "Understand exactly where deals fall out and optimize." }
+    ],
+    metrics: [
+      { label: "Lead Conversion Rate", value: "+32%" },
+      { label: "Sales Cycle Duration", value: "-40%" },
+      { label: "Monthly SaaS License Fee", value: "$0" }
+    ],
+    faqs: [
+      { q: "Can we import our existing customer sheets?", a: "Yes, we handle the entire data migration process, cleaning up duplicate contacts and maintaining activity logs." },
+      { q: "Is the CRM mobile-responsive?", a: "Yes, we optimize the layout so your sales reps can update pipeline stages, log notes, and call leads on the go." }
+    ]
+  },
+  "erp-development": {
+    title: "ERP Development",
+    tagline: "Consolidated Enterprise Dashboards Under One Roof",
+    description: "We design and deploy custom ERP solutions covering raw materials procurement, manufacturing lines, warehouse stocks, HR payroll, and multi-branch accounting. Custom-built to give you full visibility.",
+    iconName: "LayoutDashboard",
+    image: "/work_avs_omalur.png",
+    color: "#3B82F6",
+    tags: ["NextJS", "Go / Golang", "Docker", "PostgreSQL", "AWS Sharding"],
+    features: [
+      { title: "Inventory Ledger", desc: "Live stock count with barcode scanning and auto-reorder alerts." },
+      { title: "HR & Payroll Engine", desc: "Automate biometric logs, attendance, PF/ESI deductions, and payslips." },
+      { title: "Consolidated Accounting", desc: "Track GST reports, cash flow, multi-branch ledgers, and profit sheets." },
+      { title: "Secure Data Backups", desc: "Auto-replicated sharded databases backing up hourly." }
+    ],
+    metrics: [
+      { label: "Procurement Waste", value: "-25%" },
+      { label: "Audit Prep Duration", value: "-75%" },
+      { label: "System Uptime", value: "99.99%" }
+    ],
+    faqs: [
+      { q: "Can you build specific modules for our niche industry?", a: "Yes, our custom ERPs are modular. We write clean code templates allowing you to add manufacturing, fleet, or client portals easily." },
+      { q: "Is the database secure from local device failures?", a: "Yes, our servers run on AWS cloud with automatic hourly database snapshots and sharding." }
+    ]
+  },
+  "meta-ads": {
+    title: "Meta Ads & Lead Generation",
+    tagline: "High-ROI Customer Acquisition Campaigns",
+    description: "We plan, build, and optimize high-converting Meta (Facebook & Instagram) ad campaigns. From writing premium ad copy and designing creative assets to custom audience research, we scale inquiries.",
+    iconName: "Megaphone",
+    image: "/work_valli_meta_ads.png",
+    color: "#EC4899",
+    tags: ["Facebook Ads Manager", "Conversion APIs", "Custom Audiences", "A/B Testing", "Figma"],
+    features: [
+      { title: "High-Intent targeting", desc: "Pinpoint buyers based on specific interests, behaviors, and regions." },
+      { title: "Meta Conversion API Integration", desc: "Accurate tracking bypassing iOS ad-block limits." },
+      { title: "A/B Creative testing", desc: "Constantly test ad layouts and hooks to lower cost per lead." },
+      { title: "Direct Lead Form Webhooks", desc: "Route new lead inquiries into your CRM within seconds." }
+    ],
+    metrics: [
+      { label: "Cost Per Lead", value: "-45%" },
+      { label: "Ad Click-through Rate", value: "+3.5%" },
+      { label: "Return on Ad Spend", value: "4.5x" }
+    ],
+    faqs: [
+      { q: "What budget do we need to start Meta Ads?", a: "We recommend starting with at least ₹500 to ₹1000 per day to gather enough conversion data to optimize." },
+      { q: "Who designs the ad creatives and writes the copy?", a: "Our creative team handles everything — writing hooks, designing layouts in Figma, and filming video assets." }
+    ]
+  },
+  "google-ads": {
+    title: "Google Ads & PPC Campaigns",
+    tagline: "Target High-Intent Search Intent Buyers",
+    description: "We optimize Google Ads search, performance max, and display campaigns. By targeting precise buyer intent keywords, we ensure your business lands at the top of search results the moment prospects search.",
+    iconName: "Search",
+    image: "/work_valli_meta_ads.png",
+    color: "#C4A15E",
+    tags: ["Google Keyword Planner", "Google Analytics 4", "Search Ads", "PMax Campaigns", "Conversion Setup"],
+    features: [
+      { title: "Keyword Match Optimization", desc: "Filter out irrelevant searches and target converting keywords only." },
+      { title: "Negative Keyword Audits", desc: "Ensure your ad budget is never wasted on job seekers or competitors." },
+      { title: "Premium Landing Pages", desc: "Fast, single-purpose landing pages built to convert search clicks." },
+      { title: "Dynamic Search Ads", desc: "Auto-generate ad headlines to match user search intent." }
+    ],
+    metrics: [
+      { label: "Search Impression Share", value: "85%+" },
+      { label: "Click Conversion Rate", value: "+15%" },
+      { label: "Cost Per Acquisition", value: "-30%" }
+    ],
+    faqs: [
+      { q: "Should we run Google Ads or SEO first?", a: "Google Ads is perfect for immediate leads and testing keyword conversions. SEO is a long-term strategy to gain free organic traffic for those same keywords." },
+      { q: "Do you set up negative keyword tracking?", a: "Yes, we perform weekly audits to add negative keywords, keeping search clicks highly qualified." }
     ]
   }
+};
+
+const aliases: Record<string, string> = {
+  "website-development": "web-development",
+  "mobile-app-development": "app-development",
+  "custom-software": "enterprise-software",
+  "digital-marketing": "seo",
+  "seo-optimization": "seo",
+  "erp": "erp-development",
+  "crm": "crm-development"
 };
 
 interface PageProps {
   params: Promise<{ service: string }>;
 }
 
-export default function ServicePage({ params }: PageProps) {
-  const resolvedParams = use(params);
-  const serviceSlug = resolvedParams.service;
+export default async function ServicePage({ params }: PageProps) {
+  const resolvedParams = await params;
+  const rawServiceSlug = resolvedParams.service;
+  const serviceSlug = aliases[rawServiceSlug] || rawServiceSlug;
   const service = serviceDetails[serviceSlug];
 
   if (!service) {
     notFound();
   }
 
-  const containerRef = useRef<HTMLDivElement>(null);
-  const headerRef = useRef<HTMLDivElement>(null);
-  const gridRef = useRef<HTMLDivElement>(null);
-  const imageRef = useRef<HTMLDivElement>(null);
-  const ctaRef = useRef<HTMLDivElement>(null);
+  const serviceSchema = {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "name": service.title,
+    "provider": {
+      "@type": "LocalBusiness",
+      "name": "Zentrix Technology",
+      "image": `${siteConfig.url}/logo_main.png`,
+      "telephone": siteConfig.contact.phone
+    },
+    "description": service.description,
+    "areaServed": "IN"
+  };
 
-  const ServiceIcon = service.icon;
-
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      // Hero sections entry
-      gsap.fromTo(".hero-reveal", 
-        { opacity: 0, y: 40 },
-        { opacity: 1, y: 0, duration: 1, stagger: 0.15, ease: "power4.out" }
-      );
-
-      // Features cards reveal on scroll
-      if (gridRef.current) {
-        gsap.fromTo(".feature-card-anim",
-          { opacity: 0, y: 50, scale: 0.96 },
-          {
-            opacity: 1,
-            y: 0,
-            scale: 1,
-            stagger: 0.1,
-            duration: 0.8,
-            ease: "power2.out",
-            scrollTrigger: {
-              trigger: gridRef.current,
-              start: "top 80%",
-            }
-          }
-        );
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": service.faqs.map((faq) => ({
+      "@type": "Question",
+      "name": faq.q,
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": faq.a
       }
-
-      // Image clip-path expansion
-      if (imageRef.current) {
-        gsap.fromTo(imageRef.current,
-          { clipPath: "inset(10% 10% round 32px)", scale: 0.95 },
-          {
-            clipPath: "inset(0% 0% round 24px)",
-            scale: 1,
-            duration: 1.4,
-            ease: "power3.out",
-          }
-        );
-      }
-
-      // CTA reveal
-      if (ctaRef.current) {
-        gsap.fromTo(ctaRef.current,
-          { opacity: 0, y: 40 },
-          {
-            opacity: 1,
-            y: 0,
-            duration: 1,
-            ease: "power3.out",
-            scrollTrigger: {
-              trigger: ctaRef.current,
-              start: "top 85%",
-            }
-          }
-        );
-      }
-    }, containerRef);
-
-    return () => ctx.revert();
-  }, [serviceSlug]);
+    }))
+  };
 
   return (
-    <div ref={containerRef} style={{ background: "var(--color-bg)", minHeight: "100vh", padding: "140px 0 100px" }}>
-      <div className="container-zentrix">
-        {/* Breadcrumb */}
-        <div className="hero-reveal" style={{ display: "flex", alignItems: "center", gap: "8px", fontFamily: "var(--font-mono)", fontSize: "0.8rem", color: "var(--color-text-muted)", marginBottom: "32px" }}>
-          <Link href="/services" style={{ color: "var(--color-text-muted)", textDecoration: "none", transition: "color 0.2s" }} onMouseEnter={(e) => e.currentTarget.style.color = "var(--color-violet)"} onMouseLeave={(e) => e.currentTarget.style.color = "var(--color-text-muted)"}>Services</Link>
-          <span>/</span>
-          <span style={{ color: "var(--color-violet)", fontWeight: 600 }}>{service.title}</span>
-        </div>
-
-        {/* Hero Split Grid */}
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))", gap: "64px", alignItems: "center", marginBottom: "96px" }}>
-          {/* Content Block */}
-          <div ref={headerRef}>
-            <div className="hero-reveal" style={{ display: "inline-flex", alignItems: "center", gap: "10px", padding: "8px 16px", borderRadius: "100px", background: "var(--color-surface-2)", border: "1px solid var(--color-border)", color: "var(--color-violet)", fontSize: "0.85rem", fontWeight: 600, marginBottom: "24px" }}>
-              <ServiceIcon size={16} />
-              <span>{service.tagline}</span>
-            </div>
-
-            <h1 className="hero-reveal" style={{ fontFamily: "var(--font-display)", fontSize: "clamp(2.5rem, 5vw, 4.5rem)", lineHeight: 1.1, fontWeight: 500, color: "var(--color-text-primary)", marginBottom: "28px" }}>
-              {service.title}
-            </h1>
-
-            <p className="hero-reveal" style={{ fontFamily: "var(--font-body)", fontSize: "clamp(1rem, 1.2vw, 1.25rem)", lineHeight: 1.6, color: "var(--color-text-secondary)", marginBottom: "36px" }}>
-              {service.description}
-            </p>
-
-            {/* Metrics Row */}
-            <div className="hero-reveal" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "16px", borderTop: "1px solid var(--color-border)", borderBottom: "1px solid var(--color-border)", padding: "24px 0", marginBottom: "36px" }}>
-              {service.metrics.map((m, idx) => (
-                <div key={idx}>
-                  <div style={{ fontFamily: "var(--font-display)", fontSize: "clamp(1.5rem, 3vw, 2.2rem)", fontWeight: 600, color: "var(--color-violet)" }}>
-                    {m.value}
-                  </div>
-                  <div style={{ fontFamily: "var(--font-body)", fontSize: "0.75rem", color: "var(--color-text-muted)", marginTop: "4px" }}>
-                    {m.label}
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            {/* Tech Stack Badges */}
-            <div className="hero-reveal" style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}>
-              {service.tags.map((tag) => (
-                <span
-                  key={tag}
-                  style={{
-                    padding: "6px 12px",
-                    borderRadius: "8px",
-                    background: "var(--color-surface)",
-                    border: "1px solid var(--color-border)",
-                    color: "var(--color-text-secondary)",
-                    fontFamily: "var(--font-mono)",
-                    fontSize: "0.75rem",
-                  }}
-                >
-                  {tag}
-                </span>
-              ))}
-            </div>
-          </div>
-
-          {/* Visual Block */}
-          <div
-            ref={imageRef}
-            className="project-visual-container"
-            style={{
-              width: "100%",
-              aspectRatio: "4/3",
-              background: "var(--color-surface)",
-              border: "1px solid var(--color-border)",
-              boxShadow: "0 20px 50px rgba(110, 85, 40, 0.04)",
-              overflow: "hidden",
-              position: "relative",
-            }}
-          >
-            <img
-              src={service.image}
-              alt={service.title}
-              style={{
-                width: "100%",
-                height: "100%",
-                objectFit: "cover",
-                transition: "transform 1.2s cubic-bezier(0.16, 1, 0.3, 1)",
-              }}
-              className="service-image-hover"
-            />
-            {/* Ambient gold glow */}
-            <div
-              style={{
-                position: "absolute",
-                inset: 0,
-                background: "radial-gradient(circle at center, rgba(163, 126, 54, 0.08) 0%, transparent 80%)",
-                pointerEvents: "none",
-              }}
-            />
-          </div>
-        </div>
-
-        {/* Detailed Features Grid */}
-        <div style={{ marginBottom: "120px" }}>
-          <div style={{ textAlign: "center", marginBottom: "56px" }}>
-            <h2 style={{ fontFamily: "var(--font-display)", fontSize: "clamp(2rem, 4vw, 3rem)", fontWeight: 500, color: "var(--color-text-primary)", marginBottom: "16px" }}>
-              Key Specializations & Strategy
-            </h2>
-            <p style={{ fontFamily: "var(--font-body)", color: "var(--color-text-muted)", fontSize: "1rem", maxWidth: "600px", margin: "0 auto" }}>
-              Every feature we deliver is crafted for scalability, bulletproof performance, and premium business outcomes.
-            </p>
-          </div>
-
-          <div ref={gridRef} style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "24px" }}>
-            {service.features.map((f, i) => (
-              <div
-                key={i}
-                className="feature-card-anim"
-                style={{
-                  background: "var(--color-surface)",
-                  border: "1px solid var(--color-border)",
-                  borderRadius: "16px",
-                  padding: "32px",
-                  boxShadow: "0 10px 30px rgba(110, 85, 40, 0.02)",
-                  transition: "all 0.3s ease",
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.borderColor = "rgba(163, 126, 54, 0.3)";
-                  e.currentTarget.style.boxShadow = "0 15px 40px rgba(163, 126, 54, 0.06)";
-                  e.currentTarget.style.transform = "translateY(-4px)";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.borderColor = "var(--color-border)";
-                  e.currentTarget.style.boxShadow = "0 10px 30px rgba(110, 85, 40, 0.02)";
-                  e.currentTarget.style.transform = "translateY(0)";
-                }}
-              >
-                <div style={{ width: "40px", height: "40px", borderRadius: "10px", background: "rgba(163, 126, 54, 0.08)", display: "flex", alignItems: "center", justifyItems: "center", justifyContent: "center", color: "var(--color-violet)", marginBottom: "20px" }}>
-                  <Check size={18} />
-                </div>
-                <h3 style={{ fontFamily: "var(--font-body)", fontSize: "1.1rem", fontWeight: 600, color: "var(--color-text-primary)", marginBottom: "12px" }}>
-                  {f.title}
-                </h3>
-                <p style={{ fontFamily: "var(--font-body)", fontSize: "0.9rem", lineHeight: 1.5, color: "var(--color-text-secondary)" }}>
-                  {f.desc}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* CTA Section */}
-        <div
-          ref={ctaRef}
-          style={{
-            background: "var(--color-surface-2)",
-            border: "1px solid var(--color-border)",
-            borderRadius: "24px",
-            padding: "64px 32px",
-            textAlign: "center",
-            boxShadow: "0 20px 40px rgba(110, 85, 40, 0.02)",
-            position: "relative",
-            overflow: "hidden",
-          }}
-        >
-          {/* Ambient gold glow */}
-          <div
-            style={{
-              position: "absolute",
-              top: "-50%",
-              left: "-50%",
-              width: "200%",
-              height: "200%",
-              background: "radial-gradient(circle at center, rgba(163, 126, 54, 0.04) 0%, transparent 60%)",
-              pointerEvents: "none",
-            }}
-          />
-
-          <h2 style={{ fontFamily: "var(--font-display)", fontSize: "clamp(2rem, 4vw, 3.2rem)", fontWeight: 500, color: "var(--color-text-primary)", marginBottom: "20px", position: "relative", zIndex: 1 }}>
-            Ready to Build Something Extraordinary?
-          </h2>
-          <p style={{ fontFamily: "var(--font-body)", fontSize: "1.1rem", color: "var(--color-text-secondary)", maxWidth: "600px", margin: "0 auto 40px", lineHeight: 1.6, position: "relative", zIndex: 1 }}>
-            Let's discuss how we can accelerate your digital vision and build a high-performance ecosystem for your business.
-          </p>
-
-          <Link
-            href="/contact"
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: "8px",
-              padding: "14px 28px",
-              background: "var(--gradient-primary)",
-              color: "#fff",
-              borderRadius: "12px",
-              fontFamily: "var(--font-body)",
-              fontWeight: 600,
-              fontSize: "0.95rem",
-              textDecoration: "none",
-              boxShadow: "0 8px 25px rgba(110, 85, 40, 0.15)",
-              transition: "all 0.3s ease",
-              position: "relative",
-              zIndex: 1,
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.boxShadow = "0 12px 35px rgba(110, 85, 40, 0.25)";
-              e.currentTarget.style.transform = "translateY(-1px)";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.boxShadow = "0 8px 25px rgba(110, 85, 40, 0.15)";
-              e.currentTarget.style.transform = "translateY(0)";
-            }}
-          >
-            <Zap size={16} /> Get Started Now <ArrowRight size={16} />
-          </Link>
-        </div>
-      </div>
-
-      <style jsx global>{`
-        .service-image-hover:hover {
-          transform: scale(1.05);
-        }
-      `}</style>
-    </div>
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
+      <ServiceDetailClient service={service} />
+    </>
   );
+}
+
+export async function generateStaticParams() {
+  return [
+    { service: "web-development" },
+    { service: "app-development" },
+    { service: "ai-automation" },
+    { service: "enterprise-software" },
+    { service: "ui-ux-design" },
+    { service: "seo" },
+    { service: "ai-agents" },
+    { service: "voice-ai" },
+    { service: "chatbots" },
+    { service: "workflow-automation" },
+    { service: "crm-development" },
+    { service: "erp-development" },
+    { service: "meta-ads" },
+    { service: "google-ads" },
+    { service: "website-development" },
+    { service: "mobile-app-development" },
+    { service: "custom-software" },
+    { service: "digital-marketing" }
+  ];
 }

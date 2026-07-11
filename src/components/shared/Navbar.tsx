@@ -219,6 +219,7 @@ export default function Navbar() {
                   <Link
                     key={link.name}
                     href={link.href}
+                    data-magnetic
                     style={{
                       padding: "8px 14px",
                       borderRadius: "8px",
@@ -228,14 +229,23 @@ export default function Navbar() {
                       fontWeight: 600,
                       fontSize: "0.875rem",
                       textDecoration: "none",
-                      transition: "all 0.2s ease",
+                      transition: "all 0.25s var(--ease-out-expo)",
                       position: "relative",
+                      display: "inline-flex",
+                      flexDirection: "column",
+                      alignItems: "center",
                     }}
                     onMouseEnter={(e) => {
-                      if (!isActive) e.currentTarget.style.color = "var(--color-text-primary)";
+                      if (!isActive) {
+                        e.currentTarget.style.color = "var(--color-text-primary)";
+                        e.currentTarget.style.background = "rgba(163,126,54,0.06)";
+                      }
                     }}
                     onMouseLeave={(e) => {
-                      if (!isActive) e.currentTarget.style.color = "var(--color-text-secondary)";
+                      if (!isActive) {
+                        e.currentTarget.style.color = "var(--color-text-secondary)";
+                        e.currentTarget.style.background = "transparent";
+                      }
                     }}
                   >
                     {link.name}
@@ -269,28 +279,34 @@ export default function Navbar() {
 
               <Link
                 href="/contact"
+                data-magnetic
+                data-cursor-text="START"
                 style={{
                   display: "flex",
                   alignItems: "center",
                   gap: "6px",
                   padding: isScrolled ? "7px 16px" : "9px 20px",
-                  background: "var(--gradient-primary)",
+                  background: "linear-gradient(135deg, var(--color-violet-light), var(--color-violet), var(--color-gold))",
+                  backgroundSize: "200% auto",
                   color: "#fff",
                   borderRadius: "10px",
                   fontFamily: "var(--font-body)",
                   fontWeight: 600,
                   fontSize: "0.875rem",
                   textDecoration: "none",
-                  boxShadow: "0 4px 15px rgba(108, 78, 49, 0.15)",
-                  transition: "all 0.3s ease",
+                  boxShadow: "0 4px 20px rgba(108, 78, 49, 0.22)",
+                  transition: "all 0.35s var(--ease-out-expo)",
+                  animation: "holographic-shift 5s ease infinite",
+                  position: "relative",
+                  overflow: "hidden",
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.boxShadow = "0 8px 25px rgba(108, 78, 49, 0.25)";
-                  e.currentTarget.style.transform = "translateY(-1px)";
+                  e.currentTarget.style.boxShadow = "0 10px 32px rgba(108, 78, 49, 0.35)";
+                  e.currentTarget.style.transform = "translateY(-2px) scale(1.02)";
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.boxShadow = "0 4px 15px rgba(108, 78, 49, 0.15)";
-                  e.currentTarget.style.transform = "translateY(0)";
+                  e.currentTarget.style.boxShadow = "0 4px 20px rgba(108, 78, 49, 0.22)";
+                  e.currentTarget.style.transform = "translateY(0) scale(1)";
                 }}
               >
                 <Zap size={14} />

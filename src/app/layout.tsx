@@ -11,6 +11,8 @@ import PageLoader from "@/components/ui/PageLoader";
 import PageTransition from "@/components/ui/PageTransition";
 import WhatsAppButton from "@/components/ui/WhatsAppButton";
 import SmoothScrollProvider from "@/components/providers/SmoothScrollProvider";
+import AuroraBackground from "@/components/ui/AuroraBackground";
+import MouseSpotlight from "@/components/ui/MouseSpotlight";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -163,6 +165,12 @@ export default function RootLayout({
       <body>
         {/* Film grain texture */}
         <div className="grain" aria-hidden="true" />
+
+        {/* Global aurora background layer */}
+        <AuroraBackground />
+
+        {/* Mouse spotlight illumination */}
+        <MouseSpotlight />
 
         {/* Global UI components */}
         <PageLoader />

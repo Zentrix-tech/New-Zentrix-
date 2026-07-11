@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import Link from "next/link";
-import { motion, useScroll, useTransform, AnimatePresence, useInView } from "framer-motion";
+import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import CountUp from "react-countup";
@@ -12,15 +12,22 @@ import {
   ArrowRight, Zap, Globe, Code2, Smartphone, Bot, Palette,
   ChevronRight, Star, Play, Check, ExternalLink, TrendingUp,
   Shield, Rocket, Award, Users, Briefcase, FlaskConical,
-  Layers, Server, Database, Cloud
+  Layers, Server, Database, Cloud, Clock, BarChart2, ChevronLeft, ChevronDown
 } from "lucide-react";
 import { siteConfig } from "@/lib/config/site";
+import CodeTypewriter from "@/components/ui/CodeTypewriter";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
 }
 
-// ─── HERO SECTION ───────────────────────────────────────────────────────────
+// ─── UTILS ───────────────────────────────────────────────────────────────────
+
+function splitWords(text: string): string[] {
+  return text.split(" ").filter(Boolean);
+}
+
+// ─── PARTICLE FIELD ──────────────────────────────────────────────────────────
 
 function ParticleField() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -32,48 +39,45 @@ function ParticleField() {
     if (!ctx) return;
 
     let animFrame: number;
-    const particles: {
+    interface Particle {
       x: number; y: number; vx: number; vy: number;
       size: number; opacity: number; color: string; life: number; maxLife: number;
-    }[] = [];
+    }
+    const particles: Particle[] = [];
 
     const resize = () => {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
     };
     resize();
-    window.addEventListener("resize", resize);
+    window.addEventListener("resize", resize, { passive: true });
 
-    const colors = ["rgba(184,147,75,", "rgba(108,78,49,", "rgba(108,78,49,", "rgba(108,78,49,"];
+    const colors = ["rgba(163,126,54,", "rgba(196,161,94,", "rgba(110,85,40,"];
 
     const spawnParticle = () => {
       const color = colors[Math.floor(Math.random() * colors.length)];
       particles.push({
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
-        vx: (Math.random() - 0.5) * 0.4,
-        vy: (Math.random() - 0.5) * 0.4,
-        size: Math.random() * 2 + 0.5,
-        opacity: Math.random() * 0.6 + 0.1,
-        color,
-        life: 0,
-        maxLife: Math.random() * 200 + 100,
+        vx: (Math.random() - 0.5) * 0.35,
+        vy: (Math.random() - 0.5) * 0.35,
+        size: Math.random() * 1.8 + 0.4,
+        opacity: Math.random() * 0.5 + 0.1,
+        color, life: 0, maxLife: Math.random() * 220 + 100,
       });
     };
 
-    for (let i = 0; i < 120; i++) spawnParticle();
+    for (let i = 0; i < 100; i++) spawnParticle();
 
     const draw = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-      if (Math.random() < 0.05) spawnParticle();
+      if (Math.random() < 0.04) spawnParticle();
 
       for (let i = particles.length - 1; i >= 0; i--) {
         const p = particles[i];
         p.life++;
         p.x += p.vx;
         p.y += p.vy;
-
         if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
         if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
 
@@ -85,31 +89,28 @@ function ParticleField() {
         ctx.fillStyle = `${p.color}${alpha})`;
         ctx.fill();
 
-        // Glow
+        const grad = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.size * 3);
+        grad.addColorStop(0, `${p.color}${alpha * 0.3})`);
+        grad.addColorStop(1, `${p.color}0)`);
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.size * 3, 0, Math.PI * 2);
-        const gradient = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.size * 3);
-        gradient.addColorStop(0, `${p.color}${alpha * 0.3})`);
-        gradient.addColorStop(1, `${p.color}0)`);
-        ctx.fillStyle = gradient;
+        ctx.fillStyle = grad;
         ctx.fill();
 
-        if (p.life >= p.maxLife) {
-          particles.splice(i, 1);
-        }
+        if (p.life >= p.maxLife) particles.splice(i, 1);
       }
 
       // Connections
       for (let i = 0; i < particles.length; i++) {
-        for (let j = i + 1; j < Math.min(i + 5, particles.length); j++) {
+        for (let j = i + 1; j < Math.min(i + 4, particles.length); j++) {
           const dx = particles[i].x - particles[j].x;
           const dy = particles[i].y - particles[j].y;
           const dist = Math.sqrt(dx * dx + dy * dy);
-          if (dist < 120) {
+          if (dist < 110) {
             ctx.beginPath();
             ctx.moveTo(particles[i].x, particles[i].y);
             ctx.lineTo(particles[j].x, particles[j].y);
-            ctx.strokeStyle = `rgba(184,147,75,${0.08 * (1 - dist / 120)})`;
+            ctx.strokeStyle = `rgba(163,126,54,${0.06 * (1 - dist / 110)})`;
             ctx.lineWidth = 0.5;
             ctx.stroke();
           }
@@ -120,54 +121,184 @@ function ParticleField() {
     };
 
     draw();
+    return () => { cancelAnimationFrame(animFrame); window.removeEventListener("resize", resize); };
+  }, []);
+
+  return (
+    <canvas ref={canvasRef} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", pointerEvents: "none" }} />
+  );
+}
+
+// ─── NEURAL NETWORK ───────────────────────────────────────────────────────────
+
+function NeuralNetwork() {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    let rafId: number;
+    let mx = 0, my = 0;
+
+    interface NNode { x: number; y: number; vx: number; vy: number; size: number; pulsePhase: number; }
+    const nodes: NNode[] = [];
+    const numNodes = 22;
+
+    const resize = () => {
+      canvas.width = canvas.offsetWidth;
+      canvas.height = canvas.offsetHeight;
+      nodes.length = 0;
+      for (let i = 0; i < numNodes; i++) {
+        nodes.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          vx: (Math.random() - 0.5) * 0.3,
+          vy: (Math.random() - 0.5) * 0.3,
+          size: Math.random() * 3 + 1,
+          pulsePhase: Math.random() * Math.PI * 2,
+        });
+      }
+    };
+    resize();
+    window.addEventListener("resize", resize, { passive: true });
+
+    const onMove = (e: MouseEvent) => {
+      const rect = canvas.getBoundingClientRect();
+      mx = e.clientX - rect.left;
+      my = e.clientY - rect.top;
+    };
+    window.addEventListener("mousemove", onMove, { passive: true });
+
+    const draw = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      const t = Date.now() * 0.001;
+
+      nodes.forEach((node) => {
+        // Gentle mouse attract
+        const dx = mx - node.x;
+        const dy = my - node.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < 180) {
+          node.vx += (dx / dist) * 0.015;
+          node.vy += (dy / dist) * 0.015;
+        }
+
+        node.vx *= 0.96;
+        node.vy *= 0.96;
+        node.x += node.vx;
+        node.y += node.vy;
+
+        if (node.x < 0) node.x = canvas.width;
+        if (node.x > canvas.width) node.x = 0;
+        if (node.y < 0) node.y = canvas.height;
+        if (node.y > canvas.height) node.y = 0;
+
+        const pulse = Math.sin(t * 1.5 + node.pulsePhase) * 0.3 + 0.7;
+        const alpha = 0.5 * pulse;
+
+        // Glow
+        const grad = ctx.createRadialGradient(node.x, node.y, 0, node.x, node.y, node.size * 5);
+        grad.addColorStop(0, `rgba(163,126,54,${alpha * 0.6})`);
+        grad.addColorStop(1, "rgba(163,126,54,0)");
+        ctx.beginPath();
+        ctx.arc(node.x, node.y, node.size * 5, 0, Math.PI * 2);
+        ctx.fillStyle = grad;
+        ctx.fill();
+
+        // Node dot
+        ctx.beginPath();
+        ctx.arc(node.x, node.y, node.size, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(163,126,54,${alpha})`;
+        ctx.fill();
+      });
+
+      // Connections
+      for (let i = 0; i < nodes.length; i++) {
+        for (let j = i + 1; j < nodes.length; j++) {
+          const dx = nodes[i].x - nodes[j].x;
+          const dy = nodes[i].y - nodes[j].y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < 160) {
+            const alpha = (1 - dist / 160) * 0.25;
+            ctx.beginPath();
+            ctx.moveTo(nodes[i].x, nodes[i].y);
+            ctx.lineTo(nodes[j].x, nodes[j].y);
+            ctx.strokeStyle = `rgba(163,126,54,${alpha})`;
+            ctx.lineWidth = 0.8;
+            ctx.stroke();
+          }
+        }
+      }
+
+      rafId = requestAnimationFrame(draw);
+    };
+
+    draw();
     return () => {
-      cancelAnimationFrame(animFrame);
+      cancelAnimationFrame(rafId);
       window.removeEventListener("resize", resize);
+      window.removeEventListener("mousemove", onMove);
     };
   }, []);
 
   return (
     <canvas
       ref={canvasRef}
-      style={{
-        position: "absolute",
-        inset: 0,
-        width: "100%",
-        height: "100%",
-        pointerEvents: "none",
-      }}
+      style={{ position: "absolute", inset: 0, width: "100%", height: "100%", pointerEvents: "none", opacity: 0.6 }}
     />
   );
 }
 
+// ─── HERO SECTION ────────────────────────────────────────────────────────────
+
 function HeroSection() {
   const heroRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
+  const wordsRef = useRef<HTMLDivElement[]>([]);
   const badgeRef = useRef<HTMLDivElement>(null);
-  const title1Ref = useRef<HTMLHeadingElement>(null);
-  const title2Ref = useRef<HTMLHeadingElement>(null);
-  const typewriterRef = useRef<HTMLDivElement>(null);
-  const subheadlineRef = useRef<HTMLParagraphElement>(null);
+  const subRef = useRef<HTMLParagraphElement>(null);
   const ctaRef = useRef<HTMLDivElement>(null);
-  const trustRef = useRef<HTMLDivElement>(null);
+  const statsRef = useRef<HTMLDivElement>(null);
+  const codeRef = useRef<HTMLDivElement>(null);
 
-  const techStack = ["React & Next.js", "AI & Machine Learning", "Flutter & React Native", "Node.js & Python", "Cloud & DevOps"];
+  const techStack = [
+    "React & Next.js", 2000,
+    "AI & Machine Learning", 2000,
+    "Flutter & React Native", 2000,
+    "Node.js & Python", 2000,
+    "Cloud & DevOps", 2000,
+    "AI Automation", 2000,
+  ];
+
+  const heroWords1 = splitWords("We Engineer");
+  const heroWords2 = splitWords("Digital Futures");
 
   useEffect(() => {
-    // Entrance animations timeline
     const tl = gsap.timeline({ defaults: { ease: "power4.out" } });
 
-    tl.fromTo(badgeRef.current, { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 1 })
-      .fromTo([title1Ref.current, title2Ref.current], { opacity: 0, y: 70, rotateX: 15 }, { opacity: 1, y: 0, rotateX: 0, duration: 1.2, stagger: 0.12 }, "-=0.7")
-      .fromTo(typewriterRef.current, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.8 }, "-=0.8")
-      .fromTo(subheadlineRef.current, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.8 }, "-=0.6")
-      .fromTo(ctaRef.current, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.8 }, "-=0.6")
-      .fromTo(trustRef.current, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.8, stagger: 0.1 }, "-=0.6");
+    tl.fromTo(badgeRef.current, { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.9 });
 
-    // Scroll-bound parallax effect on content
-    const parallax = gsap.to(contentRef.current, {
-      y: 130,
-      opacity: 0.15,
+    // Word-by-word headline reveal
+    const allWordEls = wordsRef.current.filter(Boolean);
+    tl.fromTo(
+      allWordEls,
+      { opacity: 0, y: 50, rotateX: 15, filter: "blur(12px)" },
+      { opacity: 1, y: 0, rotateX: 0, filter: "blur(0px)", stagger: 0.08, duration: 1.1 },
+      "-=0.5"
+    );
+
+    tl.fromTo(subRef.current, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.9 }, "-=0.7")
+      .fromTo(ctaRef.current, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.8 }, "-=0.6")
+      .fromTo(statsRef.current, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.8 }, "-=0.6")
+      .fromTo(codeRef.current, { opacity: 0, x: 40 }, { opacity: 1, x: 0, duration: 1 }, "-=1.2");
+
+    // Parallax on scroll
+    const par = gsap.to(contentRef.current, {
+      y: 100,
+      opacity: 0.3,
       ease: "none",
       scrollTrigger: {
         trigger: heroRef.current,
@@ -177,12 +308,34 @@ function HeroSection() {
       },
     });
 
+    // Mouse parallax layers
+    let mx = 0, my = 0;
+    const onMove = (e: MouseEvent) => {
+      const cx = e.clientX / window.innerWidth - 0.5;
+      const cy = e.clientY / window.innerHeight - 0.5;
+      mx += (cx - mx) * 0.04;
+      my += (cy - my) * 0.04;
+    };
+    window.addEventListener("mousemove", onMove, { passive: true });
+
     return () => {
       tl.kill();
-      parallax.scrollTrigger?.kill();
-      parallax.kill();
+      par.scrollTrigger?.kill();
+      par.kill();
+      window.removeEventListener("mousemove", onMove);
     };
   }, []);
+
+  const addWordRef = (el: HTMLDivElement | null, i: number) => {
+    if (el) wordsRef.current[i] = el;
+  };
+
+  const heroStats = [
+    { value: "7+", label: "Projects Delivered" },
+    { value: "5+", label: "Innovation Projects" },
+    { value: "100%", label: "Client Satisfaction" },
+    { value: "24/7", label: "Support Available" },
+  ];
 
   return (
     <section
@@ -197,321 +350,228 @@ function HeroSection() {
         background: "var(--color-bg)",
       }}
     >
-      {/* Particle field */}
       <ParticleField />
+      <NeuralNetwork />
 
-      {/* Gradient mesh background */}
-      <div
-        style={{
-          position: "absolute",
-          inset: 0,
-          background: `
-            radial-gradient(ellipse at 15% 40%, rgba(184, 147, 75, 0.12) 0%, transparent 60%),
-            radial-gradient(ellipse at 85% 20%, rgba(108, 78, 49, 0.08) 0%, transparent 50%),
-            radial-gradient(ellipse at 50% 80%, rgba(108, 78, 49, 0.06) 0%, transparent 40%)
-          `,
-          pointerEvents: "none",
-        }}
-      />
+      {/* Gradient mesh */}
+      <div style={{
+        position: "absolute", inset: 0, pointerEvents: "none",
+        background: `radial-gradient(ellipse at 15% 40%, rgba(163,126,54,0.10) 0%, transparent 55%),
+                     radial-gradient(ellipse at 85% 20%, rgba(108,78,49,0.07) 0%, transparent 50%),
+                     radial-gradient(ellipse at 50% 80%, rgba(196,161,94,0.05) 0%, transparent 45%)`,
+      }} />
 
-      {/* Grid pattern */}
-      <div
-        style={{
-          position: "absolute",
-          inset: 0,
-          backgroundImage: `
-            linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px)
-          `,
-          backgroundSize: "60px 60px",
-          maskImage: "radial-gradient(ellipse at center, black 30%, transparent 80%)",
-          pointerEvents: "none",
-        }}
-      />
+      {/* AI Grid */}
+      <div className="ai-grid" />
 
       {/* Content */}
       <div
         ref={contentRef}
-        style={{
-          position: "relative",
-          zIndex: 2,
-          textAlign: "center",
-          paddingTop: "120px",
-          paddingBottom: "80px",
-        }}
         className="container-zentrix"
+        style={{ position: "relative", zIndex: 3, paddingTop: 120, paddingBottom: 80 }}
       >
-        {/* Status badge */}
-        {/* Status badge */}
-        <div
-          ref={badgeRef}
-          style={{
-            display: "inline-flex",
-            alignItems: "center",
-            gap: "8px",
-            padding: "8px 20px",
-            background: "rgba(184, 147, 75, 0.08)",
-            border: "1px solid rgba(184, 147, 75, 0.2)",
-            borderRadius: "100px",
-            marginBottom: "32px",
-          }}
-        >
-          <span
-            style={{
-              width: 6,
-              height: 6,
-              borderRadius: "50%",
-              background: "var(--color-success)",
-              boxShadow: "0 0 8px rgba(16,185,129,0.8)",
-              animation: "pulse-glow 2s ease-in-out infinite",
-            }}
-          />
-          <span
-            style={{
-              fontFamily: "var(--font-body)",
-              fontSize: "0.8rem",
-              fontWeight: 600,
-              color: "var(--color-text-secondary)",
-              letterSpacing: "0.03em",
-              textTransform: "uppercase",
-            }}
-          >
-            Now accepting projects — {new Date().getFullYear()}
-          </span>
-        </div>
-
-        {/* Main headline */}
-        <div style={{ perspective: "1000px" }}>
-          <h1
-            ref={title1Ref}
-            style={{
-              fontFamily: "var(--font-display)",
-              fontSize: "clamp(2.5rem, 6.5vw, 6.2rem)",
-              fontWeight: 500,
-              lineHeight: 1.05,
-              letterSpacing: "0",
-              color: "var(--color-text-primary)",
-              marginBottom: "8px",
-            }}
-          >
-            We Engineer
-          </h1>
-          <h1
-            ref={title2Ref}
-            style={{
-              fontFamily: "var(--font-display)",
-              fontSize: "clamp(2.5rem, 6.5vw, 6.2rem)",
-              fontWeight: 500,
-              lineHeight: 1.05,
-              letterSpacing: "0",
-              background: "linear-gradient(135deg, var(--color-violet) 0%, var(--color-violet-light) 100%)",
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-              backgroundClip: "text",
-              marginBottom: "24px",
-            }}
-          >
-            Digital Futures
-          </h1>
-        </div>
-
-        {/* Typewriter */}
-        <div
-          ref={typewriterRef}
-          style={{
-            fontFamily: "var(--font-mono)",
-            fontSize: "clamp(0.9rem, 2vw, 1.2rem)",
-            color: "var(--color-cyan)",
-            marginBottom: "20px",
-            minHeight: "2.5em",
-            lineHeight: "1.4",
-            display: "flex",
-            flexWrap: "wrap",
-            alignItems: "center",
-            justifyContent: "center",
-            gap: "8px",
-          }}
-        >
-          <span style={{ color: "var(--color-text-muted)" }}>// Building with</span>
-          <TypeAnimation
-            sequence={techStack.flatMap((t) => [t, 2000])}
-            wrapper="span"
-            repeat={Infinity}
-            style={{ color: "var(--color-cyan)", fontWeight: 500 }}
-          />
-        </div>
-
-        <p
-          ref={subheadlineRef}
-          style={{
-            fontFamily: "var(--font-body)",
-            fontSize: "clamp(1.05rem, 2.5vw, 1.25rem)",
-            color: "var(--color-text-secondary)",
-            lineHeight: 1.8,
-            maxWidth: "680px",
-            margin: "0 auto 48px",
-          }}
-        >
-          Premium software engineering from Salem — delivering enterprise systems, AI automation,
-          mobile apps, and digital experiences that{" "}
-          <span style={{ color: "var(--color-text-primary)", fontWeight: 500 }}>redefine what&apos;s possible</span>.
-        </p>
-
-        {/* CTA buttons */}
-        <div
-          ref={ctaRef}
-          style={{
-            display: "flex",
-            gap: "18px",
-            justifyContent: "center",
-            flexWrap: "wrap",
-            marginBottom: "64px",
-          }}
-        >
-          <Link
-            href="/contact"
-            data-magnetic
-            data-cursor-text="START"
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: "10px",
-              padding: "16px 40px",
-              background: "linear-gradient(135deg, var(--color-violet), var(--color-violet-light))",
-              color: "#fff",
-              borderRadius: "100px",
-              fontFamily: "var(--font-body)",
-              fontWeight: 700,
-              fontSize: "0.95rem",
-              textDecoration: "none",
-              boxShadow: "0 20px 50px rgba(184, 147, 75, 0.25)",
-              transition: "transform 0.3s cubic-bezier(0.16,1,0.3,1)",
-            }}
-          >
-            <Zap size={18} />
-            Start Your Project
-          </Link>
-          <Link
-            href="/works"
-            data-magnetic
-            data-cursor-text="EXPLORE"
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: "10px",
-              padding: "15px 40px",
-              background: "transparent",
-              color: "var(--color-text-primary)",
-              borderRadius: "100px",
-              border: "1px solid var(--color-border)",
-              fontFamily: "var(--font-body)",
-              fontWeight: 600,
-              fontSize: "0.95rem",
-              textDecoration: "none",
-              backdropFilter: "blur(10px)",
-              transition: "all 0.3s cubic-bezier(0.16,1,0.3,1)",
-            }}
-          >
-            <Play size={16} fill="currentColor" />
-            View Our Work
-          </Link>
-        </div>
-
-        {/* Trust indicators */}
-        <div
-          ref={trustRef}
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            gap: "clamp(24px, 4vw, 56px)",
-            flexWrap: "wrap",
-          }}
-        >
-          {[
-            { value: "7+", label: "Projects Delivered" },
-            { value: "5+", label: "Innovation Projects" },
-            { value: "100%", label: "Client Satisfaction" },
-            { value: "24/7", label: "Support Available" },
-          ].map((stat) => (
-            <div key={stat.label} style={{ textAlign: "center" }}>
-              <div
-                style={{
-                  fontFamily: "Syne, sans-serif",
-                  fontWeight: 800,
-                  fontSize: "clamp(1.6rem, 3vw, 2.2rem)",
-                  background: "linear-gradient(135deg, var(--color-violet-light), var(--color-cyan))",
-                  WebkitBackgroundClip: "text",
-                  WebkitTextFillColor: "transparent",
-                  backgroundClip: "text",
-                  lineHeight: 1,
-                  marginBottom: "6px",
-                }}
-              >
-                {stat.value}
-              </div>
-              <div
-                style={{
-                  fontFamily: "var(--font-body)",
-                  fontSize: "0.75rem",
-                  color: "var(--color-text-muted)",
-                  letterSpacing: "0.08em",
-                  textTransform: "uppercase",
-                  fontWeight: 600,
-                }}
-              >
-                {stat.label}
-              </div>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr auto", gap: "clamp(40px,6vw,80px)", alignItems: "center" }}>
+          {/* Left: hero text */}
+          <div style={{ textAlign: "left" }}>
+            {/* Badge */}
+            <div
+              ref={badgeRef}
+              style={{
+                display: "inline-flex", alignItems: "center", gap: 8,
+                padding: "8px 20px", background: "rgba(163,126,54,0.08)",
+                border: "1px solid rgba(163,126,54,0.22)", borderRadius: 100, marginBottom: 32,
+              }}
+            >
+              <span style={{ width: 6, height: 6, borderRadius: "50%", background: "var(--color-success)", boxShadow: "0 0 8px rgba(16,185,129,0.8)", animation: "pulse-dot 2s ease-in-out infinite" }} />
+              <span style={{ fontFamily: "var(--font-body)", fontSize: "0.78rem", fontWeight: 600, color: "var(--color-text-secondary)", letterSpacing: "0.06em", textTransform: "uppercase" }}>
+                Now accepting projects — {new Date().getFullYear()}
+              </span>
             </div>
-          ))}
+
+            {/* Headline — word by word */}
+            <div style={{ perspective: "1000px", marginBottom: 8 }}>
+              <h1 style={{ fontFamily: "var(--font-display)", fontSize: "clamp(2.8rem,6.5vw,6.5rem)", fontWeight: 500, lineHeight: 1.04, letterSpacing: 0, display: "flex", flexWrap: "wrap", gap: "0.25em" }}>
+                {heroWords1.map((word, i) => (
+                  <span
+                    key={`w1-${i}`}
+                    ref={(el) => addWordRef(el as HTMLDivElement | null, i)}
+                    style={{ display: "inline-block", color: "var(--color-text-primary)" }}
+                  >
+                    {word}
+                  </span>
+                ))}
+              </h1>
+            </div>
+            <div style={{ perspective: "1000px", marginBottom: 24 }}>
+              <h1 style={{ fontFamily: "var(--font-display)", fontSize: "clamp(2.8rem,6.5vw,6.5rem)", fontWeight: 500, lineHeight: 1.04, letterSpacing: 0, display: "flex", flexWrap: "wrap", gap: "0.25em" }}>
+                {heroWords2.map((word, i) => (
+                  <span
+                    key={`w2-${i}`}
+                    ref={(el) => addWordRef(el as HTMLDivElement | null, heroWords1.length + i)}
+                    style={{
+                      display: "inline-block",
+                      background: "linear-gradient(135deg, var(--color-violet) 0%, var(--color-gold) 100%)",
+                      WebkitBackgroundClip: "text",
+                      WebkitTextFillColor: "transparent",
+                      backgroundClip: "text",
+                    }}
+                  >
+                    {word}
+                  </span>
+                ))}
+              </h1>
+            </div>
+
+            {/* Typewriter */}
+            <div style={{
+              fontFamily: "var(--font-mono)", fontSize: "clamp(0.85rem,1.8vw,1.1rem)",
+              color: "var(--color-violet)", marginBottom: 18,
+              display: "flex", alignItems: "center", gap: 8,
+            }}>
+              <span style={{ color: "var(--color-text-muted)" }}>// Building with</span>
+              <TypeAnimation
+                sequence={techStack}
+                wrapper="span"
+                repeat={Infinity}
+                style={{ color: "var(--color-violet)", fontWeight: 500 }}
+              />
+            </div>
+
+            <p
+              ref={subRef}
+              style={{
+                fontFamily: "var(--font-body)", fontSize: "clamp(1rem,2vw,1.2rem)",
+                color: "var(--color-text-secondary)", lineHeight: 1.8,
+                maxWidth: 620, marginBottom: 44,
+              }}
+            >
+              Premium software engineering from Salem — delivering enterprise systems, AI automation,
+              mobile apps, and digital experiences that{" "}
+              <span style={{ color: "var(--color-text-primary)", fontWeight: 500 }}>redefine what&apos;s possible</span>.
+            </p>
+
+            {/* CTA buttons */}
+            <div ref={ctaRef} style={{ display: "flex", gap: 16, flexWrap: "wrap", marginBottom: 56 }}>
+              <Link
+                href="/contact"
+                data-magnetic
+                data-cursor-text="START"
+                style={{
+                  display: "inline-flex", alignItems: "center", gap: 10,
+                  padding: "16px 40px",
+                  background: "linear-gradient(135deg, var(--color-violet-light), var(--color-violet), var(--color-gold))",
+                  backgroundSize: "200% auto",
+                  color: "#fff", borderRadius: 100,
+                  fontFamily: "var(--font-body)", fontWeight: 700, fontSize: "0.95rem",
+                  textDecoration: "none",
+                  boxShadow: "0 20px 50px rgba(163,126,54,0.28)",
+                  transition: "all 0.4s var(--ease-out-expo)",
+                  position: "relative", overflow: "hidden",
+                  animation: "holographic-shift 4s ease infinite",
+                }}
+                onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-3px) scale(1.02)"; e.currentTarget.style.boxShadow = "0 28px 60px rgba(163,126,54,0.4)"; }}
+                onMouseLeave={(e) => { e.currentTarget.style.transform = "translateY(0) scale(1)"; e.currentTarget.style.boxShadow = "0 20px 50px rgba(163,126,54,0.28)"; }}
+              >
+                <Zap size={18} />
+                Start Your Project
+              </Link>
+              <Link
+                href="/works"
+                data-magnetic
+                data-cursor-text="EXPLORE"
+                style={{
+                  display: "inline-flex", alignItems: "center", gap: 10,
+                  padding: "15px 40px",
+                  background: "transparent", color: "var(--color-text-primary)",
+                  borderRadius: 100, border: "1px solid var(--color-border-hover)",
+                  fontFamily: "var(--font-body)", fontWeight: 600, fontSize: "0.95rem",
+                  textDecoration: "none", backdropFilter: "blur(10px)",
+                  transition: "all 0.3s var(--ease-out-expo)",
+                }}
+                onMouseEnter={(e) => { e.currentTarget.style.borderColor = "rgba(163,126,54,0.4)"; e.currentTarget.style.background = "rgba(163,126,54,0.06)"; e.currentTarget.style.transform = "translateY(-2px)"; }}
+                onMouseLeave={(e) => { e.currentTarget.style.borderColor = "var(--color-border-hover)"; e.currentTarget.style.background = "transparent"; e.currentTarget.style.transform = "translateY(0)"; }}
+              >
+                <Play size={16} fill="currentColor" />
+                View Our Work
+              </Link>
+            </div>
+
+            {/* Stats row */}
+            <div ref={statsRef} style={{ display: "flex", gap: "clamp(20px,4vw,48px)", flexWrap: "wrap" }}>
+              {heroStats.map((stat) => (
+                <div key={stat.label} style={{ textAlign: "center" }}>
+                  <div style={{
+                    fontFamily: "var(--font-display)", fontWeight: 500,
+                    fontSize: "clamp(1.6rem,3vw,2.2rem)",
+                    background: "linear-gradient(135deg, var(--color-violet-light), var(--color-gold))",
+                    WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
+                    backgroundClip: "text", lineHeight: 1, marginBottom: 5,
+                  }}>
+                    {stat.value}
+                  </div>
+                  <div style={{ fontFamily: "var(--font-body)", fontSize: "0.72rem", color: "var(--color-text-muted)", letterSpacing: "0.08em", textTransform: "uppercase", fontWeight: 600 }}>
+                    {stat.label}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Right: Code typewriter */}
+          <div ref={codeRef} style={{ opacity: 0 }}>
+            <div
+              style={{
+                position: "relative",
+                background: "rgba(26,22,18,0.92)",
+                borderRadius: 16,
+                border: "1px solid rgba(163,126,54,0.2)",
+                boxShadow: "0 32px 80px rgba(108,78,49,0.25), 0 0 0 1px rgba(163,126,54,0.08)",
+                overflow: "hidden",
+                minWidth: 380,
+              }}
+            >
+              {/* Glow highlight on top edge */}
+              <div style={{ position: "absolute", top: 0, left: "10%", right: "10%", height: 1, background: "linear-gradient(90deg, transparent, rgba(163,126,54,0.5), transparent)" }} />
+              <CodeTypewriter />
+            </div>
+          </div>
         </div>
       </div>
 
       {/* Scroll indicator */}
-      <div
-        style={{
-          position: "absolute",
-          bottom: "36px",
-          left: "50%",
-          transform: "translateX(-50%)",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          gap: "10px",
-          pointerEvents: "none",
-        }}
-      >
-        <span style={{ fontFamily: "var(--font-body)", fontSize: "0.75rem", color: "var(--color-text-muted)", letterSpacing: "0.2em", textTransform: "uppercase", fontWeight: 500 }}>
+      <div style={{
+        position: "absolute", bottom: 36, left: "50%", transform: "translateX(-50%)",
+        display: "flex", flexDirection: "column", alignItems: "center", gap: 10, pointerEvents: "none",
+      }}>
+        <span style={{ fontFamily: "var(--font-body)", fontSize: "0.72rem", color: "var(--color-text-muted)", letterSpacing: "0.18em", textTransform: "uppercase", fontWeight: 500 }}>
           Scroll to explore
         </span>
-        <div
+        <motion.div
+          animate={{ y: [0, 10, 0] }}
+          transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
           style={{
-            width: 24,
-            height: 40,
+            width: 24, height: 40,
             border: "1.5px solid var(--color-border)",
-            borderRadius: "12px",
-            display: "flex",
-            justifyContent: "center",
-            paddingTop: "6px",
+            borderRadius: 12,
+            display: "flex", justifyContent: "center", paddingTop: 6,
           }}
         >
-          <motion.div
-            animate={{ y: [0, 10, 0] }}
-            transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
-            style={{
-              width: 4,
-              height: 8,
-              background: "linear-gradient(180deg, var(--color-violet), transparent)",
-              borderRadius: "2px",
-            }}
-          />
-        </div>
+          <div style={{ width: 4, height: 8, background: "linear-gradient(180deg, var(--color-violet), transparent)", borderRadius: 2 }} />
+        </motion.div>
       </div>
+
+      {/* Responsive grid fix */}
+      <style>{`
+        @media (max-width: 900px) {
+          .hero-grid { grid-template-columns: 1fr !important; }
+          .hero-code-panel { display: none !important; }
+        }
+      `}</style>
     </section>
   );
 }
 
-// ─── MARQUEE TECH SECTION ────────────────────────────────────────────────────
+// ─── MARQUEE TECH SECTION ─────────────────────────────────────────────────────
 
 const techItems = [
   "React", "Next.js", "TypeScript", "Node.js", "Python", "Flutter",
@@ -519,9 +579,7 @@ const techItems = [
   "Kubernetes", "GraphQL", "React Native", "Figma", "Three.js", "Prisma",
   "Tailwind CSS", "GSAP", "Framer Motion", "Firebase", "Supabase", "Vercel",
 ];
-// Pre-computed reversed array — never mutate techItems at runtime (causes SSR/client hydration mismatch)
 const techItemsReversed = [...techItems].reverse();
-// Pre-duplicated arrays for seamless infinite marquee
 const marqueeTrack1 = [...techItems, ...techItems, ...techItems];
 const marqueeTrack2 = [...techItemsReversed, ...techItemsReversed, ...techItemsReversed];
 
@@ -536,23 +594,20 @@ function TechMarquee() {
     if (!track1 || !track2) return;
 
     let xPercent1 = 0;
-    let xPercent2 = 0;
+    let xPercent2 = -50;
     let direction = -1;
     let speedFactor = 1;
 
     const animate = () => {
       if (xPercent1 <= -50) xPercent1 = 0;
-      if (xPercent1 >= 0) xPercent1 = -50;
-      if (xPercent2 <= -50) xPercent2 = 0;
       if (xPercent2 >= 0) xPercent2 = -50;
 
-      xPercent1 += 0.07 * direction * speedFactor;
-      xPercent2 += 0.07 * -direction * speedFactor;
+      xPercent1 += 0.06 * direction * speedFactor;
+      xPercent2 += 0.06 * -direction * speedFactor;
+      speedFactor += (1 - speedFactor) * 0.04;
 
       gsap.set(track1, { xPercent: xPercent1 });
       gsap.set(track2, { xPercent: xPercent2 });
-
-      speedFactor += (1 - speedFactor) * 0.05; // smooth deceleration
 
       requestRef.current = requestAnimationFrame(animate);
     };
@@ -564,7 +619,7 @@ function TechMarquee() {
       onUpdate: (self) => {
         direction = self.direction === 1 ? -1 : 1;
         const velocity = Math.abs(self.getVelocity() / 300);
-        speedFactor = Math.min(Math.max(velocity, 1), 6);
+        speedFactor = Math.min(Math.max(velocity, 1), 5);
       },
     });
 
@@ -580,7 +635,7 @@ function TechMarquee() {
     <div
       ref={containerRef}
       style={{
-        padding: "48px 0",
+        padding: "52px 0",
         background: "var(--color-bg-secondary)",
         borderTop: "1px solid var(--color-border)",
         borderBottom: "1px solid var(--color-border)",
@@ -588,292 +643,369 @@ function TechMarquee() {
         position: "relative",
       }}
     >
-      {/* Fade edges */}
-      <div
-        style={{
-          position: "absolute",
-          left: 0,
-          top: 0,
-          bottom: 0,
-          width: "200px",
-          background: "linear-gradient(90deg, var(--color-bg), transparent)",
-          zIndex: 2,
-          pointerEvents: "none",
-        }}
-      />
-      <div
-        style={{
-          position: "absolute",
-          right: 0,
-          top: 0,
-          bottom: 0,
-          width: "200px",
-          background: "linear-gradient(-90deg, var(--color-bg), transparent)",
-          zIndex: 2,
-          pointerEvents: "none",
-        }}
-      />
-
-      {/* Track 1 */}
-      <div style={{ display: "flex", gap: "0", marginBottom: "20px", overflow: "hidden" }}>
+      {/* Edge fades */}
+      {["left", "right"].map((side) => (
         <div
-          ref={track1Ref}
-          style={{ display: "flex", gap: "0", whiteSpace: "nowrap" }}
-        >
-          {marqueeTrack1.map((tech, i) => (
-            <div
-              key={i}
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                gap: "12px",
-                padding: "10px 28px",
-                margin: "0 6px",
-                background: "var(--color-surface)",
-                border: "1px solid var(--color-border)",
-                borderRadius: "100px",
-              }}
-            >
-              <span style={{ width: 6, height: 6, borderRadius: "50%", background: "var(--color-violet)", flexShrink: 0 }} />
-              <span
-                style={{
-                  fontFamily: "var(--font-body)",
-                  fontWeight: 600,
-                  fontSize: "0.9rem",
-                  color: "var(--color-text-secondary)",
-                  letterSpacing: "0.02em",
-                  whiteSpace: "nowrap",
-                }}
-              >
-                {tech}
-              </span>
-            </div>
-          ))}
-        </div>
-      </div>
+          key={side}
+          style={{
+            position: "absolute", [side]: 0, top: 0, bottom: 0, width: 180,
+            background: `linear-gradient(${side === "left" ? "90deg" : "-90deg"}, var(--color-bg-secondary), transparent)`,
+            zIndex: 2, pointerEvents: "none",
+          }}
+        />
+      ))}
 
-      {/* Track 2 (reverse) */}
-      <div style={{ display: "flex", gap: "0", overflow: "hidden" }}>
-        <div
-          ref={track2Ref}
-          style={{ display: "flex", gap: "0", whiteSpace: "nowrap" }}
-        >
-          {marqueeTrack2.map((tech, i) => (
-            <div
-              key={i}
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                gap: "12px",
-                padding: "10px 28px",
-                margin: "0 6px",
-                background: "rgba(108, 78, 49, 0.02)",
-                border: "1px solid rgba(108, 78, 49, 0.1)",
-                borderRadius: "100px",
-              }}
-            >
-              <span style={{ width: 6, height: 6, borderRadius: "50%", background: "var(--color-cyan)", flexShrink: 0 }} />
-              <span
-                style={{
-                  fontFamily: "var(--font-body)",
-                  fontWeight: 600,
-                  fontSize: "0.9rem",
-                  color: "var(--color-text-secondary)",
-                  letterSpacing: "0.02em",
-                  whiteSpace: "nowrap",
-                }}
+      {[{ ref: track1Ref, items: marqueeTrack1 }, { ref: track2Ref, items: marqueeTrack2 }].map(({ ref, items }, trackIdx) => (
+        <div key={trackIdx} style={{ display: "flex", overflow: "hidden", marginBottom: trackIdx === 0 ? 16 : 0 }}>
+          <div ref={ref} style={{ display: "flex", gap: 0, whiteSpace: "nowrap" }}>
+            {items.map((tech, i) => (
+              <div
+                key={i}
+                className="marquee-item"
+                style={{ flexShrink: 0 }}
               >
-                {tech}
-              </span>
-            </div>
-          ))}
+                <span
+                  className="tech-dot"
+                  style={{
+                    width: 6, height: 6, borderRadius: "50%",
+                    background: trackIdx === 0 ? "var(--color-violet)" : "var(--color-gold)",
+                    flexShrink: 0,
+                  }}
+                />
+                <span style={{
+                  fontFamily: "var(--font-body)", fontWeight: 600, fontSize: "0.875rem",
+                  color: "var(--color-text-secondary)", letterSpacing: "0.02em",
+                }}>
+                  {tech}
+                </span>
+              </div>
+            ))}
+          </div>
         </div>
-      </div>
+      ))}
     </div>
   );
 }
 
-// ─── SERVICES SECTION ────────────────────────────────────────────────────────
+// ─── STATS SECTION ────────────────────────────────────────────────────────────
+
+function StatsSection() {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const [active, setActive] = useState(false);
+  const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
+
+  const stats = [
+    { value: 7, suffix: "+", label: "Projects Completed", icon: Briefcase, color: "#A37E36", barWidth: 70 },
+    { value: 5, suffix: "+", label: "Innovation Projects", icon: FlaskConical, color: "#6E5528", barWidth: 50 },
+    { value: 100, suffix: "%", label: "Client Satisfaction", icon: Star, color: "#C4A15E", barWidth: 100 },
+    { value: 99, suffix: ".9%", label: "Uptime Guarantee", icon: Shield, color: "#A37E36", barWidth: 99 },
+    { value: 10, suffix: "K+", label: "Hours Saved via AI", icon: Clock, color: "#6E5528", barWidth: 80 },
+    { value: 3, suffix: "+", label: "Countries Served", icon: Globe, color: "#C4A15E", barWidth: 30 },
+  ];
+
+  useEffect(() => {
+    const trigger = ScrollTrigger.create({
+      trigger: containerRef.current,
+      start: "top 78%",
+      onEnter: () => setActive(true),
+      onLeaveBack: () => setActive(false),
+    });
+
+    const cards = gsap.utils.toArray(".stat-card-anim");
+    gsap.fromTo(
+      cards,
+      { opacity: 0, y: 40, scale: 0.95 },
+      {
+        opacity: 1, y: 0, scale: 1,
+        stagger: 0.08, duration: 0.9, ease: "power3.out",
+        scrollTrigger: {
+          trigger: containerRef.current,
+          start: "top 80%",
+          toggleActions: "play none none reverse",
+        },
+      }
+    );
+
+    // Section reveal
+    gsap.fromTo(
+      sectionRef.current,
+      { opacity: 0, y: 30 },
+      {
+        opacity: 1, y: 0, duration: 0.9, ease: "power3.out",
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top 85%",
+          toggleActions: "play none none reverse",
+        },
+      }
+    );
+
+    return () => { trigger.kill(); };
+  }, []);
+
+  return (
+    <section
+      ref={sectionRef}
+      style={{
+        padding: "clamp(70px,9vw,120px) 0",
+        background: "linear-gradient(135deg, rgba(163,126,54,0.03) 0%, rgba(110,85,40,0.02) 100%)",
+        borderTop: "1px solid var(--color-border)",
+        borderBottom: "1px solid var(--color-border)",
+        position: "relative", overflow: "hidden",
+      }}
+    >
+      {/* Morphing blob */}
+      <div style={{
+        position: "absolute", top: "50%", left: "50%",
+        transform: "translate(-50%,-50%)",
+        width: 600, height: 400,
+        background: "radial-gradient(ellipse, rgba(163,126,54,0.05) 0%, transparent 70%)",
+        filter: "blur(60px)", pointerEvents: "none",
+        animation: "aurora-float-1 10s ease-in-out infinite",
+      }} />
+
+      <div className="container-zentrix" ref={containerRef}>
+        <div style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
+          gap: "clamp(16px,3vw,28px)",
+        }}>
+          {stats.map((stat, i) => {
+            const Icon = stat.icon;
+            const isHov = hoveredIdx === i;
+            return (
+              <div
+                key={stat.label}
+                className="stat-card-anim"
+                onMouseEnter={() => setHoveredIdx(i)}
+                onMouseLeave={() => setHoveredIdx(null)}
+                style={{
+                  background: isHov ? `${stat.color}08` : "rgba(255,255,255,0.5)",
+                  border: `1px solid ${isHov ? stat.color + "25" : "var(--color-border)"}`,
+                  borderRadius: 20, padding: "28px 24px", textAlign: "center",
+                  backdropFilter: "blur(12px)",
+                  transition: "all 0.4s var(--ease-out-expo)",
+                  transform: isHov ? "translateY(-8px) scale(1.02)" : "translateY(0) scale(1)",
+                  boxShadow: isHov ? `0 24px 60px ${stat.color}15, 0 0 0 1px ${stat.color}20` : "0 4px 20px rgba(108,78,49,0.04)",
+                  cursor: "default",
+                  position: "relative", overflow: "hidden",
+                }}
+              >
+                {/* Shimmer glass reflection on hover */}
+                {isHov && (
+                  <div style={{
+                    position: "absolute", top: 0, left: 0, right: 0, height: "50%",
+                    background: "linear-gradient(180deg, rgba(255,255,255,0.08) 0%, transparent 100%)",
+                    pointerEvents: "none",
+                  }} />
+                )}
+
+                <div
+                  data-magnetic
+                  style={{
+                    width: 52, height: 52, borderRadius: 14,
+                    background: `${stat.color}14`,
+                    border: `1px solid ${stat.color}22`,
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                    margin: "0 auto 16px",
+                    boxShadow: isHov ? `0 0 20px ${stat.color}25` : "none",
+                    transition: "all 0.3s ease",
+                    animation: isHov ? "float-premium 4s ease-in-out infinite" : "none",
+                  }}
+                >
+                  <Icon size={22} style={{ color: stat.color }} />
+                </div>
+
+                <div style={{
+                  fontFamily: "var(--font-display)", fontSize: "clamp(2.2rem,4vw,3.5rem)",
+                  fontWeight: 500, letterSpacing: 0, lineHeight: 1, marginBottom: 8,
+                  background: `linear-gradient(135deg, ${stat.color}, var(--color-gold))`,
+                  WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
+                  backgroundClip: "text",
+                }}>
+                  {active ? <CountUp end={stat.value} duration={2.2} delay={i * 0.12} /> : 0}
+                  {stat.suffix}
+                </div>
+
+                <div style={{
+                  fontFamily: "var(--font-body)", fontSize: "0.82rem",
+                  color: "var(--color-text-secondary)", fontWeight: 500, marginBottom: 14,
+                }}>
+                  {stat.label}
+                </div>
+
+                {/* Animated progress bar */}
+                <div className="stat-bar-track">
+                  <div
+                    className={`stat-bar-fill ${active ? "animated" : ""}`}
+                    style={{ "--bar-width": `${stat.barWidth}%` } as React.CSSProperties}
+                  />
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ─── SERVICES SECTION ─────────────────────────────────────────────────────────
 
 const featuredServices = [
   {
-    id: "web-development",
-    icon: Globe,
-    color: "#6C4E31",
-    gradient: "linear-gradient(135deg, rgba(184,147,75,0.15), rgba(108,78,49,0.05))",
+    id: "web-development", icon: Globe, color: "#A37E36",
+    gradient: "linear-gradient(135deg, rgba(163,126,54,0.15), rgba(196,161,94,0.05))",
     title: "Web Development",
     description: "Next.js, React, full-stack applications built for performance and scale.",
     features: ["React & Next.js", "SEO Optimized", "Blazing Fast"],
   },
   {
-    id: "app-development",
-    icon: Smartphone,
-    color: "#06B6D4",
-    gradient: "linear-gradient(135deg, rgba(108,78,49,0.15), rgba(34,211,238,0.05))",
+    id: "app-development", icon: Smartphone, color: "#6E5528",
+    gradient: "linear-gradient(135deg, rgba(110,85,40,0.15), rgba(163,126,54,0.05))",
     title: "App Development",
     description: "Cross-platform mobile apps with Flutter and React Native that feel native.",
     features: ["iOS & Android", "Flutter / RN", "App Store Ready"],
   },
   {
-    id: "ai-automation",
-    icon: Bot,
-    color: "#B8934B",
-    gradient: "linear-gradient(135deg, rgba(108,78,49,0.15), rgba(184,147,75,0.05))",
+    id: "ai-automation", icon: Bot, color: "#C4A15E",
+    gradient: "linear-gradient(135deg, rgba(196,161,94,0.15), rgba(163,126,54,0.05))",
     title: "AI Automation",
     description: "Machine learning pipelines, intelligent workflows, and AI-powered systems.",
     features: ["ML Models", "Workflow Bots", "Data Analytics"],
   },
   {
-    id: "enterprise-software",
-    icon: Server,
-    color: "#EC4899",
-    gradient: "linear-gradient(135deg, rgba(108,78,49,0.15), rgba(244,114,182,0.05))",
+    id: "enterprise-software", icon: Server, color: "#A37E36",
+    gradient: "linear-gradient(135deg, rgba(163,126,54,0.15), rgba(110,85,40,0.05))",
     title: "Enterprise Software",
     description: "Custom ERP, CRM, HMS, and management systems for growing businesses.",
     features: ["ERP / CRM", "HMS / SMS", "Custom Systems"],
   },
   {
-    id: "ui-ux-design",
-    icon: Palette,
-    color: "#F59E0B",
-    gradient: "linear-gradient(135deg, rgba(245,158,11,0.15), rgba(251,191,36,0.05))",
+    id: "ui-ux-design", icon: Palette, color: "#C4A15E",
+    gradient: "linear-gradient(135deg, rgba(196,161,94,0.15), rgba(163,126,54,0.05))",
     title: "UI/UX Design",
     description: "Awwwards-caliber interfaces and brand identities that captivate users.",
     features: ["Figma Design", "Brand Identity", "Motion Graphics"],
   },
   {
-    id: "cloud-solutions",
-    icon: Cloud,
-    color: "#10B981",
-    gradient: "linear-gradient(135deg, rgba(16,185,129,0.15), rgba(52,211,153,0.05))",
+    id: "cloud-solutions", icon: Cloud, color: "#6E5528",
+    gradient: "linear-gradient(135deg, rgba(110,85,40,0.15), rgba(196,161,94,0.05))",
     title: "Cloud & DevOps",
     description: "AWS, Docker, CI/CD pipelines and scalable infrastructure that never sleeps.",
     features: ["AWS / GCP", "Docker / K8s", "CI/CD Pipelines"],
   },
 ];
 
-function ServiceCard({
-  service,
-  index,
-}: {
-  service: (typeof featuredServices)[0];
-  index: number;
-}) {
+function ServiceCard({ service, index }: { service: typeof featuredServices[0]; index: number }) {
+  const cardRef = useRef<HTMLDivElement>(null);
   const [hovered, setHovered] = useState(false);
   const Icon = service.icon;
 
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const card = cardRef.current;
+    if (!card) return;
+    const rect = card.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / rect.width - 0.5;
+    const y = (e.clientY - rect.top) / rect.height - 0.5;
+    card.style.transform = `translateY(-8px) rotateX(${-y * 10}deg) rotateY(${x * 10}deg) scale(1.01)`;
+  };
+
+  const handleMouseLeave = () => {
+    const card = cardRef.current;
+    if (!card) return;
+    card.style.transform = "translateY(0) rotateX(0) rotateY(0) scale(1)";
+    setHovered(false);
+  };
+
   return (
     <div
-      className="service-card-anim"
+      ref={cardRef}
+      className="service-card-anim service-card-premium"
       data-cursor-text="EXPLORE"
       onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
+      onMouseLeave={handleMouseLeave}
+      onMouseMove={handleMouseMove}
       style={{
-        background: hovered ? service.gradient : "transparent",
+        background: hovered ? service.gradient : "rgba(255,255,255,0.4)",
         border: `1px solid ${hovered ? service.color + "30" : "var(--color-border)"}`,
-        borderRadius: "20px",
-        padding: "32px",
-        cursor: "pointer",
-        transition: "all 0.4s cubic-bezier(0.16, 1, 0.3, 1)",
-        transform: hovered ? "translateY(-6px)" : "translateY(0)",
-        boxShadow: hovered ? `0 20px 60px ${service.color}12` : "none",
-        position: "relative",
-        overflow: "hidden",
+        borderRadius: 20, padding: "32px 28px",
+        transition: "transform 0.5s var(--ease-out-expo), background 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease",
+        boxShadow: hovered ? `0 24px 60px ${service.color}12, 0 0 0 1px ${service.color}15` : "0 4px 20px rgba(108,78,49,0.03)",
+        backdropFilter: "blur(12px)",
+        transformStyle: "preserve-3d",
+        position: "relative", overflow: "hidden",
+        cursor: "none",
       }}
     >
-      {/* Spotlight */}
+      {/* Glass reflection */}
+      <div style={{
+        position: "absolute", top: 0, left: 0, right: 0, height: "40%",
+        background: "linear-gradient(180deg, rgba(255,255,255,0.06) 0%, transparent 100%)",
+        pointerEvents: "none", borderRadius: "20px 20px 0 0",
+      }} />
+
+      {/* Glow on hover */}
       {hovered && (
-        <div
-          style={{
-            position: "absolute",
-            top: "-50%",
-            left: "-50%",
-            width: "200%",
-            height: "200%",
-            background: `radial-gradient(circle at 50% 50%, ${service.color}08, transparent 60%)`,
-            pointerEvents: "none",
-          }}
-        />
+        <div style={{
+          position: "absolute", top: "-30%", left: "-30%", width: "160%", height: "160%",
+          background: `radial-gradient(circle at 50% 50%, ${service.color}08, transparent 60%)`,
+          pointerEvents: "none",
+        }} />
       )}
 
       {/* Icon */}
       <div
         data-magnetic
         style={{
-          width: 56,
-          height: 56,
-          borderRadius: "14px",
-          background: `${service.color}15`,
-          border: `1px solid ${service.color}25`,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          marginBottom: "20px",
+          width: 56, height: 56, borderRadius: 14,
+          background: `${service.color}14`,
+          border: `1px solid ${service.color}22`,
+          display: "flex", alignItems: "center", justifyContent: "center",
+          marginBottom: 20,
+          boxShadow: hovered ? `0 0 24px ${service.color}25` : "none",
           transition: "all 0.3s ease",
-          boxShadow: hovered ? `0 0 20px ${service.color}20` : "none",
+          animation: hovered ? "float-premium 5s ease-in-out infinite" : "none",
         }}
       >
         <Icon size={24} style={{ color: service.color }} />
       </div>
 
-      <h3
-        style={{
-          fontFamily: "Syne, sans-serif",
-          fontWeight: 700,
-          fontSize: "1.2rem",
-          color: "var(--color-text-primary)",
-          marginBottom: "10px",
-          letterSpacing: "-0.01em",
-        }}
-      >
+      <h3 style={{
+        fontFamily: "var(--font-display)", fontWeight: 500,
+        fontSize: "1.3rem", color: "var(--color-text-primary)",
+        marginBottom: 10, letterSpacing: 0,
+      }}>
         {service.title}
       </h3>
-      <p
-        style={{
-          fontFamily: "var(--font-body)",
-          fontSize: "0.875rem",
-          color: "var(--color-text-secondary)",
-          lineHeight: 1.6,
-          marginBottom: "20px",
-        }}
-      >
+      <p style={{
+        fontFamily: "var(--font-body)", fontSize: "0.875rem",
+        color: "var(--color-text-secondary)", lineHeight: 1.65, marginBottom: 20,
+      }}>
         {service.description}
       </p>
 
-      {/* Features */}
-      <div style={{ display: "flex", gap: "8px", flexWrap: "wrap", marginBottom: "20px" }}>
+      <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 22 }}>
         {service.features.map((feat) => (
-          <span
-            key={feat}
-            style={{
-              padding: "4px 12px",
-              background: `${service.color}10`,
-              border: `1px solid ${service.color}20`,
-              borderRadius: "100px",
-              fontFamily: "var(--font-body)",
-              fontSize: "0.75rem",
-              fontWeight: 500,
-              color: service.color,
-            }}
-          >
+          <span key={feat} style={{
+            padding: "4px 12px",
+            background: `${service.color}10`, border: `1px solid ${service.color}20`,
+            borderRadius: 100, fontSize: "0.72rem", fontWeight: 600,
+            color: service.color, fontFamily: "var(--font-body)",
+          }}>
             {feat}
           </span>
         ))}
       </div>
 
-      {/* CTA */}
       <Link
         href={`/services/${service.id}`}
         style={{
-          display: "inline-flex",
-          alignItems: "center",
-          gap: "6px",
+          display: "inline-flex", alignItems: "center", gap: 6,
+          fontSize: "0.85rem", fontWeight: 600, color: service.color,
+          textDecoration: "none", transition: "gap 0.2s ease",
           fontFamily: "var(--font-body)",
-          fontSize: "0.85rem",
-          fontWeight: 600,
-          color: service.color,
-          textDecoration: "none",
-          transition: "gap 0.2s ease",
         }}
         onMouseEnter={(e) => { e.currentTarget.style.gap = "10px"; }}
         onMouseLeave={(e) => { e.currentTarget.style.gap = "6px"; }}
@@ -895,164 +1027,96 @@ function ServicesSection() {
     const section = sectionRef.current;
     if (!section) return;
 
-    // Header reveal
-    const headerTl = gsap.timeline({
-      scrollTrigger: {
-        trigger: section,
-        start: "top 80%",
-        toggleActions: "play none none reverse",
-      },
+    const tl = gsap.timeline({
+      scrollTrigger: { trigger: section, start: "top 80%", toggleActions: "play none none reverse" },
     });
 
-    headerTl
-      .fromTo(badgeRef.current, { opacity: 0, y: 25 }, { opacity: 1, y: 0, duration: 0.6 })
-      .fromTo(headingRef.current, { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.8 }, "-=0.45")
-      .fromTo(descRef.current, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.8 }, "-=0.55");
+    tl.fromTo(badgeRef.current, { opacity: 0, y: 25 }, { opacity: 1, y: 0, duration: 0.7 })
+      .fromTo(headingRef.current, { opacity: 0, y: 35, filter: "blur(8px)" }, { opacity: 1, y: 0, filter: "blur(0px)", duration: 1 }, "-=0.5")
+      .fromTo(descRef.current, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.8 }, "-=0.6");
 
-    // Grid cards stagger reveal with velocity/direction sensitivity
     const cards = gsap.utils.toArray(".service-card-anim");
-    const cardsAnim = gsap.fromTo(
+    gsap.fromTo(
       cards,
-      { opacity: 0, y: 50, scale: 0.96, filter: "blur(8px)" },
+      { opacity: 0, y: 60, scale: 0.94, filter: "blur(10px)" },
       {
-        opacity: 1,
-        y: 0,
-        scale: 1,
-        filter: "blur(0px)",
-        stagger: 0.08,
-        duration: 1,
-        ease: "power3.out",
-        scrollTrigger: {
-          trigger: gridRef.current,
-          start: "top 85%",
-          toggleActions: "play none none reverse",
-        },
+        opacity: 1, y: 0, scale: 1, filter: "blur(0px)",
+        stagger: 0.1, duration: 1.1, ease: "power3.out",
+        scrollTrigger: { trigger: gridRef.current, start: "top 85%", toggleActions: "play none none reverse" },
       }
     );
 
-    return () => {
-      headerTl.kill();
-      cardsAnim.kill();
-    };
+    return () => { tl.kill(); };
   }, []);
 
   return (
-    <section ref={sectionRef} style={{ padding: "clamp(80px, 10vw, 140px) 0", position: "relative" }}>
-      {/* Background */}
-      <div
-        style={{
-          position: "absolute",
-          inset: 0,
-          background: "radial-gradient(ellipse at 50% 50%, rgba(184,147,75,0.04) 0%, transparent 70%)",
-          pointerEvents: "none",
-        }}
-      />
+    <section ref={sectionRef} style={{ padding: "clamp(80px,10vw,140px) 0", position: "relative" }}>
+      <div style={{
+        position: "absolute", inset: 0,
+        background: "radial-gradient(ellipse at 50% 50%, rgba(163,126,54,0.04) 0%, transparent 70%)",
+        pointerEvents: "none",
+      }} />
 
       <div className="container-zentrix" style={{ position: "relative" }}>
-        <div style={{ textAlign: "center", marginBottom: "64px" }}>
-          <div
-            ref={badgeRef}
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: "8px",
-              padding: "6px 16px",
-              border: "1px solid rgba(184,147,75,0.25)",
-              borderRadius: "100px",
-              marginBottom: "20px",
-              background: "rgba(184,147,75,0.06)",
-            }}
-          >
+        <div style={{ textAlign: "center", marginBottom: 64 }}>
+          <div ref={badgeRef} style={{
+            display: "inline-flex", alignItems: "center", gap: 8, padding: "6px 16px",
+            border: "1px solid rgba(163,126,54,0.25)", borderRadius: 100,
+            marginBottom: 20, background: "rgba(163,126,54,0.06)",
+          }}>
             <span style={{ width: 6, height: 6, borderRadius: "50%", background: "var(--color-violet-light)" }} />
             <span style={{ fontFamily: "var(--font-body)", fontSize: "0.75rem", fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--color-violet-light)" }}>
               Our Expertise
             </span>
           </div>
 
-          <h2
-            ref={headingRef}
-            style={{
-              fontFamily: "Syne, sans-serif",
-              fontSize: "clamp(2.2rem, 5vw, 4rem)",
-              fontWeight: 800,
-              color: "var(--color-text-primary)",
-              lineHeight: 1.05,
-              letterSpacing: "-0.03em",
-              marginBottom: "16px",
-            }}
-          >
+          <h2 ref={headingRef} style={{
+            fontFamily: "var(--font-display)", fontSize: "clamp(2.2rem,5vw,4.2rem)",
+            fontWeight: 500, color: "var(--color-text-primary)", lineHeight: 1.05,
+            letterSpacing: 0, marginBottom: 16,
+          }}>
             Services That{" "}
-            <span
-              style={{
-                background: "linear-gradient(135deg, var(--color-violet) 0%, var(--color-violet-light) 50%, var(--color-cyan) 100%)",
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
-                backgroundClip: "text",
-              }}
-            >
+            <span style={{
+              background: "linear-gradient(135deg, var(--color-violet) 0%, var(--color-gold) 100%)",
+              WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text",
+            }}>
               Transform
             </span>
           </h2>
 
-          <p
-            ref={descRef}
-            style={{
-              fontFamily: "var(--font-body)",
-              fontSize: "clamp(0.9rem, 2vw, 1.1rem)",
-              color: "var(--color-text-secondary)",
-              maxWidth: "560px",
-              margin: "0 auto",
-              lineHeight: 1.7,
-            }}
-          >
+          <p ref={descRef} style={{
+            fontFamily: "var(--font-body)", fontSize: "clamp(0.9rem,2vw,1.1rem)",
+            color: "var(--color-text-secondary)", maxWidth: 560, margin: "0 auto", lineHeight: 1.75,
+          }}>
             From startup MVPs to enterprise platforms — we craft technology that drives growth, automates complexity, and creates experiences users love.
           </p>
         </div>
 
-        {/* Services grid */}
-        <div
-          ref={gridRef}
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))",
-            gap: "20px",
-            marginBottom: "48px",
-          }}
-        >
+        <div ref={gridRef} style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
+          gap: 20, marginBottom: 48,
+        }}>
           {featuredServices.map((service, i) => (
             <ServiceCard key={service.id} service={service} index={i} />
           ))}
         </div>
 
-        {/* View all */}
         <div style={{ textAlign: "center" }}>
           <Link
             href="/services"
             data-magnetic
             data-cursor-text="ALL SERVICES"
             style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: "10px",
-              padding: "14px 32px",
-              background: "transparent",
-              border: "1px solid var(--color-border)",
-              borderRadius: "100px",
-              fontFamily: "var(--font-body)",
-              fontWeight: 600,
-              fontSize: "0.9375rem",
-              color: "var(--color-text-primary)",
-              textDecoration: "none",
-              transition: "all 0.3s ease",
+              display: "inline-flex", alignItems: "center", gap: 10,
+              padding: "14px 34px", background: "transparent",
+              border: "1px solid var(--color-border)", borderRadius: 100,
+              fontFamily: "var(--font-body)", fontWeight: 600, fontSize: "0.9375rem",
+              color: "var(--color-text-primary)", textDecoration: "none",
+              transition: "all 0.3s var(--ease-out-expo)",
             }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.background = "var(--color-surface)";
-              e.currentTarget.style.borderColor = "var(--color-text-primary)";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.background = "transparent";
-              e.currentTarget.style.borderColor = "var(--color-border)";
-            }}
+            onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(163,126,54,0.06)"; e.currentTarget.style.borderColor = "rgba(163,126,54,0.3)"; e.currentTarget.style.transform = "translateY(-2px)"; }}
+            onMouseLeave={(e) => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.borderColor = "var(--color-border)"; e.currentTarget.style.transform = "translateY(0)"; }}
           >
             Explore All 22 Services <ArrowRight size={16} />
           </Link>
@@ -1062,132 +1126,7 @@ function ServicesSection() {
   );
 }
 
-// ─── STATS SECTION ──────────────────────────────────────────────────────────
-
-function StatsSection() {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const [active, setActive] = useState(false);
-
-  const stats = [
-    { value: 7, suffix: "+", label: "Projects Completed", icon: Briefcase, color: "#8B5CF6" },
-    { value: 5, suffix: "+", label: "Innovation Projects", icon: FlaskConical, color: "#06B6D4" },
-    { value: 100, suffix: "%", label: "Client Satisfaction", icon: Star, color: "#F59E0B" },
-    { value: 99, suffix: ".9%", label: "Uptime Guarantee", icon: Shield, color: "#10B981" },
-  ];
-
-  useEffect(() => {
-    const trigger = ScrollTrigger.create({
-      trigger: containerRef.current,
-      start: "top 80%",
-      onEnter: () => setActive(true),
-      onLeaveBack: () => setActive(false),
-    });
-
-    const items = gsap.utils.toArray(".stat-item-anim");
-    const anim = gsap.fromTo(items, 
-      { opacity: 0, y: 30 },
-      {
-        opacity: 1,
-        y: 0,
-        stagger: 0.1,
-        duration: 0.8,
-        ease: "power3.out",
-        scrollTrigger: {
-          trigger: containerRef.current,
-          start: "top 80%",
-          toggleActions: "play none none reverse",
-        }
-      }
-    );
-
-    return () => {
-      trigger.kill();
-      anim.kill();
-    };
-  }, []);
-
-  return (
-    <section
-      style={{
-        padding: "clamp(60px, 8vw, 100px) 0",
-        background: "linear-gradient(135deg, rgba(184,147,75,0.03) 0%, rgba(108,78,49,0.02) 100%)",
-        borderTop: "1px solid var(--color-border)",
-        borderBottom: "1px solid var(--color-border)",
-      }}
-    >
-      <div className="container-zentrix" ref={containerRef}>
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
-            gap: "clamp(24px, 4vw, 48px)",
-          }}
-        >
-          {stats.map((stat, i) => {
-            const Icon = stat.icon;
-            return (
-              <div
-                key={stat.label}
-                className="stat-item-anim"
-                style={{ textAlign: "center" }}
-              >
-                <div
-                  data-magnetic
-                  style={{
-                    width: 52,
-                    height: 52,
-                    borderRadius: "14px",
-                    background: `${stat.color}15`,
-                    border: `1px solid ${stat.color}25`,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    margin: "0 auto 16px",
-                  }}
-                >
-                  <Icon size={22} style={{ color: stat.color }} />
-                </div>
-                <div
-                  style={{
-                    fontFamily: "Syne, sans-serif",
-                    fontSize: "clamp(2.5rem, 5vw, 4rem)",
-                    fontWeight: 800,
-                    letterSpacing: "-0.04em",
-                    lineHeight: 1,
-                    marginBottom: "8px",
-                    background: "linear-gradient(135deg, var(--color-text-primary), var(--color-text-secondary))",
-                    WebkitBackgroundClip: "text",
-                    WebkitTextFillColor: "transparent",
-                    backgroundClip: "text",
-                  }}
-                >
-                  {active ? (
-                    <CountUp end={stat.value} duration={2} delay={i * 0.15} />
-                  ) : (
-                    0
-                  )}
-                  {stat.suffix}
-                </div>
-                <div
-                  style={{
-                    fontFamily: "var(--font-body)",
-                    fontSize: "0.875rem",
-                    color: "var(--color-text-secondary)",
-                    fontWeight: 500,
-                  }}
-                >
-                  {stat.label}
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-// ─── FEATURED WORKS SECTION ──────────────────────────────────────────────────
+// ─── FEATURED WORKS SECTION ───────────────────────────────────────────────────
 
 const featuredProjects = [
   {
@@ -1203,12 +1142,12 @@ const featuredProjects = [
   },
   {
     id: "sakthi-kailash-college",
-    title: "Sakthi Kailash Women's College",
+    title: "Sakthi Kailash Women&apos;s College",
     category: "Education",
     description: "Custom institutional website for Sakthi Kailash Women's College, highlighting courses, placement records, achievements, and departments.",
     link: "https://www.sakthikailashcollege.org/",
     image: "/work_sakthi_kailash.png",
-    color: "#EC4899",
+    color: "#C4A15E",
     tags: ["React", "TypeScript", "Tailwind CSS", "Framer Motion"],
     metrics: ["Traffic +180%", "Speed 95%", "Engage 99%"],
   },
@@ -1219,7 +1158,7 @@ const featuredProjects = [
     description: "Official institutional web platform and student portal for AVS College of Arts & Science, providing access to academic resources and admissions.",
     link: "https://www.avscollegeomalur.edu.in/",
     image: "/work_avs_omalur.png",
-    color: "#8B5CF6",
+    color: "#6E5528",
     tags: ["Next.js", "TypeScript", "Node.js"],
     metrics: ["98% Performance", "2.5x Inbound Rise", "0% Downtime"],
   },
@@ -1235,152 +1174,70 @@ function WorksSection() {
     const section = sectionRef.current;
     if (!section) return;
 
-    // Header reveal
-    const headerTl = gsap.timeline({
-      scrollTrigger: {
-        trigger: section,
-        start: "top 80%",
-        toggleActions: "play none none reverse",
-      },
+    const tl = gsap.timeline({
+      scrollTrigger: { trigger: section, start: "top 80%", toggleActions: "play none none reverse" },
     });
 
-    headerTl
-      .fromTo(badgeRef.current, { opacity: 0, y: 25 }, { opacity: 1, y: 0, duration: 0.6 })
-      .fromTo(headingRef.current, { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.8 }, "-=0.45");
+    tl.fromTo(badgeRef.current, { opacity: 0, y: 25 }, { opacity: 1, y: 0, duration: 0.7 })
+      .fromTo(headingRef.current, { opacity: 0, y: 35, filter: "blur(8px)" }, { opacity: 1, y: 0, filter: "blur(0px)", duration: 1 }, "-=0.5");
 
-    // Project cards stagger reveal
     const rows = gsap.utils.toArray(".project-row-anim");
-    const gridAnim = gsap.fromTo(
-      rows,
-      { opacity: 0, y: 80, scale: 0.96 },
-      {
-        opacity: 1,
-        y: 0,
-        scale: 1,
-        stagger: 0.15,
-        duration: 1.2,
-        ease: "power4.out",
-        scrollTrigger: {
-          trigger: gridRef.current,
-          start: "top 80%",
-          toggleActions: "play none none reverse",
-        },
-      }
-    );
 
-    // Premium Obys-style rounded Reveal Clip-Path mask on scroll
-    const maskAnimations: gsap.core.Tween[] = [];
+    // Clip-path cinematic reveals
     rows.forEach((row: any) => {
-      const anim = gsap.fromTo(row, 
-        { 
-          clipPath: "inset(12% 8% round 32px)",
-          scale: 0.94,
-          opacity: 0.8
-        }, 
+      gsap.fromTo(
+        row,
+        { clipPath: "inset(12% 8% round 32px)", scale: 0.94, opacity: 0.8 },
         {
-          clipPath: "inset(0% 0% round 24px)",
-          scale: 1,
-          opacity: 1,
+          clipPath: "inset(0% 0% round 24px)", scale: 1, opacity: 1,
           ease: "power2.out",
-          scrollTrigger: {
-            trigger: row,
-            start: "top 92%",
-            end: "top 60%",
-            scrub: true,
-          }
+          scrollTrigger: { trigger: row, start: "top 90%", end: "top 60%", scrub: true },
         }
       );
-      maskAnimations.push(anim);
-    });
 
-    // Parallax on visual elements vs content elements in rows
-    rows.forEach((row: any) => {
+      // Parallax layers within rows
       const visual = row.querySelector(".project-visual-anim");
       const content = row.querySelector(".project-content-anim");
-      
       if (visual && content) {
-        gsap.fromTo(visual, { y: 25 }, {
-          y: -25,
-          ease: "none",
-          scrollTrigger: {
-            trigger: row,
-            start: "top bottom",
-            end: "bottom top",
-            scrub: true,
-          }
-        });
-        
-        gsap.fromTo(content, { y: -25 }, {
-          y: 25,
-          ease: "none",
-          scrollTrigger: {
-            trigger: row,
-            start: "top bottom",
-            end: "bottom top",
-            scrub: true,
-          }
-        });
+        gsap.fromTo(visual, { y: 30 }, { y: -30, ease: "none", scrollTrigger: { trigger: row, start: "top bottom", end: "bottom top", scrub: true } });
+        gsap.fromTo(content, { y: -20 }, { y: 20, ease: "none", scrollTrigger: { trigger: row, start: "top bottom", end: "bottom top", scrub: true } });
       }
     });
 
-    return () => {
-      headerTl.kill();
-      gridAnim.kill();
-      maskAnimations.forEach(a => a.kill());
-    };
+    return () => { tl.kill(); };
   }, []);
 
   return (
-    <section ref={sectionRef} style={{ padding: "clamp(80px, 10vw, 140px) 0", position: "relative" }}>
+    <section ref={sectionRef} style={{ padding: "clamp(80px,10vw,140px) 0", position: "relative" }}>
       <div className="container-zentrix">
-        <div style={{ textAlign: "center", marginBottom: "64px" }}>
-          <div
-            ref={badgeRef}
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: "8px",
-              padding: "6px 16px",
-              border: "1px solid rgba(108, 78, 49, 0.25)",
-              borderRadius: "100px",
-              marginBottom: "20px",
-              background: "rgba(108, 78, 49, 0.06)",
-            }}
-          >
-            <span style={{ width: 6, height: 6, borderRadius: "50%", background: "var(--color-cyan)" }} />
-            <span style={{ fontFamily: "var(--font-body)", fontSize: "0.75rem", fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--color-cyan)" }}>
+        <div style={{ textAlign: "center", marginBottom: 64 }}>
+          <div ref={badgeRef} style={{
+            display: "inline-flex", alignItems: "center", gap: 8, padding: "6px 16px",
+            border: "1px solid rgba(163,126,54,0.25)", borderRadius: 100,
+            marginBottom: 20, background: "rgba(163,126,54,0.06)",
+          }}>
+            <span style={{ width: 6, height: 6, borderRadius: "50%", background: "var(--color-gold)" }} />
+            <span style={{ fontFamily: "var(--font-body)", fontSize: "0.75rem", fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--color-gold)" }}>
               Featured Work
             </span>
           </div>
 
-          <h2
-            ref={headingRef}
-            style={{
-              fontFamily: "Syne, sans-serif",
-              fontSize: "clamp(2.2rem, 5vw, 4rem)",
-              fontWeight: 800,
-              color: "var(--color-text-primary)",
-              lineHeight: 1.05,
-              letterSpacing: "-0.03em",
-              marginBottom: "16px",
-            }}
-          >
+          <h2 ref={headingRef} style={{
+            fontFamily: "var(--font-display)", fontSize: "clamp(2.2rem,5vw,4.2rem)",
+            fontWeight: 500, color: "var(--color-text-primary)", lineHeight: 1.05,
+            letterSpacing: 0,
+          }}>
             Real Results,{" "}
-            <span
-              style={{
-                background: "linear-gradient(135deg, var(--color-cyan), var(--color-cyan-light))",
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
-                backgroundClip: "text",
-              }}
-            >
+            <span style={{
+              background: "linear-gradient(135deg, var(--color-gold), var(--color-violet))",
+              WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text",
+            }}>
               Real Impact
             </span>
           </h2>
         </div>
 
-        {/* Projects */}
-        <div ref={gridRef} style={{ display: "flex", flexDirection: "column", gap: "32px" }}>
+        <div ref={gridRef} style={{ display: "flex", flexDirection: "column", gap: 28 }}>
           {featuredProjects.map((project, i) => (
             <div
               key={project.id}
@@ -1388,17 +1245,17 @@ function WorksSection() {
               data-cursor-text="VIEW STUDY"
               style={{
                 display: "grid",
-                gridTemplateColumns: "repeat(auto-fit, minmax(460px, 1fr))",
-                gap: "0",
-                background: "transparent",
+                gridTemplateColumns: "repeat(auto-fit, minmax(440px, 1fr))",
+                gap: 0,
                 border: "1px solid var(--color-border)",
-                borderRadius: "24px",
-                overflow: "hidden",
+                borderRadius: 24, overflow: "hidden",
                 transition: "border-color 0.3s ease, box-shadow 0.3s ease",
+                background: "rgba(255,255,255,0.5)",
+                backdropFilter: "blur(12px)",
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.borderColor = `${project.color}30`;
-                e.currentTarget.style.boxShadow = `0 20px 60px ${project.color}08`;
+                e.currentTarget.style.boxShadow = `0 24px 60px ${project.color}10`;
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.borderColor = "var(--color-border)";
@@ -1406,68 +1263,47 @@ function WorksSection() {
               }}
             >
               {/* Content side */}
-              <div
-                className="project-content-anim"
-                style={{ padding: "clamp(24px, 5vw, 56px)", display: "flex", flexDirection: "column", justifyContent: "center" }}
-              >
-                <div style={{ marginBottom: "12px" }}>
-                  <span
-                    style={{
-                      padding: "4px 12px",
-                      background: `${project.color}12`,
-                      border: `1px solid ${project.color}25`,
-                      borderRadius: "100px",
-                      fontFamily: "var(--font-body)",
-                      fontSize: "0.75rem",
-                      fontWeight: 600,
-                      color: project.color,
-                    }}
-                  >
+              <div className="project-content-anim" style={{ padding: "clamp(24px,5vw,52px)", display: "flex", flexDirection: "column", justifyContent: "center" }}>
+                <div style={{ marginBottom: 12 }}>
+                  <span style={{
+                    padding: "4px 12px",
+                    background: `${project.color}12`, border: `1px solid ${project.color}25`,
+                    borderRadius: 100, fontSize: "0.72rem", fontWeight: 600,
+                    color: project.color, fontFamily: "var(--font-body)",
+                  }}>
                     {project.category}
                   </span>
                 </div>
-                <h3
-                  style={{
-                    fontFamily: "Syne, sans-serif",
-                    fontWeight: 800,
-                    fontSize: "clamp(1.5rem, 3vw, 2.2rem)",
-                    color: "var(--color-text-primary)",
-                    lineHeight: 1.1,
-                    letterSpacing: "-0.02em",
-                    marginBottom: "16px",
-                  }}
-                >
-                  {project.title}
-                </h3>
-                <p style={{ fontFamily: "var(--font-body)", fontSize: "0.9rem", color: "var(--color-text-secondary)", lineHeight: 1.75, marginBottom: "24px" }}>
+
+                <h3 style={{
+                  fontFamily: "var(--font-display)", fontWeight: 500,
+                  fontSize: "clamp(1.5rem,3vw,2.3rem)", color: "var(--color-text-primary)",
+                  lineHeight: 1.1, letterSpacing: 0, marginBottom: 16,
+                }}
+                  dangerouslySetInnerHTML={{ __html: project.title }}
+                />
+
+                <p style={{ fontFamily: "var(--font-body)", fontSize: "0.9rem", color: "var(--color-text-secondary)", lineHeight: 1.75, marginBottom: 24 }}>
                   {project.description}
                 </p>
 
-                {/* Metrics */}
-                <div style={{ display: "flex", gap: "12px", marginBottom: "28px", flexWrap: "wrap" }}>
+                <div style={{ display: "flex", gap: 12, marginBottom: 24, flexWrap: "wrap" }}>
                   {project.metrics.map((m) => (
-                    <div key={m} style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-                      <Check size={14} style={{ color: project.color }} />
+                    <div key={m} style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                      <Check size={13} style={{ color: project.color }} />
                       <span style={{ fontFamily: "var(--font-body)", fontSize: "0.8rem", color: "var(--color-text-secondary)" }}>{m}</span>
                     </div>
                   ))}
                 </div>
 
-                {/* Tags */}
-                <div style={{ display: "flex", gap: "8px", flexWrap: "wrap", marginBottom: "28px" }}>
+                <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 28 }}>
                   {project.tags.map((tag) => (
-                    <span
-                      key={tag}
-                      style={{
-                        padding: "4px 12px",
-                        background: "var(--color-surface)",
-                        border: "1px solid var(--color-border)",
-                        borderRadius: "100px",
-                        fontFamily: "var(--font-body)",
-                        fontSize: "0.75rem",
-                        color: "var(--color-text-secondary)",
-                      }}
-                    >
+                    <span key={tag} style={{
+                      padding: "4px 12px", background: "var(--color-surface)",
+                      border: "1px solid var(--color-border)", borderRadius: 100,
+                      fontSize: "0.72rem", color: "var(--color-text-secondary)",
+                      fontFamily: "var(--font-body)",
+                    }}>
                       {tag}
                     </span>
                   ))}
@@ -1478,28 +1314,24 @@ function WorksSection() {
                   target={project.link ? "_blank" : undefined}
                   rel={project.link ? "noopener noreferrer" : undefined}
                   style={{
-                    display: "inline-flex",
-                    alignItems: "center",
-                    gap: "8px",
+                    display: "inline-flex", alignItems: "center", gap: 8,
+                    fontSize: "0.875rem", fontWeight: 600, color: project.color,
+                    textDecoration: "none", width: "fit-content",
                     fontFamily: "var(--font-body)",
-                    fontSize: "0.875rem",
-                    fontWeight: 600,
-                    color: project.color,
-                    textDecoration: "none",
-                    width: "fit-content",
+                    transition: "gap 0.2s ease",
                   }}
+                  onMouseEnter={(e) => { e.currentTarget.style.gap = "12px"; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.gap = "8px"; }}
                 >
                   View Live Site <ExternalLink size={14} />
                 </Link>
               </div>
 
-              {/* Visual side with screenshot */}
+              {/* Visual side */}
               <div
                 className="project-visual-anim"
                 style={{
-                  minHeight: "340px",
-                  position: "relative",
-                  overflow: "hidden",
+                  minHeight: 340, position: "relative", overflow: "hidden",
                   order: i % 2 === 0 ? 1 : -1,
                   borderLeft: i % 2 === 0 ? "1px solid var(--color-border)" : "none",
                   borderRight: i % 2 !== 0 ? "1px solid var(--color-border)" : "none",
@@ -1507,49 +1339,39 @@ function WorksSection() {
               >
                 <img
                   src={project.image}
-                  alt={project.title}
+                  alt={project.title.replace(/&apos;/g, "'")}
                   style={{
-                    width: "100%",
-                    height: "100%",
-                    objectFit: "cover",
-                    position: "absolute",
-                    inset: 0,
-                    transition: "transform 0.8s cubic-bezier(0.16, 1, 0.3, 1)",
+                    width: "100%", height: "100%", objectFit: "cover",
+                    position: "absolute", inset: 0,
+                    transition: "transform 0.8s var(--ease-out-expo), filter 0.5s ease",
+                    filter: "brightness(0.92)",
                   }}
-                  className="project-row-image"
+                  onMouseEnter={(e) => { e.currentTarget.style.transform = "scale(1.05)"; e.currentTarget.style.filter = "brightness(1)"; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.transform = "scale(1)"; e.currentTarget.style.filter = "brightness(0.92)"; }}
                 />
-                <div
-                  style={{
-                    position: "absolute",
-                    inset: 0,
-                    background: "linear-gradient(to bottom, rgba(26,22,18,0.05) 0%, rgba(26,22,18,0.2) 100%)",
-                    pointerEvents: "none",
-                  }}
-                />
+                <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to bottom, rgba(26,22,18,0.02), rgba(26,22,18,0.15))", pointerEvents: "none" }} />
               </div>
             </div>
           ))}
         </div>
 
-        <div style={{ textAlign: "center", marginTop: "56px" }}>
+        <div style={{ textAlign: "center", marginTop: 56 }}>
           <Link
             href="/works"
             data-magnetic
             data-cursor-text="ALL PROJECTS"
             style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: "10px",
+              display: "inline-flex", alignItems: "center", gap: 10,
               padding: "16px 36px",
-              background: "linear-gradient(135deg, var(--color-violet), var(--color-violet-light))",
-              color: "#fff",
-              borderRadius: "100px",
-              fontFamily: "var(--font-body)",
-              fontWeight: 700,
-              fontSize: "0.95rem",
+              background: "linear-gradient(135deg, var(--color-violet-light), var(--color-violet))",
+              color: "#fff", borderRadius: 100,
+              fontFamily: "var(--font-body)", fontWeight: 700, fontSize: "0.95rem",
               textDecoration: "none",
-              boxShadow: "0 12px 40px rgba(184, 147, 75, 0.25)",
+              boxShadow: "0 16px 48px rgba(163,126,54,0.28)",
+              transition: "all 0.4s var(--ease-out-expo)",
             }}
+            onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-3px) scale(1.02)"; e.currentTarget.style.boxShadow = "0 24px 60px rgba(163,126,54,0.4)"; }}
+            onMouseLeave={(e) => { e.currentTarget.style.transform = "translateY(0) scale(1)"; e.currentTarget.style.boxShadow = "0 16px 48px rgba(163,126,54,0.28)"; }}
           >
             View All Projects <ArrowRight size={16} />
           </Link>
@@ -1559,13 +1381,13 @@ function WorksSection() {
   );
 }
 
-// ─── PROCESS SECTION ─────────────────────────────────────────────────────────
+// ─── PROCESS SECTION ──────────────────────────────────────────────────────────
 
 const processSteps = [
   { step: "01", title: "Discovery", desc: "We dive deep into your vision, goals, and requirements to build a strategic roadmap.", icon: "🔍", color: "#6C4E31" },
   { step: "02", title: "Design", desc: "Awwwards-caliber UI/UX design — wireframes, prototypes, and pixel-perfect visuals.", icon: "✦", color: "#B8934B" },
-  { step: "03", title: "Engineering", desc: "Clean, scalable code with modern architectures, CI/CD pipelines, and comprehensive testing.", icon: "⚡", color: "#06B6D4" },
-  { step: "04", title: "Launch", desc: "Smooth deployment with monitoring, performance optimization, and post-launch support.", icon: "🚀", color: "#10B981" },
+  { step: "03", title: "Engineering", desc: "Clean, scalable code with modern architectures, CI/CD pipelines, and comprehensive testing.", icon: "⚡", color: "#A37E36" },
+  { step: "04", title: "Launch", desc: "Smooth deployment with monitoring, performance optimization, and post-launch support.", icon: "🚀", color: "#C4A15E" },
 ];
 
 function ProcessSection() {
@@ -1579,166 +1401,90 @@ function ProcessSection() {
     const container = containerRef.current;
     if (!container) return;
 
-    // Header reveal
-    const headerTl = gsap.timeline({
-      scrollTrigger: {
-        trigger: container,
-        start: "top 80%",
-        toggleActions: "play none none reverse",
-      },
+    const tl = gsap.timeline({
+      scrollTrigger: { trigger: container, start: "top 80%", toggleActions: "play none none reverse" },
     });
 
-    headerTl
-      .fromTo(badgeRef.current, { opacity: 0, y: 25 }, { opacity: 1, y: 0, duration: 0.6 })
-      .fromTo(headingRef.current, { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.8 }, "-=0.45");
+    tl.fromTo(badgeRef.current, { opacity: 0, y: 25 }, { opacity: 1, y: 0, duration: 0.7 })
+      .fromTo(headingRef.current, { opacity: 0, y: 35, filter: "blur(8px)" }, { opacity: 1, y: 0, filter: "blur(0px)", duration: 1 }, "-=0.5");
 
-    // Steps cards stagger entrance
     const steps = gsap.utils.toArray(".process-step-anim");
-    const stepsAnim = gsap.fromTo(
+    gsap.fromTo(
       steps,
       { opacity: 0, y: 50, scale: 0.95 },
       {
-        opacity: 1,
-        y: 0,
-        scale: 1,
-        stagger: 0.15,
-        duration: 1,
-        ease: "power4.out",
-        scrollTrigger: {
-          trigger: stepsGridRef.current,
-          start: "top 75%",
-          toggleActions: "play none none reverse",
-        },
+        opacity: 1, y: 0, scale: 1, stagger: 0.15, duration: 1, ease: "power4.out",
+        scrollTrigger: { trigger: stepsGridRef.current, start: "top 75%", toggleActions: "play none none reverse" },
       }
     );
 
-    // Dynamic drawing of the path line on scroll
+    // SVG path draw
     const path = linePathRef.current;
     if (path) {
-      const pathLength = path.getTotalLength();
-      gsap.set(path, { strokeDasharray: pathLength, strokeDashoffset: pathLength });
-
-      const pathAnim = gsap.to(path, {
-        strokeDashoffset: 0,
-        ease: "none",
-        scrollTrigger: {
-          trigger: stepsGridRef.current,
-          start: "top 60%",
-          end: "bottom 80%",
-          scrub: true,
-        },
+      const len = path.getTotalLength();
+      gsap.set(path, { strokeDasharray: len, strokeDashoffset: len });
+      gsap.to(path, {
+        strokeDashoffset: 0, ease: "none",
+        scrollTrigger: { trigger: stepsGridRef.current, start: "top 60%", end: "bottom 80%", scrub: true },
       });
 
-      // Illuminate step circles as the scroll crosses them
+      // Step glow activation
       steps.forEach((step: any, idx) => {
         const circle = step.querySelector(".step-circle");
         gsap.to(circle, {
           borderColor: processSteps[idx].color,
-          backgroundColor: `${processSteps[idx].color}18`,
-          boxShadow: `0 0 25px ${processSteps[idx].color}25`,
-          duration: 0.4,
-          scrollTrigger: {
-            trigger: step,
-            start: "top 65%",
-            toggleActions: "play none none reverse",
-          }
+          backgroundColor: `${processSteps[idx].color}15`,
+          boxShadow: `0 0 30px ${processSteps[idx].color}30`,
+          duration: 0.5,
+          scrollTrigger: { trigger: step, start: "top 65%", toggleActions: "play none none reverse" },
         });
       });
-
-      return () => {
-        headerTl.kill();
-        stepsAnim.kill();
-        pathAnim.kill();
-      };
     }
 
-    return () => {
-      headerTl.kill();
-      stepsAnim.kill();
-    };
+    return () => { tl.kill(); };
   }, []);
 
   return (
     <section
       ref={containerRef}
       style={{
-        padding: "clamp(80px, 10vw, 140px) 0",
+        padding: "clamp(80px,10vw,140px) 0",
         background: "var(--color-bg-secondary)",
-        position: "relative",
-        overflow: "hidden",
+        position: "relative", overflow: "hidden",
       }}
     >
-      {/* Background glow */}
-      <div
-        style={{
-          position: "absolute",
-          top: "50%",
-          left: "50%",
-          transform: "translate(-50%, -50%)",
-          width: "800px",
-          height: "400px",
-          background: "radial-gradient(ellipse, rgba(184,147,75,0.06) 0%, transparent 70%)",
-          pointerEvents: "none",
-        }}
-      />
+      <div style={{
+        position: "absolute", top: "50%", left: "50%", transform: "translate(-50%,-50%)",
+        width: 800, height: 400,
+        background: "radial-gradient(ellipse, rgba(163,126,54,0.06) 0%, transparent 70%)",
+        pointerEvents: "none", filter: "blur(40px)",
+        animation: "aurora-float-2 12s ease-in-out infinite",
+      }} />
 
       <div className="container-zentrix" style={{ position: "relative" }}>
-        <div style={{ textAlign: "center", marginBottom: "64px" }}>
-          <div
-            ref={badgeRef}
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: "8px",
-              padding: "6px 16px",
-              border: "1px solid rgba(16, 185, 129, 0.25)",
-              borderRadius: "100px",
-              marginBottom: "20px",
-              background: "rgba(16, 185, 129, 0.06)",
-            }}
-          >
+        <div style={{ textAlign: "center", marginBottom: 64 }}>
+          <div ref={badgeRef} style={{
+            display: "inline-flex", alignItems: "center", gap: 8, padding: "6px 16px",
+            border: "1px solid rgba(16,185,129,0.25)", borderRadius: 100,
+            marginBottom: 20, background: "rgba(16,185,129,0.06)",
+          }}>
             <span style={{ width: 6, height: 6, borderRadius: "50%", background: "var(--color-success)" }} />
             <span style={{ fontFamily: "var(--font-body)", fontSize: "0.75rem", fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--color-success)" }}>
               How We Work
             </span>
           </div>
 
-          <h2
-            ref={headingRef}
-            style={{
-              fontFamily: "Syne, sans-serif",
-              fontSize: "clamp(2.2rem, 5vw, 4rem)",
-              fontWeight: 800,
-              color: "var(--color-text-primary)",
-              lineHeight: 1.05,
-              letterSpacing: "-0.03em",
-            }}
-          >
+          <h2 ref={headingRef} style={{
+            fontFamily: "var(--font-display)", fontSize: "clamp(2.2rem,5vw,4.2rem)",
+            fontWeight: 500, color: "var(--color-text-primary)", lineHeight: 1.05, letterSpacing: 0,
+          }}>
             Our Development Process
           </h2>
         </div>
 
-        <div
-          ref={stepsGridRef}
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
-            gap: "2px",
-            position: "relative",
-          }}
-        >
-          {/* SVG Connector line */}
-          <div
-            style={{
-              position: "absolute",
-              top: "60px",
-              left: "10%",
-              right: "10%",
-              height: "4px",
-              zIndex: 0,
-              pointerEvents: "none",
-            }}
-          >
+        <div ref={stepsGridRef} style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(230px, 1fr))", gap: 2, position: "relative" }}>
+          {/* Animated SVG connector */}
+          <div style={{ position: "absolute", top: 60, left: "8%", right: "8%", height: 4, zIndex: 0, pointerEvents: "none" }}>
             <svg width="100%" height="4" fill="none" style={{ overflow: "visible" }}>
               <path
                 ref={linePathRef}
@@ -1749,9 +1495,9 @@ function ProcessSection() {
               />
               <defs>
                 <linearGradient id="process-grad" x1="0" y1="0" x2="1" y2="0">
-                  <stop offset="0%" stopColor="var(--color-violet)" />
-                  <stop offset="50%" stopColor="var(--color-violet-light)" />
-                  <stop offset="100%" stopColor="var(--color-cyan)" />
+                  <stop offset="0%" stopColor="var(--color-violet-light)" />
+                  <stop offset="50%" stopColor="var(--color-violet)" />
+                  <stop offset="100%" stopColor="var(--color-gold)" />
                 </linearGradient>
               </defs>
             </svg>
@@ -1762,73 +1508,39 @@ function ProcessSection() {
               key={step.step}
               className="process-step-anim"
               data-cursor-text={step.title.toUpperCase()}
-              style={{
-                padding: "32px 24px",
-                textAlign: "center",
-                position: "relative",
-                zIndex: 1,
-              }}
+              style={{ padding: "32px 24px", textAlign: "center", position: "relative", zIndex: 1 }}
             >
-              {/* Step number circle */}
               <div
                 className="step-circle"
                 style={{
-                  width: 72,
-                  height: 72,
-                  borderRadius: "50%",
+                  width: 72, height: 72, borderRadius: "50%",
                   background: "var(--color-surface)",
                   border: "2px solid var(--color-border)",
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  margin: "0 auto 24px",
-                  position: "relative",
-                  transition: "all 0.4s ease",
+                  display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
+                  margin: "0 auto 24px", position: "relative", transition: "all 0.4s ease",
                 }}
               >
                 <span style={{ fontSize: "1.4rem" }}>{step.icon}</span>
-                <span
-                  style={{
-                    position: "absolute",
-                    top: "-8px",
-                    right: "-8px",
-                    width: "24px",
-                    height: "24px",
-                    borderRadius: "50%",
-                    background: step.color,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    fontFamily: "var(--font-mono)",
-                    fontSize: "0.6rem",
-                    fontWeight: 700,
-                    color: "#fff",
-                  }}
-                >
+                <span style={{
+                  position: "absolute", top: -8, right: -8,
+                  width: 24, height: 24, borderRadius: "50%",
+                  background: step.color, display: "flex", alignItems: "center", justifyContent: "center",
+                  fontFamily: "var(--font-mono)", fontSize: "0.6rem", fontWeight: 700, color: "#fff",
+                }}>
                   {step.step}
                 </span>
               </div>
 
-              <h3
-                style={{
-                  fontFamily: "Syne, sans-serif",
-                  fontWeight: 700,
-                  fontSize: "1.2rem",
-                  color: "var(--color-text-primary)",
-                  marginBottom: "10px",
-                }}
-              >
+              <h3 style={{
+                fontFamily: "var(--font-display)", fontWeight: 500,
+                fontSize: "1.25rem", color: "var(--color-text-primary)", marginBottom: 10,
+              }}>
                 {step.title}
               </h3>
-              <p
-                style={{
-                  fontFamily: "var(--font-body)",
-                  fontSize: "0.875rem",
-                  color: "var(--color-text-secondary)",
-                  lineHeight: 1.65,
-                }}
-              >
+              <p style={{
+                fontFamily: "var(--font-body)", fontSize: "0.875rem",
+                color: "var(--color-text-secondary)", lineHeight: 1.65,
+              }}>
                 {step.desc}
               </p>
             </div>
@@ -1839,88 +1551,39 @@ function ProcessSection() {
   );
 }
 
-// ─── TESTIMONIALS SECTION ────────────────────────────────────────────────────
+// ─── TESTIMONIALS SECTION ─────────────────────────────────────────────────────
 
 const testimonials = [
-  {
-    id: 1,
-    name: "Arun Kumar",
-    role: "CEO",
-    company: "HealthFirst Clinic",
-    text: "Zentrix delivered an incredible HMS that transformed our entire hospital operations. The attention to detail and quality is extraordinary.",
-    rating: 5,
-    avatar: "A",
-    color: "#6C4E31",
-  },
-  {
-    id: 2,
-    name: "Priya Sharma",
-    role: "Director",
-    company: "Excel School",
-    text: "The school management system they built is world-class. Parents, teachers, and admin all love it. Highly recommend Zentrix!",
-    rating: 5,
-    avatar: "P",
-    color: "#06B6D4",
-  },
-  {
-    id: 3,
-    name: "Rajesh Nair",
-    role: "Founder",
-    company: "AutoFlow Solutions",
-    text: "Their AI automation suite cut our manual work by 80%. The team is incredibly professional and delivered ahead of schedule.",
-    rating: 5,
-    avatar: "R",
-    color: "#B8934B",
-  },
-  {
-    id: 4,
-    name: "Kavitha Devi",
-    role: "CTO",
-    company: "RetailPro",
-    text: "Best web development agency we've worked with. The website they built for us drives real business results every single day.",
-    rating: 5,
-    avatar: "K",
-    color: "#EC4899",
-  },
+  { id: 1, name: "Arun Kumar", role: "CEO", company: "HealthFirst Clinic", text: "Zentrix delivered an incredible HMS that transformed our entire hospital operations. The attention to detail and quality is extraordinary.", rating: 5, avatar: "A", color: "#A37E36" },
+  { id: 2, name: "Priya Sharma", role: "Director", company: "Excel School", text: "The school management system they built is world-class. Parents, teachers, and admin all love it. Highly recommend Zentrix!", rating: 5, avatar: "P", color: "#6E5528" },
+  { id: 3, name: "Rajesh Nair", role: "Founder", company: "AutoFlow Solutions", text: "Their AI automation suite cut our manual work by 80%. The team is incredibly professional and delivered ahead of schedule.", rating: 5, avatar: "R", color: "#C4A15E" },
+  { id: 4, name: "Kavitha Devi", role: "CTO", company: "RetailPro", text: "Best web development agency we've worked with. The website they built for us drives real business results every single day.", rating: 5, avatar: "K", color: "#A37E36" },
 ];
 
 function TestimonialsSection() {
-  const [currentIndex, setCurrentIndex] = useState(0);
   const { ref, inView } = useInViewObserver({ threshold: 0.1, triggerOnce: true });
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentIndex((prev) => (prev + 1) % testimonials.length);
-    }, 4000);
-    return () => clearInterval(interval);
-  }, []);
-
   return (
-    <section
-      style={{
-        padding: "clamp(80px, 10vw, 140px) 0",
-        position: "relative",
-        overflow: "hidden",
-      }}
-    >
+    <section style={{ padding: "clamp(80px,10vw,140px) 0", position: "relative", overflow: "hidden" }}>
+      <div style={{
+        position: "absolute", inset: 0,
+        background: "radial-gradient(ellipse at 50% 50%, rgba(163,126,54,0.04) 0%, transparent 70%)",
+        pointerEvents: "none",
+      }} />
+
       <div className="container-zentrix">
-        <div ref={ref} style={{ textAlign: "center", marginBottom: "60px" }}>
+        <div ref={ref} style={{ textAlign: "center", marginBottom: 60 }}>
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}
             style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: "8px",
-              padding: "6px 16px",
-              border: "1px solid rgba(245,158,11,0.3)",
-              borderRadius: "100px",
-              marginBottom: "20px",
-              background: "rgba(245,158,11,0.06)",
+              display: "inline-flex", alignItems: "center", gap: 8, padding: "6px 16px",
+              border: "1px solid rgba(245,158,11,0.3)", borderRadius: 100,
+              marginBottom: 20, background: "rgba(245,158,11,0.06)",
             }}
           >
             <span style={{ width: 6, height: 6, borderRadius: "50%", background: "#F59E0B" }} />
-            <span style={{ fontFamily: "Inter, sans-serif", fontSize: "0.75rem", fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase", color: "#F59E0B" }}>
+            <span style={{ fontFamily: "var(--font-body)", fontSize: "0.75rem", fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase", color: "#F59E0B" }}>
               Client Stories
             </span>
           </motion.div>
@@ -1930,97 +1593,60 @@ function TestimonialsSection() {
             animate={inView ? { opacity: 1, y: 0 } : {}}
             transition={{ delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
             style={{
-              fontFamily: "Syne, sans-serif",
-              fontSize: "clamp(2.2rem, 5vw, 4rem)",
-              fontWeight: 800,
-              color: "var(--color-text-primary)",
-              lineHeight: 1.05,
-              letterSpacing: "-0.03em",
+              fontFamily: "var(--font-display)", fontSize: "clamp(2.2rem,5vw,4.2rem)",
+              fontWeight: 500, color: "var(--color-text-primary)", lineHeight: 1.05, letterSpacing: 0,
             }}
           >
             Trusted by Visionaries
           </motion.h2>
         </div>
 
-        {/* Testimonial carousel */}
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
-            gap: "20px",
-          }}
-        >
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 20 }}>
           {testimonials.map((t, i) => (
             <motion.div
               key={t.id}
-              initial={{ opacity: 0, y: 40 }}
+              initial={{ opacity: 0, y: 50 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.8, delay: i * 0.1, ease: [0.16, 1, 0.3, 1] }}
-              style={{
-                padding: "32px",
-                background: "var(--color-surface)",
-                border: "1px solid var(--color-surface-2)",
-                borderRadius: "20px",
-                transition: "all 0.3s ease",
-                position: "relative",
-                overflow: "hidden",
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.borderColor = `${t.color}30`;
-                e.currentTarget.style.background = `${t.color}05`;
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.borderColor = "var(--color-surface-2)";
-                e.currentTarget.style.background = "var(--color-surface)";
-              }}
+              transition={{ duration: 0.9, delay: i * 0.12, ease: [0.16, 1, 0.3, 1] }}
+              className="testimonial-glass"
+              style={{ padding: 32, position: "relative", overflow: "hidden" }}
             >
-              {/* Stars */}
-              <div style={{ display: "flex", gap: "4px", marginBottom: "16px" }}>
+              {/* Glass shimmer */}
+              <div style={{
+                position: "absolute", top: 0, left: 0, right: 0, height: "35%",
+                background: "linear-gradient(180deg, rgba(255,255,255,0.12) 0%, transparent 100%)",
+                pointerEvents: "none",
+              }} />
+
+              <div style={{ display: "flex", gap: 4, marginBottom: 16 }}>
                 {Array(t.rating).fill(0).map((_, si) => (
                   <Star key={si} size={14} style={{ color: "#F59E0B", fill: "#F59E0B" }} />
                 ))}
               </div>
 
-              {/* Quote */}
-              <p
-                style={{
-                  fontFamily: "Inter, sans-serif",
-                  fontSize: "0.9375rem",
-                  color: "var(--color-text-muted)",
-                  lineHeight: 1.7,
-                  marginBottom: "24px",
-                  fontStyle: "italic",
-                }}
-              >
+              <p style={{
+                fontFamily: "var(--font-body)", fontSize: "0.9375rem",
+                color: "var(--color-text-muted)", lineHeight: 1.75,
+                marginBottom: 24, fontStyle: "italic",
+              }}>
                 &ldquo;{t.text}&rdquo;
               </p>
 
-              {/* Author */}
-              <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-                <div
-                  style={{
-                    width: 44,
-                    height: 44,
-                    borderRadius: "50%",
-                    background: `${t.color}20`,
-                    border: `1px solid ${t.color}30`,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    fontFamily: "Syne, sans-serif",
-                    fontWeight: 700,
-                    fontSize: "1.1rem",
-                    color: t.color,
-                    flexShrink: 0,
-                  }}
-                >
+              <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                <div style={{
+                  width: 44, height: 44, borderRadius: "50%",
+                  background: `${t.color}18`, border: `1px solid ${t.color}28`,
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  fontFamily: "var(--font-display)", fontWeight: 500, fontSize: "1.1rem",
+                  color: t.color, flexShrink: 0,
+                }}>
                   {t.avatar}
                 </div>
                 <div>
-                  <div style={{ fontFamily: "Syne, sans-serif", fontWeight: 600, fontSize: "0.9rem", color: "var(--color-text-primary)" }}>
+                  <div style={{ fontFamily: "var(--font-body)", fontWeight: 600, fontSize: "0.9rem", color: "var(--color-text-primary)" }}>
                     {t.name}
                   </div>
-                  <div style={{ fontFamily: "Inter, sans-serif", fontSize: "0.75rem", color: "var(--color-text-secondary)" }}>
+                  <div style={{ fontFamily: "var(--font-body)", fontSize: "0.75rem", color: "var(--color-text-secondary)" }}>
                     {t.role} @ {t.company}
                   </div>
                 </div>
@@ -2029,20 +1655,17 @@ function TestimonialsSection() {
           ))}
         </div>
 
-        {/* Review CTA */}
-        <div style={{ textAlign: "center", marginTop: "48px" }}>
+        <div style={{ textAlign: "center", marginTop: 48 }}>
           <Link
             href="/contact#reviews"
             style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: "8px",
-              fontFamily: "Inter, sans-serif",
-              fontSize: "0.875rem",
-              fontWeight: 600,
-              color: "var(--color-text-muted)",
-              textDecoration: "none",
+              display: "inline-flex", alignItems: "center", gap: 8,
+              fontSize: "0.875rem", fontWeight: 600, color: "var(--color-text-muted)",
+              textDecoration: "none", fontFamily: "var(--font-body)",
+              transition: "color 0.2s ease",
             }}
+            onMouseEnter={(e) => { e.currentTarget.style.color = "var(--color-text-primary)"; }}
+            onMouseLeave={(e) => { e.currentTarget.style.color = "var(--color-text-muted)"; }}
           >
             Read all reviews <ChevronRight size={16} />
           </Link>
@@ -2052,59 +1675,43 @@ function TestimonialsSection() {
   );
 }
 
-// ─── INNOVATION LAB PREVIEW ──────────────────────────────────────────────────
+// ─── INNOVATION SECTION ───────────────────────────────────────────────────────
 
 function InnovationSection() {
   const { ref, inView } = useInViewObserver({ threshold: 0.1, triggerOnce: true });
 
   const innovations = [
     { icon: "🤖", title: "AI Research", desc: "Computer vision, NLP, and predictive models for real-world applications.", color: "#6C4E31" },
-    { icon: "⚙️", title: "IoT & Automation", desc: "Smart systems connecting physical devices to intelligent software platforms.", color: "#06B6D4" },
+    { icon: "⚙️", title: "IoT & Automation", desc: "Smart systems connecting physical devices to intelligent software platforms.", color: "#A37E36" },
     { icon: "🏥", title: "Healthcare Innovation", desc: "Experimental apps revolutionizing patient care and medical workflows.", color: "#10B981" },
-    { icon: "🌐", title: "Future Ideas", desc: "Internal products and experimental concepts pushing technology boundaries.", color: "#F59E0B" },
+    { icon: "🌐", title: "Future Ideas", desc: "Internal products and experimental concepts pushing technology boundaries.", color: "#C4A15E" },
   ];
 
   return (
-    <section
-      style={{
-        padding: "clamp(80px, 10vw, 140px) 0",
-        background: "var(--color-bg)",
-        position: "relative",
-        overflow: "hidden",
-      }}
-    >
-      {/* Futuristic grid */}
-      <div
-        style={{
-          position: "absolute",
-          inset: 0,
-          backgroundImage: `linear-gradient(rgba(184,147,75,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(184,147,75,0.03) 1px, transparent 1px)`,
-          backgroundSize: "40px 40px",
-          pointerEvents: "none",
-        }}
-      />
+    <section style={{ padding: "clamp(80px,10vw,140px) 0", background: "var(--color-bg)", position: "relative", overflow: "hidden" }}>
+      {/* AI Grid */}
+      <div className="ai-grid-animated" />
 
-      <div className="container-zentrix" style={{ position: "relative" }}>
+      <div className="container-zentrix" style={{ position: "relative", zIndex: 1 }}>
         <div ref={ref}>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "clamp(40px, 6vw, 80px)", alignItems: "center" }}>
+          <div style={{
+            display: "grid",
+            gridTemplateColumns: "clamp(300px,45%,560px) 1fr",
+            gap: "clamp(40px,6vw,80px)", alignItems: "center",
+          }}>
             {/* Left content */}
             <div>
               <motion.div
                 initial={{ opacity: 0, x: -40 }}
                 animate={inView ? { opacity: 1, x: 0 } : {}}
                 style={{
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: "8px",
-                  padding: "6px 16px",
-                  border: "1px solid rgba(184, 147, 75, 0.3)",
-                  borderRadius: "100px",
-                  marginBottom: "24px",
-                  background: "rgba(184, 147, 75, 0.08)",
+                  display: "inline-flex", alignItems: "center", gap: 8, padding: "6px 16px",
+                  border: "1px solid rgba(163,126,54,0.3)", borderRadius: 100,
+                  marginBottom: 24, background: "rgba(163,126,54,0.08)",
                 }}
               >
                 <FlaskConical size={14} style={{ color: "#B8934B" }} />
-                <span style={{ fontFamily: "Inter, sans-serif", fontSize: "0.75rem", fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase", color: "#B8934B" }}>
+                <span style={{ fontFamily: "var(--font-body)", fontSize: "0.75rem", fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase", color: "#B8934B" }}>
                   Innovation Lab
                 </span>
               </motion.div>
@@ -2114,25 +1721,17 @@ function InnovationSection() {
                 animate={inView ? { opacity: 1, x: 0 } : {}}
                 transition={{ delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
                 style={{
-                  fontFamily: "Syne, sans-serif",
-                  fontSize: "clamp(2rem, 4vw, 3.5rem)",
-                  fontWeight: 800,
-                  color: "var(--color-text-primary)",
-                  lineHeight: 1.05,
-                  letterSpacing: "-0.03em",
-                  marginBottom: "20px",
+                  fontFamily: "var(--font-display)", fontSize: "clamp(2rem,4vw,3.8rem)",
+                  fontWeight: 500, color: "var(--color-text-primary)", lineHeight: 1.05,
+                  letterSpacing: 0, marginBottom: 20,
                 }}
               >
                 Where the Future
                 <br />
-                <span
-                  style={{
-                    background: "linear-gradient(135deg, #6C4E31, #B8934B, #06B6D4)",
-                    WebkitBackgroundClip: "text",
-                    WebkitTextFillColor: "transparent",
-                    backgroundClip: "text",
-                  }}
-                >
+                <span style={{
+                  background: "linear-gradient(135deg, #6C4E31, #B8934B, #C4A15E)",
+                  WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text",
+                }}>
                   Gets Built
                 </span>
               </motion.h2>
@@ -2142,12 +1741,9 @@ function InnovationSection() {
                 animate={inView ? { opacity: 1, x: 0 } : {}}
                 transition={{ delay: 0.2 }}
                 style={{
-                  fontFamily: "Inter, sans-serif",
-                  fontSize: "0.9375rem",
-                  color: "var(--color-text-muted)",
-                  lineHeight: 1.7,
-                  marginBottom: "32px",
-                  maxWidth: "480px",
+                  fontFamily: "var(--font-body)", fontSize: "0.9375rem",
+                  color: "var(--color-text-muted)", lineHeight: 1.75,
+                  marginBottom: 32, maxWidth: 480,
                 }}
               >
                 Our Innovation Lab is where we experiment with emerging technologies — from computer vision to IoT automation — creating tomorrow&apos;s solutions today.
@@ -2157,40 +1753,36 @@ function InnovationSection() {
                 initial={{ opacity: 0, x: -40 }}
                 animate={inView ? { opacity: 1, x: 0 } : {}}
                 transition={{ delay: 0.3 }}
-                style={{ display: "flex", gap: "16px" }}
+                style={{ display: "flex", gap: 24, marginBottom: 32 }}
               >
-                <div style={{ textAlign: "center" }}>
-                  <div style={{ fontFamily: "Syne, sans-serif", fontSize: "2rem", fontWeight: 800, color: "#B8934B" }}>5+</div>
-                  <div style={{ fontFamily: "Inter, sans-serif", fontSize: "0.75rem", color: "var(--color-text-secondary)" }}>Active Projects</div>
-                </div>
-                <div style={{ width: "1px", background: "var(--color-surface-2)" }} />
-                <div style={{ textAlign: "center" }}>
-                  <div style={{ fontFamily: "Syne, sans-serif", fontSize: "2rem", fontWeight: 800, color: "#06B6D4" }}>10+</div>
-                  <div style={{ fontFamily: "Inter, sans-serif", fontSize: "0.75rem", color: "var(--color-text-secondary)" }}>Technologies</div>
-                </div>
+                {[{ val: "5+", label: "Active Projects", color: "#B8934B" }, { val: "10+", label: "Technologies", color: "#A37E36" }].map((item) => (
+                  <div key={item.label} style={{ textAlign: "center" }}>
+                    <div style={{ fontFamily: "var(--font-display)", fontSize: "2rem", fontWeight: 500, color: item.color }}>{item.val}</div>
+                    <div style={{ fontFamily: "var(--font-body)", fontSize: "0.75rem", color: "var(--color-text-secondary)" }}>{item.label}</div>
+                  </div>
+                ))}
               </motion.div>
 
               <motion.div
                 initial={{ opacity: 0, x: -40 }}
                 animate={inView ? { opacity: 1, x: 0 } : {}}
                 transition={{ delay: 0.4 }}
-                style={{ marginTop: "32px" }}
               >
                 <Link
                   href="/innovation-lab"
+                  data-magnetic
                   style={{
-                    display: "inline-flex",
-                    alignItems: "center",
-                    gap: "10px",
+                    display: "inline-flex", alignItems: "center", gap: 10,
                     padding: "14px 28px",
                     background: "linear-gradient(135deg, #6C4E31, #B8934B)",
-                    color: "#fff",
-                    borderRadius: "100px",
-                    fontFamily: "Inter, sans-serif",
-                    fontWeight: 600,
+                    color: "#fff", borderRadius: 100,
+                    fontFamily: "var(--font-body)", fontWeight: 600,
                     textDecoration: "none",
-                    boxShadow: "0 12px 40px rgba(184,147,75,0.3)",
+                    boxShadow: "0 16px 48px rgba(163,126,54,0.3)",
+                    transition: "all 0.4s var(--ease-out-expo)",
                   }}
+                  onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-3px)"; e.currentTarget.style.boxShadow = "0 24px 60px rgba(163,126,54,0.4)"; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = "0 16px 48px rgba(163,126,54,0.3)"; }}
                 >
                   <FlaskConical size={16} />
                   Explore the Lab
@@ -2198,43 +1790,38 @@ function InnovationSection() {
               </motion.div>
             </div>
 
-            {/* Right — innovation cards grid */}
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "1fr 1fr",
-                gap: "16px",
-              }}
-            >
+            {/* Right: innovation cards */}
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
               {innovations.map((item, i) => (
                 <motion.div
                   key={item.title}
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={inView ? { opacity: 1, scale: 1 } : {}}
-                  transition={{ duration: 0.6, delay: i * 0.1 + 0.3, ease: [0.16, 1, 0.3, 1] }}
+                  transition={{ duration: 0.7, delay: i * 0.1 + 0.3, ease: [0.16, 1, 0.3, 1] }}
                   style={{
                     padding: "28px 24px",
-                    background: `${item.color}08`,
-                    border: `1px solid ${item.color}20`,
-                    borderRadius: "20px",
-                    transition: "all 0.3s ease",
+                    background: `${item.color}07`, border: `1px solid ${item.color}18`,
+                    borderRadius: 20, transition: "all 0.35s var(--ease-out-expo)",
+                    cursor: "none",
                   }}
                   onMouseEnter={(e) => {
                     e.currentTarget.style.background = `${item.color}12`;
-                    e.currentTarget.style.borderColor = `${item.color}30`;
-                    e.currentTarget.style.transform = "translateY(-4px)";
+                    e.currentTarget.style.borderColor = `${item.color}28`;
+                    e.currentTarget.style.transform = "translateY(-6px) scale(1.01)";
+                    e.currentTarget.style.boxShadow = `0 20px 50px ${item.color}12`;
                   }}
                   onMouseLeave={(e) => {
-                    e.currentTarget.style.background = `${item.color}08`;
-                    e.currentTarget.style.borderColor = `${item.color}20`;
-                    e.currentTarget.style.transform = "translateY(0)";
+                    e.currentTarget.style.background = `${item.color}07`;
+                    e.currentTarget.style.borderColor = `${item.color}18`;
+                    e.currentTarget.style.transform = "translateY(0) scale(1)";
+                    e.currentTarget.style.boxShadow = "none";
                   }}
                 >
-                  <div style={{ fontSize: "2rem", marginBottom: "12px" }}>{item.icon}</div>
-                  <h4 style={{ fontFamily: "Syne, sans-serif", fontWeight: 700, fontSize: "1rem", color: "var(--color-text-primary)", marginBottom: "8px" }}>
+                  <div style={{ fontSize: "2rem", marginBottom: 12 }}>{item.icon}</div>
+                  <h4 style={{ fontFamily: "var(--font-display)", fontWeight: 500, fontSize: "1.1rem", color: "var(--color-text-primary)", marginBottom: 8 }}>
                     {item.title}
                   </h4>
-                  <p style={{ fontFamily: "Inter, sans-serif", fontSize: "0.8rem", color: "var(--color-text-muted)", lineHeight: 1.6 }}>
+                  <p style={{ fontFamily: "var(--font-body)", fontSize: "0.8rem", color: "var(--color-text-muted)", lineHeight: 1.65 }}>
                     {item.desc}
                   </p>
                 </motion.div>
@@ -2244,178 +1831,130 @@ function InnovationSection() {
         </div>
       </div>
 
-      <style jsx global>{`
-        @media (max-width: 768px) {
-          section [style*="grid-template-columns: 1fr 1fr"] {
-            grid-template-columns: 1fr !important;
-          }
+      <style>{`
+        @media (max-width: 900px) {
+          .innovation-grid { grid-template-columns: 1fr !important; }
         }
       `}</style>
     </section>
   );
 }
 
-// ─── CTA SECTION ─────────────────────────────────────────────────────────────
+// ─── CTA SECTION ──────────────────────────────────────────────────────────────
 
 function CTASection() {
   const { ref, inView } = useInViewObserver({ threshold: 0.2, triggerOnce: true });
 
   return (
-    <section
-      style={{
-        padding: "clamp(80px, 10vw, 140px) 0",
-        position: "relative",
-        overflow: "hidden",
-        background: "var(--color-bg)",
-      }}
-    >
-      {/* Animated background */}
-      <div
-        style={{
-          position: "absolute",
-          inset: 0,
-          background: `
-            radial-gradient(ellipse at 30% 50%, rgba(184,147,75,0.15) 0%, transparent 60%),
-            radial-gradient(ellipse at 70% 50%, rgba(108,78,49,0.1) 0%, transparent 60%)
-          `,
-          pointerEvents: "none",
-        }}
-      />
+    <section style={{ padding: "clamp(80px,10vw,140px) 0", position: "relative", overflow: "hidden", background: "var(--color-bg)" }}>
+      {/* Aurora background */}
+      <div style={{
+        position: "absolute", inset: 0, pointerEvents: "none",
+        background: `radial-gradient(ellipse at 30% 50%, rgba(163,126,54,0.14) 0%, transparent 60%),
+                     radial-gradient(ellipse at 70% 50%, rgba(110,85,40,0.09) 0%, transparent 60%)`,
+      }} />
+      <div style={{
+        position: "absolute", top: "50%", left: "50%", transform: "translate(-50%,-50%)",
+        width: 600, height: 400, borderRadius: "50%",
+        background: "radial-gradient(ellipse, rgba(163,126,54,0.08) 0%, transparent 70%)",
+        filter: "blur(60px)", pointerEvents: "none",
+        animation: "aurora-float-1 14s ease-in-out infinite",
+      }} />
 
       <div className="container-zentrix" style={{ position: "relative", zIndex: 2 }}>
-        <div
-          ref={ref}
-          style={{
-            textAlign: "center",
-            maxWidth: "800px",
-            margin: "0 auto",
-          }}
-        >
+        <div ref={ref} style={{ textAlign: "center", maxWidth: 820, margin: "0 auto" }}>
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={inView ? { opacity: 1, scale: 1 } : {}}
-            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+            transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
           >
-            <div
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                gap: "8px",
-                padding: "8px 20px",
-                border: "1px solid rgba(184, 147, 75, 0.3)",
-                borderRadius: "100px",
-                marginBottom: "32px",
-                background: "rgba(184, 147, 75, 0.08)",
-              }}
-            >
+            <div style={{
+              display: "inline-flex", alignItems: "center", gap: 8, padding: "8px 20px",
+              border: "1px solid rgba(163,126,54,0.3)", borderRadius: 100,
+              marginBottom: 32, background: "rgba(163,126,54,0.08)",
+            }}>
               <Award size={14} style={{ color: "#B8934B" }} />
-              <span style={{ fontFamily: "Inter, sans-serif", fontSize: "0.8rem", fontWeight: 600, color: "#B8934B" }}>
+              <span style={{ fontFamily: "var(--font-body)", fontSize: "0.8rem", fontWeight: 600, color: "#B8934B" }}>
                 Premium Quality Guaranteed
               </span>
             </div>
 
-            <h2
-              style={{
-                fontFamily: "Syne, sans-serif",
-                fontSize: "clamp(2.5rem, 6vw, 5.5rem)",
-                fontWeight: 800,
-                lineHeight: 0.95,
-                letterSpacing: "-0.04em",
-                marginBottom: "24px",
-              }}
-            >
+            <h2 style={{
+              fontFamily: "var(--font-display)", fontSize: "clamp(2.5rem,6vw,5.8rem)",
+              fontWeight: 500, lineHeight: 0.95, letterSpacing: 0, marginBottom: 24,
+            }}>
               <span style={{ color: "var(--color-text-primary)" }}>Ready to Build</span>
               <br />
-              <span
-                style={{
-                  background: "linear-gradient(135deg, #6C4E31, #B8934B, #06B6D4)",
-                  WebkitBackgroundClip: "text",
-                  WebkitTextFillColor: "transparent",
-                  backgroundClip: "text",
-                }}
-              >
+              <span style={{
+                background: "linear-gradient(135deg, #6C4E31, #A37E36, #C4A15E)",
+                WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text",
+              }}>
                 Something Legendary?
               </span>
             </h2>
 
-            <p
-              style={{
-                fontFamily: "Inter, sans-serif",
-                fontSize: "clamp(0.9rem, 2vw, 1.15rem)",
-                color: "var(--color-text-muted)",
-                lineHeight: 1.7,
-                marginBottom: "48px",
-              }}
-            >
+            <p style={{
+              fontFamily: "var(--font-body)", fontSize: "clamp(0.9rem,2vw,1.15rem)",
+              color: "var(--color-text-muted)", lineHeight: 1.75, marginBottom: 48,
+            }}>
               From a simple website to a complex enterprise system — we bring your vision to life with premium quality, on time, every time. Let&apos;s create something extraordinary together.
             </p>
 
-            <div style={{ display: "flex", gap: "16px", justifyContent: "center", flexWrap: "wrap" }}>
+            <div style={{ display: "flex", gap: 16, justifyContent: "center", flexWrap: "wrap", marginBottom: 52 }}>
               <Link
                 href="/contact"
+                data-magnetic
+                data-cursor-text="START"
                 style={{
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: "10px",
-                  padding: "18px 44px",
-                  background: "linear-gradient(135deg, #6C4E31, #B8934B)",
-                  color: "#fff",
-                  borderRadius: "100px",
-                  fontFamily: "Inter, sans-serif",
-                  fontWeight: 700,
-                  fontSize: "1rem",
+                  display: "inline-flex", alignItems: "center", gap: 10,
+                  padding: "18px 48px",
+                  background: "linear-gradient(135deg, #6C4E31, #A37E36, #C4A15E)",
+                  backgroundSize: "200% auto", color: "#fff", borderRadius: 100,
+                  fontFamily: "var(--font-body)", fontWeight: 700, fontSize: "1rem",
                   textDecoration: "none",
-                  boxShadow: "0 24px 80px rgba(184, 147, 75, 0.4)",
-                  letterSpacing: "0.01em",
+                  boxShadow: "0 28px 80px rgba(163,126,54,0.38)",
+                  transition: "all 0.4s var(--ease-out-expo)",
+                  animation: "holographic-shift 5s ease infinite",
                 }}
+                onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-4px) scale(1.02)"; e.currentTarget.style.boxShadow = "0 36px 100px rgba(163,126,54,0.5)"; }}
+                onMouseLeave={(e) => { e.currentTarget.style.transform = "translateY(0) scale(1)"; e.currentTarget.style.boxShadow = "0 28px 80px rgba(163,126,54,0.38)"; }}
               >
                 <Zap size={18} />
                 Start Your Project Now
               </Link>
               <Link
                 href="/works"
+                data-magnetic
                 style={{
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: "10px",
-                  padding: "17px 44px",
-                  background: "transparent",
-                  border: "1px solid var(--color-border)",
-                  color: "var(--color-text-primary)",
-                  borderRadius: "100px",
-                  fontFamily: "Inter, sans-serif",
-                  fontWeight: 500,
-                  fontSize: "1rem",
-                  textDecoration: "none",
+                  display: "inline-flex", alignItems: "center", gap: 10,
+                  padding: "17px 48px",
+                  background: "rgba(255,255,255,0.7)", backdropFilter: "blur(20px)",
+                  border: "1px solid var(--color-border-hover)",
+                  color: "var(--color-text-primary)", borderRadius: 100,
+                  fontFamily: "var(--font-body)", fontWeight: 600, fontSize: "1rem",
+                  textDecoration: "none", transition: "all 0.3s var(--ease-out-expo)",
                 }}
+                onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(163,126,54,0.06)"; e.currentTarget.style.borderColor = "rgba(163,126,54,0.3)"; e.currentTarget.style.transform = "translateY(-2px)"; }}
+                onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(255,255,255,0.7)"; e.currentTarget.style.borderColor = "var(--color-border-hover)"; e.currentTarget.style.transform = "translateY(0)"; }}
               >
                 See Our Portfolio
               </Link>
             </div>
 
             {/* Trust row */}
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                gap: "clamp(16px, 3vw, 32px)",
-                marginTop: "48px",
-                flexWrap: "wrap",
-              }}
-            >
+            <div style={{
+              display: "flex", alignItems: "center", justifyContent: "center",
+              gap: "clamp(16px,3vw,36px)", flexWrap: "wrap",
+            }}>
               {[
                 { icon: "⚡", text: "Fast Delivery" },
                 { icon: "🛡️", text: "Quality Guaranteed" },
                 { icon: "🤝", text: "Post-launch Support" },
                 { icon: "📱", text: "Mobile-first" },
               ].map((item) => (
-                <div
-                  key={item.text}
-                  style={{ display: "flex", alignItems: "center", gap: "8px" }}
-                >
+                <div key={item.text} style={{ display: "flex", alignItems: "center", gap: 8 }}>
                   <span style={{ fontSize: "1rem" }}>{item.icon}</span>
-                  <span style={{ fontFamily: "Inter, sans-serif", fontSize: "0.8rem", color: "var(--color-text-secondary)" }}>
+                  <span style={{ fontFamily: "var(--font-body)", fontSize: "0.8rem", color: "var(--color-text-secondary)", fontWeight: 500 }}>
                     {item.text}
                   </span>
                 </div>
@@ -2428,7 +1967,7 @@ function CTASection() {
   );
 }
 
-// ─── MAIN HOME PAGE ──────────────────────────────────────────────────────────
+// ─── HOME PAGE ────────────────────────────────────────────────────────────────
 
 export default function HomePage() {
   return (
