@@ -2058,6 +2058,220 @@ function CTASection() {
   );
 }
 
+// ─── FAQ SECTION ──────────────────────────────────────────────────────────────
+
+const faqs = [
+  {
+    question: "What core services does Zentrix Technology specifically specialize in?",
+    answer: "Specifically, we engineer premium Next.js/React web platforms, high-performance mobile applications, and customized enterprise software. In addition, we design and deploy advanced workflow automations and cognitive AI solutions (such as autonomous agents and voice call bots) to accelerate operational growth."
+  },
+  {
+    question: "Where is your team based, and how do you handle international clients?",
+    answer: "Our headquarters are based in Salem, Tamil Nadu, India. However, we serve enterprises, startups, and hospitals globally with 100% remote collaboration models. Consequently, we structure agile sprint deliverables and maintain live staging endpoints to ensure transparent tracking across different time zones."
+  },
+  {
+    question: "How does Zentrix ensure high scalability and security for our software?",
+    answer: "Ultimately, we host all custom platforms on robust cloud networks like AWS and Vercel. Furthermore, we implement hourly automated database backups, secure sharded database configurations, and strict role-based access control protocols. As a result, your business data remains secure while processing thousands of transactions concurrently."
+  },
+  {
+    question: "Do we pay monthly licensing fees for custom ERP or CRM platforms?",
+    answer: "No. Since Zentrix Technology builds fully bespoke software platforms, you own the complete intellectual property and source code. Moreover, this eliminates any recurring monthly per-user licensing fees. Subsequently, your operational expenses are reduced while scalability increases."
+  },
+  {
+    question: "What is the typical timeline and onboarding process for new projects?",
+    answer: "For example, custom web and mobile projects typically range from 4 to 8 weeks, whereas complex ERP systems require longer development phases. Initially, we run a technical consultation session to align requirements. Subsequently, we deploy weekly sprint builds to your private staging URL, ensuring you can review the live progression at every stage."
+  }
+];
+
+function FAQSection() {
+  const [activeIndex, setActiveIndex] = useState<number | null>(null);
+
+  const toggleFAQ = (index: number) => {
+    setActiveIndex(activeIndex === index ? null : index);
+  };
+
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": faqs.map((faq) => ({
+      "@type": "Question",
+      "name": faq.question,
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": faq.answer
+      }
+    }))
+  };
+
+  const localBusinessSchema = {
+    "@context": "https://schema.org",
+    "@type": "ProfessionalService",
+    "name": "Zentrix Technology",
+    "image": `${siteConfig.url}/logo_main.webp`,
+    "url": siteConfig.url,
+    "telephone": siteConfig.contact.phone,
+    "priceRange": "$$$",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "Meyyanur Bypass Road",
+      "addressLocality": "Salem",
+      "addressRegion": "Tamil Nadu",
+      "postalCode": "636004",
+      "addressCountry": "IN"
+    },
+    "geo": {
+      "@type": "GeoCoordinates",
+      "latitude": 11.6644,
+      "longitude": 78.1408
+    },
+    "openingHoursSpecification": {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": [
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday"
+      ],
+      "opens": "09:00",
+      "closes": "19:00"
+    },
+    "sameAs": [
+      "https://github.com/Zentrix-tech"
+    ]
+  };
+
+  return (
+    <section id="faq" style={{ padding: "clamp(80px, 10vw, 140px) 0", position: "relative", zIndex: 3, borderTop: "1px solid var(--color-surface)" }}>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessSchema) }}
+      />
+      <div className="container-zentrix" style={{ maxWidth: "800px" }}>
+        <div style={{ textAlign: "center", marginBottom: "clamp(48px, 6vw, 72px)" }}>
+          <div
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "8px",
+              padding: "6px 14px",
+              background: "rgba(163,126,54,0.06)",
+              border: "1px solid rgba(163,126,54,0.18)",
+              borderRadius: "100px",
+              marginBottom: "16px",
+            }}
+          >
+            <span style={{ fontSize: "0.7rem", fontWeight: 600, color: "var(--color-gold)", letterSpacing: "0.06em", textTransform: "uppercase" }}>
+              Frequently Asked Questions
+            </span>
+          </div>
+          <h2 style={{ fontFamily: "var(--font-display)", fontSize: "clamp(2rem, 4vw, 3rem)", fontWeight: 500, lineHeight: 1.1, color: "var(--color-text-primary)", letterSpacing: "-0.02em" }}>
+            Answers to Essential Inquiries
+          </h2>
+        </div>
+
+        <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+          {faqs.map((faq, i) => {
+            const isOpen = activeIndex === i;
+            return (
+              <div
+                key={i}
+                style={{
+                  background: "rgba(10, 10, 10, 0.4)",
+                  backdropFilter: "blur(20px)",
+                  border: isOpen ? "1px solid rgba(163, 126, 54, 0.35)" : "1px solid rgba(255, 255, 255, 0.03)",
+                  borderRadius: "16px",
+                  transition: "all 0.3s ease",
+                  overflow: "hidden"
+                }}
+              >
+                <button
+                  onClick={() => toggleFAQ(i)}
+                  style={{
+                    width: "100%",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    padding: "24px clamp(16px, 4vw, 32px)",
+                    background: "none",
+                    border: "none",
+                    outline: "none",
+                    cursor: "pointer",
+                    textAlign: "left",
+                  }}
+                >
+                  <span
+                    style={{
+                      fontFamily: "var(--font-body)",
+                      fontSize: "clamp(0.95rem, 1.2vw, 1.1rem)",
+                      fontWeight: 500,
+                      color: isOpen ? "var(--color-gold)" : "var(--color-text-primary)",
+                      transition: "color 0.2s ease"
+                    }}
+                  >
+                    {faq.question}
+                  </span>
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      width: "32px",
+                      height: "32px",
+                      borderRadius: "50%",
+                      background: isOpen ? "rgba(163, 126, 54, 0.1)" : "rgba(255, 255, 255, 0.02)",
+                      border: isOpen ? "1px solid rgba(163, 126, 54, 0.2)" : "1px solid rgba(255, 255, 255, 0.05)",
+                      color: isOpen ? "var(--color-gold)" : "var(--color-text-secondary)",
+                      transition: "all 0.3s ease"
+                    }}
+                  >
+                    <ChevronDown
+                      size={16}
+                      style={{
+                        transform: isOpen ? "rotate(180deg)" : "rotate(0deg)",
+                        transition: "transform 0.3s cubic-bezier(0.16, 1, 0.3, 1)"
+                      }}
+                    />
+                  </div>
+                </button>
+
+                <AnimatePresence initial={false}>
+                  {isOpen && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: "auto", opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+                    >
+                      <div
+                        style={{
+                          padding: "0 clamp(16px, 4vw, 32px) 24px clamp(16px, 4vw, 32px)",
+                          fontFamily: "var(--font-body)",
+                          fontSize: "0.95rem",
+                          lineHeight: 1.6,
+                          color: "var(--color-text-secondary)",
+                          borderTop: "1px solid rgba(255, 255, 255, 0.02)"
+                        }}
+                      >
+                        {faq.answer}
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 // ─── HOME PAGE ────────────────────────────────────────────────────────────────
 
 export default function HomePage() {
@@ -2071,6 +2285,7 @@ export default function HomePage() {
       <ProcessSection />
       <TestimonialsSection />
       <InnovationSection />
+      <FAQSection />
       <CTASection />
     </>
   );

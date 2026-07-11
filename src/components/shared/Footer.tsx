@@ -434,19 +434,32 @@ export default function Footer() {
             gap: "12px",
           }}
         >
-          <p
-            style={{
-              fontFamily: "Inter, sans-serif",
-              fontSize: "0.8rem",
-              color: "#334155",
-              display: "flex",
-              alignItems: "center",
-              gap: "4px",
-            }}
-          >
-            © {new Date().getFullYear()} Zentrix Technology. Made with{" "}
-            <Heart size={12} style={{ color: "#EC4899", fill: "#EC4899" }} /> in Salem, India.
-          </p>
+          <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
+            <p
+              style={{
+                fontFamily: "Inter, sans-serif",
+                fontSize: "0.8rem",
+                color: "#334155",
+                display: "flex",
+                alignItems: "center",
+                gap: "4px",
+                margin: 0,
+              }}
+            >
+              © {new Date().getFullYear()} Zentrix Technology. Made with{" "}
+              <Heart size={12} style={{ color: "#EC4899", fill: "#EC4899" }} /> in Salem, India.
+            </p>
+            <p
+              style={{
+                fontFamily: "Inter, sans-serif",
+                fontSize: "0.7rem",
+                color: "var(--color-text-secondary)",
+                margin: 0,
+              }}
+            >
+              Published: January 1, 2026 • Last updated: {new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
+            </p>
+          </div>
           <div style={{ display: "flex", gap: "20px" }}>
             <span style={{ fontFamily: "JetBrains Mono, monospace", fontSize: "0.7rem", color: "#334155" }}>
               v1.0.0
