@@ -59,6 +59,17 @@ const nextConfig: NextConfig = {
   async redirects() {
     return [
       {
+        source: "/:path*",
+        has: [
+          {
+            type: "host",
+            value: "www.zentrixtechnology.zone.id",
+          },
+        ],
+        destination: "https://zentrixtechnology.zone.id/:path*",
+        permanent: true,
+      },
+      {
         source: "/home",
         destination: "/",
         permanent: true,

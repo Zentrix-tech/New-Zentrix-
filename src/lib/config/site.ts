@@ -5,10 +5,10 @@
 export const siteConfig = {
   name: "Zentrix Technology",
   shortName: "Zentrix",
-  tagline: "Where Vision Meets Velocity",
+  tagline: "Next.js, React & AI Software Engineering",
   description:
-    "Zentrix Technology is a premium software engineering company from Salem, crafting enterprise software, AI solutions, automation systems, mobile applications, and digital experiences that redefine what's possible.",
-  shortDescription: "Premium software engineering, AI solutions, and digital transformation.",
+    "Zentrix Technology is a Next.js, React, and Node.js software engineering company crafting custom enterprise systems, AI solutions, and mobile apps.",
+  shortDescription: "Next.js, React, and Node.js software engineering company.",
   url: process.env.NEXT_PUBLIC_SITE_URL || "https://zentrixtechnology.zone.id",
   domain: "zentrixtechnology.zone.id",
   permanentDomain: "zentrix.in",

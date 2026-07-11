@@ -276,7 +276,7 @@ export default function PageLoader() {
 
       {/* Brand text */}
       <div ref={textRef} style={{ textAlign: "center", opacity: 0 }}>
-        <h1
+        <div
           style={{
             fontFamily: "var(--font-display)",
             fontSize: "clamp(1.1rem, 3vw, 1.7rem)",
@@ -288,7 +288,7 @@ export default function PageLoader() {
           }}
         >
           Zentrix Technology
-        </h1>
+        </div>
         <p
           style={{
             fontFamily: "var(--font-mono)",

@@ -459,38 +459,43 @@ function HeroSection() {
             </div>
 
             {/* Headline — letter by letter */}
-            <div style={{ perspective: "1000px", marginBottom: 8 }}>
-              <h1 style={{ fontFamily: "var(--font-display)", fontSize: "clamp(2.8rem,6.5vw,6.5rem)", fontWeight: 500, lineHeight: 1.04, letterSpacing: 0, display: "flex", flexWrap: "wrap", justifyContent: "center" }}>
-                {heroLetters1.map((char, i) => (
-                  <span
-                    key={`char1-${i}`}
-                    ref={(el) => addLetterRef1(el as HTMLSpanElement | null, i)}
-                    style={{ display: "inline-block", color: "var(--color-text-primary)", whiteSpace: "pre" }}
-                  >
-                    {char}
-                  </span>
-                ))}
-              </h1>
-            </div>
-            <div style={{ perspective: "1000px", marginBottom: 24 }}>
-              <h1 style={{ fontFamily: "var(--font-display)", fontSize: "clamp(2.8rem,6.5vw,6.5rem)", fontWeight: 500, lineHeight: 1.04, letterSpacing: 0, display: "flex", flexWrap: "wrap", justifyContent: "center" }}>
-                {heroLetters2.map((char, i) => (
-                  <span
-                    key={`char2-${i}`}
-                    ref={(el) => addLetterRef2(el as HTMLSpanElement | null, i)}
-                    style={{
-                      display: "inline-block",
-                      background: "linear-gradient(135deg, var(--color-violet) 0%, var(--color-gold) 100%)",
-                      WebkitBackgroundClip: "text",
-                      WebkitTextFillColor: "transparent",
-                      backgroundClip: "text",
-                      whiteSpace: "pre"
-                    }}
-                  >
-                    {char}
-                  </span>
-                ))}
-              </h1>
+            <h1 style={{ position: "absolute", width: 1, height: 1, padding: 0, margin: -1, overflow: "hidden", clip: "rect(0, 0, 0, 0)", whiteSpace: "nowrap", border: 0 }}>
+              We Engineer Digital Futures
+            </h1>
+            <div aria-hidden="true" style={{ width: "100%" }}>
+              <div style={{ perspective: "1000px", marginBottom: 8 }}>
+                <div style={{ fontFamily: "var(--font-display)", fontSize: "clamp(2.8rem,6.5vw,6.5rem)", fontWeight: 500, lineHeight: 1.04, letterSpacing: 0, display: "flex", flexWrap: "wrap", justifyContent: "center" }}>
+                  {heroLetters1.map((char, i) => (
+                    <span
+                      key={`char1-${i}`}
+                      ref={(el) => addLetterRef1(el as HTMLSpanElement | null, i)}
+                      style={{ display: "inline-block", color: "var(--color-text-primary)", whiteSpace: "pre" }}
+                    >
+                      {char}
+                    </span>
+                  ))}
+                </div>
+              </div>
+              <div style={{ perspective: "1000px", marginBottom: 24 }}>
+                <div style={{ fontFamily: "var(--font-display)", fontSize: "clamp(2.8rem,6.5vw,6.5rem)", fontWeight: 500, lineHeight: 1.04, letterSpacing: 0, display: "flex", flexWrap: "wrap", justifyContent: "center" }}>
+                  {heroLetters2.map((char, i) => (
+                    <span
+                      key={`char2-${i}`}
+                      ref={(el) => addLetterRef2(el as HTMLSpanElement | null, i)}
+                      style={{
+                        display: "inline-block",
+                        background: "linear-gradient(135deg, var(--color-violet) 0%, var(--color-gold) 100%)",
+                        WebkitBackgroundClip: "text",
+                        WebkitTextFillColor: "transparent",
+                        backgroundClip: "text",
+                        whiteSpace: "pre"
+                      }}
+                    >
+                      {char}
+                    </span>
+                  ))}
+                </div>
+              </div>
             </div>
 
             {/* Typewriter */}
