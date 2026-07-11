@@ -39,32 +39,9 @@ export default function SmoothScrollProvider({
     // Set lag smoothing to 0 for better synchronization
     gsap.ticker.lagSmoothing(0);
 
-    // Connect Lenis to ScrollTrigger defaults
-    ScrollTrigger.scrollerProxy(document.body, {
-      scrollTop(value) {
-        if (arguments.length) {
-          lenis.scrollTo(value as number, { immediate: true });
-        }
-        return lenis.scroll;
-      },
-      getBoundingClientRect() {
-        return {
-          top: 0,
-          left: 0,
-          width: window.innerWidth,
-          height: window.innerHeight,
-        };
-      },
-    });
-
-    // Refresh ScrollTrigger
-    ScrollTrigger.addEventListener("refresh", () => lenis.resize());
-    ScrollTrigger.refresh();
-
     return () => {
       lenis.destroy();
       gsap.ticker.remove(rafCallback);
-      ScrollTrigger.removeEventListener("refresh", () => lenis.resize());
     };
   }, []);
 

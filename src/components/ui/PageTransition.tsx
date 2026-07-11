@@ -2,7 +2,7 @@
 
 import { useRouter, usePathname } from "next/navigation";
 import { useEffect, useRef } from "react";
-import gsap from "gsap";
+import { gsap } from "gsap";
 
 export default function PageTransition() {
   const router = useRouter();
@@ -17,8 +17,14 @@ export default function PageTransition() {
       const link = target.closest("a");
 
       if (link && link.href) {
-        // Skip default page refresh / hash anchors / external links / targets
-        const url = new URL(link.href);
+        let url: URL;
+        try {
+          url = new URL(link.href);
+        } catch {
+          // Bypass if URL constructor fails
+          return;
+        }
+
         const isInternal = url.origin === window.location.origin;
         const isHash = url.hash !== "";
         const targetAttr = link.getAttribute("target");
