@@ -27,6 +27,10 @@ function splitWords(text: string): string[] {
   return text.split(" ").filter(Boolean);
 }
 
+function splitLetters(text: string): string[] {
+  return text.split("").map((c) => (c === " " ? "\u00A0" : c));
+}
+
 // ─── PARTICLE FIELD ──────────────────────────────────────────────────────────
 
 function ParticleField() {
@@ -39,9 +43,18 @@ function ParticleField() {
     if (!ctx) return;
 
     let animFrame: number;
+    let mx = 0, my = 0;
+    
+    const onMouseMove = (e: MouseEvent) => {
+      mx = e.clientX;
+      my = e.clientY;
+    };
+    window.addEventListener("mousemove", onMouseMove, { passive: true });
+
     interface Particle {
       x: number; y: number; vx: number; vy: number;
       size: number; opacity: number; color: string; life: number; maxLife: number;
+      angle: number; speed: number;
     }
     const particles: Particle[] = [];
 
@@ -59,59 +72,89 @@ function ParticleField() {
       particles.push({
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
-        vx: (Math.random() - 0.5) * 0.35,
-        vy: (Math.random() - 0.5) * 0.35,
-        size: Math.random() * 1.8 + 0.4,
-        opacity: Math.random() * 0.5 + 0.1,
-        color, life: 0, maxLife: Math.random() * 220 + 100,
+        vx: (Math.random() - 0.5) * 0.5,
+        vy: (Math.random() - 0.5) * 0.5,
+        size: Math.random() * 2.2 + 0.5,
+        opacity: Math.random() * 0.4 + 0.1,
+        color,
+        life: 0,
+        maxLife: Math.random() * 300 + 150,
+        angle: Math.random() * Math.PI * 2,
+        speed: Math.random() * 0.5 + 0.2
       });
     };
 
     for (let i = 0; i < 100; i++) spawnParticle();
 
     const draw = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      if (Math.random() < 0.04) spawnParticle();
+      // Clear with trail effect matching the Alabaster Beige color --color-bg: #FAF7F2
+      ctx.fillStyle = "rgba(250, 247, 242, 0.08)";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      if (particles.length < 100 && Math.random() < 0.04) spawnParticle();
 
       for (let i = particles.length - 1; i >= 0; i--) {
         const p = particles[i];
         p.life++;
+
+        // Swirling force around mouse
+        if (mx > 0 && my > 0) {
+          const dx = mx - p.x;
+          const dy = my - p.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < 260) {
+            const force = (1 - dist / 260) * 0.25;
+            const swirlAngle = Math.atan2(dy, dx) + Math.PI / 2;
+            p.vx += Math.cos(swirlAngle) * force + (dx / dist) * force * 0.15;
+            p.vy += Math.sin(swirlAngle) * force + (dy / dist) * force * 0.15;
+          }
+        }
+
+        // Global flow field noise/sine force
+        const noiseAngle = (p.y / canvas.height) * Math.PI * 2.5 + (Date.now() * 0.0003);
+        p.vx += Math.cos(noiseAngle) * 0.02;
+        p.vy += Math.sin(noiseAngle) * 0.02;
+
+        // Apply friction
+        p.vx *= 0.95;
+        p.vy *= 0.95;
+
         p.x += p.vx;
         p.y += p.vy;
-        if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
-        if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
 
-        const fade = p.life < 20 ? p.life / 20 : p.life > p.maxLife - 20 ? (p.maxLife - p.life) / 20 : 1;
+        // Wrap around boundaries
+        if (p.x < 0) p.x = canvas.width;
+        if (p.x > canvas.width) p.x = 0;
+        if (p.y < 0) p.y = canvas.height;
+        if (p.y > canvas.height) p.y = 0;
+
+        const fade = p.life < 30 ? p.life / 30 : p.life > p.maxLife - 30 ? (p.maxLife - p.life) / 30 : 1;
         const alpha = p.opacity * fade;
 
+        // Glowing circle
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
         ctx.fillStyle = `${p.color}${alpha})`;
         ctx.fill();
 
-        const grad = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.size * 3);
-        grad.addColorStop(0, `${p.color}${alpha * 0.3})`);
-        grad.addColorStop(1, `${p.color}0)`);
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.size * 3, 0, Math.PI * 2);
-        ctx.fillStyle = grad;
-        ctx.fill();
-
-        if (p.life >= p.maxLife) particles.splice(i, 1);
+        if (p.life >= p.maxLife) {
+          particles.splice(i, 1);
+        }
       }
 
-      // Connections
+      // Draw connection lines between close particles
       for (let i = 0; i < particles.length; i++) {
         for (let j = i + 1; j < Math.min(i + 4, particles.length); j++) {
           const dx = particles[i].x - particles[j].x;
           const dy = particles[i].y - particles[j].y;
           const dist = Math.sqrt(dx * dx + dy * dy);
           if (dist < 110) {
+            const alpha = 0.07 * (1 - dist / 110);
             ctx.beginPath();
             ctx.moveTo(particles[i].x, particles[i].y);
             ctx.lineTo(particles[j].x, particles[j].y);
-            ctx.strokeStyle = `rgba(163,126,54,${0.06 * (1 - dist / 110)})`;
-            ctx.lineWidth = 0.5;
+            ctx.strokeStyle = `rgba(163,126,54,${alpha})`;
+            ctx.lineWidth = 0.45;
             ctx.stroke();
           }
         }
@@ -121,7 +164,11 @@ function ParticleField() {
     };
 
     draw();
-    return () => { cancelAnimationFrame(animFrame); window.removeEventListener("resize", resize); };
+    return () => {
+      cancelAnimationFrame(animFrame);
+      window.removeEventListener("resize", resize);
+      window.removeEventListener("mousemove", onMouseMove);
+    };
   }, []);
 
   return (
@@ -257,12 +304,12 @@ function NeuralNetwork() {
 function HeroSection() {
   const heroRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
-  const wordsRef = useRef<HTMLDivElement[]>([]);
+  const lettersRef1 = useRef<HTMLSpanElement[]>([]);
+  const lettersRef2 = useRef<HTMLSpanElement[]>([]);
   const badgeRef = useRef<HTMLDivElement>(null);
   const subRef = useRef<HTMLParagraphElement>(null);
   const ctaRef = useRef<HTMLDivElement>(null);
   const statsRef = useRef<HTMLDivElement>(null);
-  const codeRef = useRef<HTMLDivElement>(null);
 
   const techStack = [
     "React & Next.js", 2000,
@@ -273,27 +320,47 @@ function HeroSection() {
     "AI Automation", 2000,
   ];
 
-  const heroWords1 = splitWords("We Engineer");
-  const heroWords2 = splitWords("Digital Futures");
+  const heroLetters1 = splitLetters("We Engineer");
+  const heroLetters2 = splitLetters("Digital Futures");
 
   useEffect(() => {
     const tl = gsap.timeline({ defaults: { ease: "power4.out" } });
 
     tl.fromTo(badgeRef.current, { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.9 });
 
-    // Word-by-word headline reveal
-    const allWordEls = wordsRef.current.filter(Boolean);
+    // Letter-by-letter kinetic 3D stagger
+    const letters1 = lettersRef1.current.filter(Boolean);
+    const letters2 = lettersRef2.current.filter(Boolean);
+    const allLetters = [...letters1, ...letters2];
+
     tl.fromTo(
-      allWordEls,
-      { opacity: 0, y: 50, rotateX: 15, filter: "blur(12px)" },
-      { opacity: 1, y: 0, rotateX: 0, filter: "blur(0px)", stagger: 0.08, duration: 1.1 },
-      "-=0.5"
+      allLetters,
+      {
+        opacity: 0,
+        y: 80,
+        rotateX: 90,
+        rotateY: 15,
+        scale: 0.8,
+        filter: "blur(6px)",
+        transformOrigin: "50% 100% -30px"
+      },
+      {
+        opacity: 1,
+        y: 0,
+        rotateX: 0,
+        rotateY: 0,
+        scale: 1,
+        filter: "blur(0px)",
+        stagger: 0.022,
+        duration: 1.3,
+        ease: "power4.out"
+      },
+      "-=0.6"
     );
 
-    tl.fromTo(subRef.current, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.9 }, "-=0.7")
-      .fromTo(ctaRef.current, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.8 }, "-=0.6")
-      .fromTo(statsRef.current, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.8 }, "-=0.6")
-      .fromTo(codeRef.current, { opacity: 0, x: 40 }, { opacity: 1, x: 0, duration: 1 }, "-=1.2");
+    tl.fromTo(subRef.current, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.9 }, "-=0.75")
+      .fromTo(ctaRef.current, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.8 }, "-=0.65")
+      .fromTo(statsRef.current, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.8 }, "-=0.65");
 
     // Parallax on scroll
     const par = gsap.to(contentRef.current, {
@@ -326,8 +393,11 @@ function HeroSection() {
     };
   }, []);
 
-  const addWordRef = (el: HTMLDivElement | null, i: number) => {
-    if (el) wordsRef.current[i] = el;
+  const addLetterRef1 = (el: HTMLSpanElement | null, i: number) => {
+    if (el) lettersRef1.current[i] = el;
+  };
+  const addLetterRef2 = (el: HTMLSpanElement | null, i: number) => {
+    if (el) lettersRef2.current[i] = el;
   };
 
   const heroStats = [
@@ -388,35 +458,36 @@ function HeroSection() {
               </span>
             </div>
 
-            {/* Headline — word by word */}
+            {/* Headline — letter by letter */}
             <div style={{ perspective: "1000px", marginBottom: 8 }}>
-              <h1 style={{ fontFamily: "var(--font-display)", fontSize: "clamp(2.8rem,6.5vw,6.5rem)", fontWeight: 500, lineHeight: 1.04, letterSpacing: 0, display: "flex", flexWrap: "wrap", justifyContent: "center", gap: "0.25em" }}>
-                {heroWords1.map((word, i) => (
+              <h1 style={{ fontFamily: "var(--font-display)", fontSize: "clamp(2.8rem,6.5vw,6.5rem)", fontWeight: 500, lineHeight: 1.04, letterSpacing: 0, display: "flex", flexWrap: "wrap", justifyContent: "center" }}>
+                {heroLetters1.map((char, i) => (
                   <span
-                    key={`w1-${i}`}
-                    ref={(el) => addWordRef(el as HTMLDivElement | null, i)}
-                    style={{ display: "inline-block", color: "var(--color-text-primary)" }}
+                    key={`char1-${i}`}
+                    ref={(el) => addLetterRef1(el as HTMLSpanElement | null, i)}
+                    style={{ display: "inline-block", color: "var(--color-text-primary)", whiteSpace: "pre" }}
                   >
-                    {word}
+                    {char}
                   </span>
                 ))}
               </h1>
             </div>
             <div style={{ perspective: "1000px", marginBottom: 24 }}>
-              <h1 style={{ fontFamily: "var(--font-display)", fontSize: "clamp(2.8rem,6.5vw,6.5rem)", fontWeight: 500, lineHeight: 1.04, letterSpacing: 0, display: "flex", flexWrap: "wrap", justifyContent: "center", gap: "0.25em" }}>
-                {heroWords2.map((word, i) => (
+              <h1 style={{ fontFamily: "var(--font-display)", fontSize: "clamp(2.8rem,6.5vw,6.5rem)", fontWeight: 500, lineHeight: 1.04, letterSpacing: 0, display: "flex", flexWrap: "wrap", justifyContent: "center" }}>
+                {heroLetters2.map((char, i) => (
                   <span
-                    key={`w2-${i}`}
-                    ref={(el) => addWordRef(el as HTMLDivElement | null, heroWords1.length + i)}
+                    key={`char2-${i}`}
+                    ref={(el) => addLetterRef2(el as HTMLSpanElement | null, i)}
                     style={{
                       display: "inline-block",
                       background: "linear-gradient(135deg, var(--color-violet) 0%, var(--color-gold) 100%)",
                       WebkitBackgroundClip: "text",
                       WebkitTextFillColor: "transparent",
                       backgroundClip: "text",
+                      whiteSpace: "pre"
                     }}
                   >
-                    {word}
+                    {char}
                   </span>
                 ))}
               </h1>
@@ -1116,51 +1187,111 @@ const featuredProjects = [
 
 function WorksSection() {
   const sectionRef = useRef<HTMLDivElement>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
   const badgeRef = useRef<HTMLDivElement>(null);
   const headingRef = useRef<HTMLHeadingElement>(null);
-  const gridRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const section = sectionRef.current;
-    if (!section) return;
+    const scrollContainer = scrollRef.current;
+    if (!section || !scrollContainer) return;
 
-    const tl = gsap.timeline({
-      scrollTrigger: { trigger: section, start: "top 80%", toggleActions: "play none none reverse" },
-    });
+    let ctx = gsap.context(() => {
+      const isMobile = window.innerWidth < 900;
+      if (isMobile) {
+        // Simple entrance animation on mobile
+        gsap.fromTo(badgeRef.current, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.7, scrollTrigger: { trigger: section, start: "top 80%" } });
+        gsap.fromTo(headingRef.current, { opacity: 0, y: 25 }, { opacity: 1, y: 0, duration: 0.8, scrollTrigger: { trigger: section, start: "top 78%" } });
+        
+        const mobileRows = gsap.utils.toArray(".horizontal-project-slide");
+        mobileRows.forEach((row: any) => {
+          gsap.fromTo(row, 
+            { opacity: 0, y: 40, scale: 0.97 }, 
+            { opacity: 1, y: 0, scale: 1, duration: 0.9, scrollTrigger: { trigger: row, start: "top 85%" } }
+          );
+        });
+        return;
+      }
 
-    tl.fromTo(badgeRef.current, { opacity: 0, y: 25 }, { opacity: 1, y: 0, duration: 0.7 })
-      .fromTo(headingRef.current, { opacity: 0, y: 35, filter: "blur(8px)" }, { opacity: 1, y: 0, filter: "blur(0px)", duration: 1 }, "-=0.5");
+      // Title & badge staggered entry
+      const tl = gsap.timeline({
+        scrollTrigger: { trigger: section, start: "top 80%", toggleActions: "play none none reverse" },
+      });
+      tl.fromTo(badgeRef.current, { opacity: 0, y: 25 }, { opacity: 1, y: 0, duration: 0.7 })
+        .fromTo(headingRef.current, { opacity: 0, y: 35, filter: "blur(8px)" }, { opacity: 1, y: 0, filter: "blur(0px)", duration: 1 }, "-=0.5");
 
-    const rows = gsap.utils.toArray(".project-row-anim");
+      const scrollWidth = scrollContainer.scrollWidth;
+      const windowWidth = window.innerWidth;
+      const amountToScroll = scrollWidth - windowWidth;
 
-    // Clip-path cinematic reveals
-    rows.forEach((row: any) => {
-      gsap.fromTo(
-        row,
-        { clipPath: "inset(12% 8% round 32px)", scale: 0.94, opacity: 0.8 },
+      // Pin and horizontal scrub
+      const pin = gsap.fromTo(scrollContainer,
+        { x: 0 },
         {
-          clipPath: "inset(0% 0% round 24px)", scale: 1, opacity: 1,
-          ease: "power2.out",
-          scrollTrigger: { trigger: row, start: "top 90%", end: "top 60%", scrub: true },
+          x: -amountToScroll,
+          ease: "none",
+          scrollTrigger: {
+            trigger: section,
+            pin: true,
+            scrub: 1.1,
+            start: "top top",
+            end: () => `+=${amountToScroll * 1.3}`,
+            invalidateOnRefresh: true,
+          }
         }
       );
 
-      // Parallax layers within rows
-      const visual = row.querySelector(".project-visual-anim");
-      const content = row.querySelector(".project-content-anim");
-      if (visual && content) {
-        gsap.fromTo(visual, { y: 30 }, { y: -30, ease: "none", scrollTrigger: { trigger: row, start: "top bottom", end: "bottom top", scrub: true } });
-        gsap.fromTo(content, { y: -20 }, { y: 20, ease: "none", scrollTrigger: { trigger: row, start: "top bottom", end: "bottom top", scrub: true } });
-      }
-    });
+      // Parallax shifts inside slides linked to horizontal movement
+      const slides = gsap.utils.toArray(".horizontal-project-slide");
+      slides.forEach((slide: any) => {
+        const image = slide.querySelector(".project-visual-anim img");
+        const content = slide.querySelector(".project-content-anim");
+        
+        if (image) {
+          gsap.fromTo(image,
+            { scale: 1.16, x: 60 },
+            {
+              scale: 1.0, x: -60,
+              ease: "none",
+              scrollTrigger: {
+                trigger: slide,
+                containerAnimation: pin,
+                start: "left right",
+                end: "right left",
+                scrub: true
+              }
+            }
+          );
+        }
 
-    return () => { tl.kill(); };
+        if (content) {
+          gsap.fromTo(content,
+            { x: 40, opacity: 0.9 },
+            {
+              x: -40, opacity: 1,
+              ease: "none",
+              scrollTrigger: {
+                trigger: slide,
+                containerAnimation: pin,
+                start: "left right",
+                end: "right left",
+                scrub: true
+              }
+            }
+          );
+        }
+      });
+    }, sectionRef);
+
+    return () => ctx.revert();
   }, []);
 
   return (
-    <section ref={sectionRef} style={{ padding: "clamp(80px,10vw,140px) 0", position: "relative" }}>
-      <div className="container-zentrix">
-        <div style={{ textAlign: "center", marginBottom: 64 }}>
+    <section ref={sectionRef} className="works-scroll-section" style={{ background: "var(--color-bg)", overflow: "hidden", position: "relative" }}>
+      {/* Dynamic full-screen container */}
+      <div className="works-scroll-viewport" style={{ display: "flex", flexDirection: "column", justifyContent: "center", minHeight: "100vh", padding: "80px 0" }}>
+        
+        <div style={{ textAlign: "center", marginBottom: 32 }} className="container-zentrix">
           <div ref={badgeRef} style={{
             display: "inline-flex", alignItems: "center", gap: 8, padding: "6px 16px",
             border: "1px solid rgba(163,126,54,0.25)", borderRadius: 100,
@@ -1187,25 +1318,30 @@ function WorksSection() {
           </h2>
         </div>
 
-        <div ref={gridRef} style={{ display: "flex", flexDirection: "column", gap: 28 }}>
+        {/* Horizontal scroll track */}
+        <div ref={scrollRef} className="works-horizontal-track" style={{ display: "flex", flexWrap: "nowrap", gap: "100px", padding: "0 10vw", alignItems: "center", willChange: "transform" }}>
           {featuredProjects.map((project, i) => (
             <div
               key={project.id}
-              className="project-row-anim"
+              className="horizontal-project-slide"
               data-cursor-text="VIEW STUDY"
               style={{
+                flexShrink: 0,
+                width: "min(86vw, 1100px)",
+                height: "65vh",
+                minHeight: "460px",
                 display: "grid",
-                gridTemplateColumns: "repeat(auto-fit, minmax(440px, 1fr))",
+                gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))",
                 gap: 0,
                 border: "1px solid var(--color-border)",
-                borderRadius: 24, overflow: "hidden",
+                borderRadius: 32, overflow: "hidden",
                 transition: "border-color 0.3s ease, box-shadow 0.3s ease",
-                background: "rgba(255,255,255,0.5)",
-                backdropFilter: "blur(12px)",
+                background: "rgba(255,255,255,0.45)",
+                backdropFilter: "blur(20px)",
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.borderColor = `${project.color}30`;
-                e.currentTarget.style.boxShadow = `0 24px 60px ${project.color}10`;
+                e.currentTarget.style.borderColor = `${project.color}35`;
+                e.currentTarget.style.boxShadow = `0 32px 70px ${project.color}14`;
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.borderColor = "var(--color-border)";
@@ -1213,7 +1349,7 @@ function WorksSection() {
               }}
             >
               {/* Content side */}
-              <div className="project-content-anim" style={{ padding: "clamp(24px,5vw,52px)", display: "flex", flexDirection: "column", justifyContent: "center" }}>
+              <div className="project-content-anim" style={{ padding: "clamp(32px,4vw,56px)", display: "flex", flexDirection: "column", justifyContent: "center" }}>
                 <div style={{ marginBottom: 12 }}>
                   <span style={{
                     padding: "4px 12px",
@@ -1227,17 +1363,17 @@ function WorksSection() {
 
                 <h3 style={{
                   fontFamily: "var(--font-display)", fontWeight: 500,
-                  fontSize: "clamp(1.5rem,3vw,2.3rem)", color: "var(--color-text-primary)",
+                  fontSize: "clamp(1.5rem,2.8vw,2.2rem)", color: "var(--color-text-primary)",
                   lineHeight: 1.1, letterSpacing: 0, marginBottom: 16,
                 }}
                   dangerouslySetInnerHTML={{ __html: project.title }}
                 />
 
-                <p style={{ fontFamily: "var(--font-body)", fontSize: "0.9rem", color: "var(--color-text-secondary)", lineHeight: 1.75, marginBottom: 24 }}>
+                <p style={{ fontFamily: "var(--font-body)", fontSize: "0.88rem", color: "var(--color-text-secondary)", lineHeight: 1.7, marginBottom: 20 }}>
                   {project.description}
                 </p>
 
-                <div style={{ display: "flex", gap: 12, marginBottom: 24, flexWrap: "wrap" }}>
+                <div style={{ display: "flex", gap: 12, marginBottom: 20, flexWrap: "wrap" }}>
                   {project.metrics.map((m) => (
                     <div key={m} style={{ display: "flex", alignItems: "center", gap: 6 }}>
                       <Check size={13} style={{ color: project.color }} />
@@ -1246,7 +1382,7 @@ function WorksSection() {
                   ))}
                 </div>
 
-                <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 28 }}>
+                <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 24 }}>
                   {project.tags.map((tag) => (
                     <span key={tag} style={{
                       padding: "4px 12px", background: "var(--color-surface)",
@@ -1281,10 +1417,8 @@ function WorksSection() {
               <div
                 className="project-visual-anim"
                 style={{
-                  minHeight: 340, position: "relative", overflow: "hidden",
-                  order: i % 2 === 0 ? 1 : -1,
-                  borderLeft: i % 2 === 0 ? "1px solid var(--color-border)" : "none",
-                  borderRight: i % 2 !== 0 ? "1px solid var(--color-border)" : "none",
+                  height: "100%", minHeight: 320, position: "relative", overflow: "hidden",
+                  borderLeft: "1px solid var(--color-border)",
                 }}
               >
                 <img
@@ -1295,6 +1429,7 @@ function WorksSection() {
                     position: "absolute", inset: 0,
                     transition: "transform 0.8s var(--ease-out-expo), filter 0.5s ease",
                     filter: "brightness(0.92)",
+                    willChange: "transform",
                   }}
                   onMouseEnter={(e) => { e.currentTarget.style.transform = "scale(1.05)"; e.currentTarget.style.filter = "brightness(1)"; }}
                   onMouseLeave={(e) => { e.currentTarget.style.transform = "scale(1)"; e.currentTarget.style.filter = "brightness(0.92)"; }}
@@ -1305,7 +1440,7 @@ function WorksSection() {
           ))}
         </div>
 
-        <div style={{ textAlign: "center", marginTop: 56 }}>
+        <div style={{ textAlign: "center", marginTop: 48 }}>
           <Link
             href="/works"
             data-magnetic
@@ -1326,6 +1461,7 @@ function WorksSection() {
             View All Projects <ArrowRight size={16} />
           </Link>
         </div>
+
       </div>
     </section>
   );
