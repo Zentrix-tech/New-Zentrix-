@@ -9,6 +9,7 @@ export default function PageTransition() {
   const pathname = usePathname();
   const curtainRef = useRef<HTMLDivElement>(null);
   const isFirstRender = useRef(true);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     // Intercept clicks on links globally
@@ -48,6 +49,22 @@ export default function PageTransition() {
           gsap.timeline({
             onComplete: () => {
               router.push(targetPath);
+
+              // Set a safety timeout to hide curtain if navigation hangs
+              if (timeoutRef.current) clearTimeout(timeoutRef.current);
+              timeoutRef.current = setTimeout(() => {
+                gsap.killTweensOf(curtain);
+                gsap.timeline({
+                  onComplete: () => {
+                    gsap.set(curtain, { display: "none" });
+                  }
+                })
+                .to(curtain, {
+                  yPercent: -100,
+                  duration: 0.55,
+                  ease: "power3.inOut"
+                });
+              }, 2500);
             }
           })
           .set(curtain, { yPercent: 100, display: "flex" })
@@ -63,11 +80,18 @@ export default function PageTransition() {
     document.addEventListener("click", handleLinkClick, true);
     return () => {
       document.removeEventListener("click", handleLinkClick, true);
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
     };
   }, [pathname, router]);
 
   // When pathname changes, slide curtain up to top to reveal the new page content
   useEffect(() => {
+    // Clear safety timeout since navigation succeeded
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+      timeoutRef.current = null;
+    }
+
     const curtain = curtainRef.current;
     if (!curtain) return;
 

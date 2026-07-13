@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import {
@@ -123,6 +123,15 @@ const socialLinks = [
 ];
 
 export default function Footer() {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const currentYear = mounted ? new Date().getFullYear() : 2026;
+  const lastUpdated = mounted ? new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) : "July 13, 2026";
+
   return (
     <footer
       style={{
@@ -446,7 +455,7 @@ export default function Footer() {
                 margin: 0,
               }}
             >
-              © {new Date().getFullYear()} Zentrix Technology. Made with{" "}
+              © {currentYear} Zentrix Technology. Made with{" "}
               <Heart size={12} style={{ color: "#EC4899", fill: "#EC4899" }} /> in Salem, India.
             </p>
             <p
@@ -457,7 +466,7 @@ export default function Footer() {
                 margin: 0,
               }}
             >
-              Published: January 1, 2026 • Last updated: {new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
+              Published: January 1, 2026 • Last updated: {lastUpdated}
             </p>
           </div>
           <div style={{ display: "flex", gap: "20px" }}>

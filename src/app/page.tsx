@@ -302,6 +302,12 @@ function NeuralNetwork() {
 // ─── HERO SECTION ────────────────────────────────────────────────────────────
 
 function HeroSection() {
+  const [currentYear, setCurrentYear] = useState(2026);
+
+  useEffect(() => {
+    setCurrentYear(new Date().getFullYear());
+  }, []);
+
   const heroRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   const lettersRef1 = useRef<HTMLSpanElement[]>([]);
@@ -454,7 +460,7 @@ function HeroSection() {
             >
               <span style={{ width: 6, height: 6, borderRadius: "50%", background: "var(--color-success)", boxShadow: "0 0 8px rgba(16,185,129,0.8)", animation: "pulse-dot 2s ease-in-out infinite" }} />
               <span style={{ fontFamily: "var(--font-body)", fontSize: "0.78rem", fontWeight: 600, color: "var(--color-text-secondary)", letterSpacing: "0.06em", textTransform: "uppercase" }}>
-                Now accepting projects — {new Date().getFullYear()}
+                Now accepting projects — {currentYear}
               </span>
             </div>
 

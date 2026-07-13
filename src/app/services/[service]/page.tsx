@@ -1,3 +1,16 @@
+export const unstable_instant = {
+  prefetch: 'static',
+  samples: [
+    { params: { service: 'web-development' } },
+    { params: { service: 'app-development' } },
+    { params: { service: 'ai-automation' } },
+    { params: { service: 'enterprise-software' } },
+    { params: { service: 'ui-ux-design' } },
+    { params: { service: 'seo' } }
+  ]
+};
+
+import { Suspense } from "react";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { siteConfig } from "@/lib/config/site";
@@ -379,7 +392,15 @@ interface PageProps {
   params: Promise<{ service: string }>;
 }
 
-export default async function ServicePage({ params }: PageProps) {
+export default function ServicePage({ params }: PageProps) {
+  return (
+    <Suspense fallback={null}>
+      <ServiceContent params={params} />
+    </Suspense>
+  );
+}
+
+async function ServiceContent({ params }: PageProps) {
   const resolvedParams = await params;
   const rawServiceSlug = resolvedParams.service;
   const serviceSlug = aliases[rawServiceSlug] || rawServiceSlug;

@@ -1,6 +1,9 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  // Enable Next.js 16 Cache Components for instant navigation
+  cacheComponents: true,
+
   // Turbopack (Next.js 16 default)
   turbopack: {},
 

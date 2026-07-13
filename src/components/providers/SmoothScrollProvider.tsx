@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react";
 import Lenis from "lenis";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { usePathname } from "next/navigation";
 
 export default function SmoothScrollProvider({
   children,
@@ -11,6 +12,8 @@ export default function SmoothScrollProvider({
   children: React.ReactNode;
 }) {
   const containerRef = useRef<HTMLDivElement>(null);
+  const pathname = usePathname();
+  const lenisRef = useRef<Lenis | null>(null);
 
   useEffect(() => {
     // Register GSAP ScrollTrigger
@@ -27,6 +30,8 @@ export default function SmoothScrollProvider({
       touchMultiplier: 2,
     });
 
+    lenisRef.current = lenis;
+
     // Update ScrollTrigger on Lenis scroll
     lenis.on("scroll", ScrollTrigger.update);
 
@@ -42,8 +47,20 @@ export default function SmoothScrollProvider({
     return () => {
       lenis.destroy();
       gsap.ticker.remove(rafCallback);
+      lenisRef.current = null;
     };
   }, []);
+
+  // Reset scroll and refresh ScrollTrigger when pathname changes
+  useEffect(() => {
+    if (lenisRef.current) {
+      lenisRef.current.scrollTo(0, { immediate: true });
+    }
+    // Force ScrollTrigger to refresh after DOM updates
+    setTimeout(() => {
+      ScrollTrigger.refresh();
+    }, 100);
+  }, [pathname]);
 
   return <div ref={containerRef}>{children}</div>;
 }
