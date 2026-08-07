@@ -426,9 +426,6 @@ function HeroSection() {
         background: "var(--color-bg)",
       }}
     >
-      <ParticleField />
-      <NeuralNetwork />
-
       {/* Gradient mesh */}
       <div style={{
         position: "absolute", inset: 0, pointerEvents: "none",

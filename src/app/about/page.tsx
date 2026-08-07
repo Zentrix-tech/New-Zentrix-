@@ -56,7 +56,7 @@ const values = [
 const team = [
   {
     name: "Mohammed Arif",
-    role: "Founder",
+    role: "Founder & CEO",
     bio: "Visionary leader and core system architect. Specialized in custom engineering, high-performance web platforms, and Awwwards-grade digital experiences.",
     color: "var(--color-violet)",
     emoji: "🚀",
@@ -66,13 +66,22 @@ const team = [
   },
   {
     name: "Gokulprasath",
-    role: "Co-founder",
+    role: "Co-Founder & CTO",
     bio: "Full-stack technologist and product architect. Focused on building scalable cloud platforms, automated workflows, and complex technovation portals.",
     color: "var(--color-cyan)",
     emoji: "⚙️",
     skills: ["System Architecture", "NodeJS / NextJS", "Database Design", "AI Integration"],
     image: "/cofounder_gokul.webp",
     portfolio: "https://gokulprasath.vercel.app/",
+  },
+  {
+    name: "Mohammad Rashid",
+    role: "Co-Founder & CBO",
+    bio: "Strategic business executive driving corporate partnerships, revenue growth, and market expansion. Dedicated to delivering high-impact enterprise software solutions.",
+    color: "#F59E0B",
+    emoji: "💼",
+    skills: ["Business Strategy", "Client Partnerships", "Revenue Growth", "Enterprise Operations"],
+    image: "/cofounder_rashid.jpg",
   },
 ];
 
