@@ -92,7 +92,7 @@ export default function LocationClient({ location, locationSlug }: LocationClien
         </div>
 
         {/* Hero split */}
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))", gap: "60px", alignItems: "center", marginBottom: "96px" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 280px), 1fr))", gap: "40px", alignItems: "center", marginBottom: "64px" }}>
           <div>
             <div className="fade-in-reveal" style={{ display: "inline-flex", alignItems: "center", gap: "8px", padding: "8px 16px", borderRadius: "100px", background: "var(--color-surface-2)", border: "1px solid var(--color-border)", color: "var(--color-violet)", fontSize: "0.85rem", fontWeight: 600, marginBottom: "24px" }}>
               <MapPin size={14} />
@@ -181,7 +181,7 @@ export default function LocationClient({ location, locationSlug }: LocationClien
           <h2 style={{ fontFamily: "var(--font-display)", fontSize: "clamp(2rem, 3.5vw, 2.8rem)", color: "var(--color-text-primary)", textAlign: "center", marginBottom: "48px" }}>
             Client Success in {location.name}
           </h2>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))", gap: "24px" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 280px), 1fr))", gap: "24px" }}>
             {location.testimonials.map((t, idx) => (
               <div key={idx} style={{ background: "var(--color-surface-2)", border: "1px solid var(--color-border)", borderRadius: "20px", padding: "32px", boxShadow: "0 10px 30px rgba(110,85,40,0.01)" }}>
                 <div style={{ display: "flex", gap: "4px", marginBottom: "16px" }}>

@@ -255,6 +255,7 @@ export default function Footer() {
 
         {/* Main footer grid */}
         <div
+          className="footer-grid"
           style={{
             display: "grid",
             gridTemplateColumns: "2fr 1fr 1fr 1fr",
@@ -482,13 +483,15 @@ export default function Footer() {
 
       <style jsx global>{`
         @media (max-width: 1024px) {
-          footer [style*="grid-template-columns: 2fr"] {
+          .footer-grid {
             grid-template-columns: 1fr 1fr !important;
+            gap: 32px !important;
           }
         }
         @media (max-width: 640px) {
-          footer [style*="grid-template-columns: 2fr"] {
+          .footer-grid {
             grid-template-columns: 1fr !important;
+            gap: 28px !important;
           }
         }
       `}</style>

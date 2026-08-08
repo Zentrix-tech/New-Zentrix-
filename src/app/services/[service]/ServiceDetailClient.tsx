@@ -139,7 +139,7 @@ export default function ServiceDetailClient({ service }: ServiceDetailClientProp
         </div>
 
         {/* Hero Split Grid */}
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))", gap: "64px", alignItems: "center", marginBottom: "96px" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 280px), 1fr))", gap: "40px", alignItems: "center", marginBottom: "64px" }}>
           {/* Content Block */}
           <div ref={headerRef}>
             <div className="hero-reveal" style={{ display: "inline-flex", alignItems: "center", gap: "10px", padding: "8px 16px", borderRadius: "100px", background: "var(--color-surface-2)", border: "1px solid var(--color-border)", color: "var(--color-violet)", fontSize: "0.85rem", fontWeight: 600, marginBottom: "24px" }}>

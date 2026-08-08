@@ -404,7 +404,7 @@ export default function BlogPage() {
               {/* Featured */}
               {featured.length > 0 && (
                 <div style={{ marginBottom: "40px" }}>
-                  <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(340px, 1fr))", gap: "20px" }}>
+                  <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(min(100%, 280px), 1fr))", gap: "20px" }}>
                     {featured.map((post, i) => (
                       <PostCard key={post.id} post={post} index={i} featured />
                     ))}
@@ -413,7 +413,7 @@ export default function BlogPage() {
               )}
               {/* Regular */}
               {rest.length > 0 && (
-                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))", gap: "20px" }}>
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(min(100%, 280px), 1fr))", gap: "20px" }}>
                   {rest.map((post, i) => (
                     <PostCard key={post.id} post={post} index={i} />
                   ))}

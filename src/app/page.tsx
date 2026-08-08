@@ -1655,7 +1655,7 @@ const testimonials = [
 ];
 
 function TestimonialsSection() {
-  const { ref, inView } = useInViewObserver({ threshold: 0.1, triggerOnce: true });
+  const { ref, inView } = useInViewObserver({ threshold: 0.01, triggerOnce: true });
 
   return (
     <section style={{ padding: "clamp(80px,10vw,140px) 0", position: "relative", overflow: "hidden" }}>
@@ -1665,11 +1665,11 @@ function TestimonialsSection() {
         pointerEvents: "none",
       }} />
 
-      <div className="container-zentrix">
-        <div ref={ref} style={{ textAlign: "center", marginBottom: 60 }}>
+      <div className="container-zentrix" ref={ref}>
+        <div style={{ textAlign: "center", marginBottom: 60 }}>
           <motion.div
             initial={{ opacity: 0, y: 20 }}
-            animate={inView ? { opacity: 1, y: 0 } : {}}
+            animate={{ opacity: 1, y: 0 }}
             style={{
               display: "inline-flex", alignItems: "center", gap: 8, padding: "6px 16px",
               border: "1px solid rgba(245,158,11,0.3)", borderRadius: 100,
@@ -1684,7 +1684,7 @@ function TestimonialsSection() {
 
           <motion.h2
             initial={{ opacity: 0, y: 30 }}
-            animate={inView ? { opacity: 1, y: 0 } : {}}
+            animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
             style={{
               fontFamily: "var(--font-display)", fontSize: "clamp(2.2rem,5vw,4.2rem)",
@@ -1695,13 +1695,13 @@ function TestimonialsSection() {
           </motion.h2>
         </div>
 
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 20 }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 280px), 1fr))", gap: 20 }}>
           {testimonials.map((t, i) => (
             <motion.div
               key={t.id}
-              initial={{ opacity: 0, y: 50 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.9, delay: i * 0.12, ease: [0.16, 1, 0.3, 1] }}
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: i * 0.1, ease: [0.16, 1, 0.3, 1] }}
               className="testimonial-glass"
               style={{ padding: 32, position: "relative", overflow: "hidden" }}
             >
@@ -1788,16 +1788,19 @@ function InnovationSection() {
 
       <div className="container-zentrix" style={{ position: "relative", zIndex: 1 }}>
         <div ref={ref}>
-          <div style={{
-            display: "grid",
-            gridTemplateColumns: "clamp(300px,45%,560px) 1fr",
-            gap: "clamp(40px,6vw,80px)", alignItems: "center",
-          }}>
+          <div
+            className="innovation-grid"
+            style={{
+              display: "grid",
+              gridTemplateColumns: "clamp(300px,45%,560px) 1fr",
+              gap: "clamp(40px,6vw,80px)", alignItems: "center",
+            }}
+          >
             {/* Left content */}
             <div>
               <motion.div
                 initial={{ opacity: 0, x: -40 }}
-                animate={inView ? { opacity: 1, x: 0 } : {}}
+                animate={{ opacity: 1, x: 0 }}
                 style={{
                   display: "inline-flex", alignItems: "center", gap: 8, padding: "6px 16px",
                   border: "1px solid rgba(163,126,54,0.3)", borderRadius: 100,
@@ -1812,7 +1815,7 @@ function InnovationSection() {
 
               <motion.h2
                 initial={{ opacity: 0, x: -40 }}
-                animate={inView ? { opacity: 1, x: 0 } : {}}
+                animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
                 style={{
                   fontFamily: "var(--font-display)", fontSize: "clamp(2rem,4vw,3.8rem)",
@@ -1832,7 +1835,7 @@ function InnovationSection() {
 
               <motion.p
                 initial={{ opacity: 0, x: -40 }}
-                animate={inView ? { opacity: 1, x: 0 } : {}}
+                animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.2 }}
                 style={{
                   fontFamily: "var(--font-body)", fontSize: "0.9375rem",
@@ -1845,7 +1848,7 @@ function InnovationSection() {
 
               <motion.div
                 initial={{ opacity: 0, x: -40 }}
-                animate={inView ? { opacity: 1, x: 0 } : {}}
+                animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.3 }}
                 style={{ display: "flex", gap: 24, marginBottom: 32 }}
               >
@@ -1859,7 +1862,7 @@ function InnovationSection() {
 
               <motion.div
                 initial={{ opacity: 0, x: -40 }}
-                animate={inView ? { opacity: 1, x: 0 } : {}}
+                animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.4 }}
               >
                 <Link
@@ -1885,12 +1888,12 @@ function InnovationSection() {
             </div>
 
             {/* Right: innovation cards */}
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+            <div className="innovation-cards-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
               {innovations.map((item, i) => (
                 <motion.div
                   key={item.title}
                   initial={{ opacity: 0, scale: 0.9 }}
-                  animate={inView ? { opacity: 1, scale: 1 } : {}}
+                  animate={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.7, delay: i * 0.1 + 0.3, ease: [0.16, 1, 0.3, 1] }}
                   style={{
                     padding: "28px 24px",
@@ -1927,7 +1930,8 @@ function InnovationSection() {
 
       <style>{`
         @media (max-width: 900px) {
-          .innovation-grid { grid-template-columns: 1fr !important; }
+          .innovation-grid { grid-template-columns: 1fr !important; gap: 40px !important; }
+          .innovation-cards-grid { grid-template-columns: 1fr !important; }
         }
       `}</style>
     </section>

@@ -547,7 +547,7 @@ export default function WorksPage() {
               transition={{ duration: 0.4 }}
               style={{
                 display: "grid",
-                gridTemplateColumns: "repeat(auto-fill, minmax(340px, 1fr))",
+                gridTemplateColumns: "repeat(auto-fill, minmax(min(100%, 280px), 1fr))",
                 gap: "20px",
               }}
             >
