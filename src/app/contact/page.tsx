@@ -141,10 +141,26 @@ export default function ContactPage() {
 
   const onSubmit = async (data: ContactForm) => {
     setSubmitting(true);
-    // Simulate API call
-    await new Promise((r) => setTimeout(r, 1500));
-    setSubmitting(false);
-    setSubmitted(true);
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+
+      const resData = await response.json();
+
+      if (!response.ok) {
+        throw new Error(resData.error || "Failed to send message");
+      }
+
+      setSubmitted(true);
+    } catch (err: any) {
+      console.error(err);
+      alert(err?.message || "Something went wrong while sending your message. Please try again or email us at zentrixtech01@gmail.com.");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
