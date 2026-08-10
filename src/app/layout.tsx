@@ -5,15 +5,12 @@ import "@/styles/globals.css";
 import { siteConfig } from "@/lib/config/site";
 import Navbar from "@/components/shared/Navbar";
 import Footer from "@/components/shared/Footer";
-import CustomCursor from "@/components/ui/CustomCursor";
+import ClientWidgets from "@/components/providers/ClientWidgets";
 import ScrollProgress from "@/components/ui/ScrollProgress";
-import CommandPalette from "@/components/ui/CommandPalette";
 import PageLoader from "@/components/ui/PageLoader";
 import PageTransition from "@/components/ui/PageTransition";
-import WhatsAppButton from "@/components/ui/WhatsAppButton";
 import SmoothScrollProvider from "@/components/providers/SmoothScrollProvider";
 import AuroraBackground from "@/components/ui/AuroraBackground";
-import MouseSpotlight from "@/components/ui/MouseSpotlight";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -159,22 +156,20 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
       </head>
-      <body>
+      <body suppressHydrationWarning>
         {/* Film grain texture */}
         <div className="grain" aria-hidden="true" />
 
         {/* Global aurora background layer */}
         <AuroraBackground />
 
-        {/* Mouse spotlight illumination */}
-        <MouseSpotlight />
+        {/* Client side interactive widgets */}
+        <ClientWidgets />
 
         {/* Global UI components */}
         <PageLoader />
         <PageTransition />
-        <CustomCursor />
         <ScrollProgress />
-        <CommandPalette />
 
         <SmoothScrollProvider>
           {/* Navigation */}
@@ -186,9 +181,6 @@ export default function RootLayout({
           {/* Footer */}
           <Footer />
         </SmoothScrollProvider>
-
-        {/* WhatsApp floating button — Client Component (has event handlers) */}
-        <WhatsAppButton />
 
         {/* Google Analytics (GA4) Integration */}
         <Script

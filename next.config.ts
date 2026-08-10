@@ -1,33 +1,58 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  // Enable Next.js 16 Cache Components for instant navigation
-  cacheComponents: true,
+  // Compress static assets using gzip/brotli
+  compress: true,
 
-  // Turbopack (Next.js 16 default)
+  // Turbopack options
   turbopack: {},
 
-  // Enable experimental features
+  // Experimental package import optimizations for fast tree-shaking
   experimental: {
-    optimizePackageImports: ["lucide-react", "framer-motion"],
+    optimizePackageImports: [
+      "lucide-react",
+      "framer-motion",
+      "@radix-ui/react-accordion",
+      "@radix-ui/react-dialog",
+      "@radix-ui/react-dropdown-menu",
+      "@radix-ui/react-slider",
+      "@radix-ui/react-tabs",
+      "@radix-ui/react-tooltip",
+      "date-fns",
+      "three",
+      "@react-three/fiber",
+      "@react-three/drei",
+      "gsap",
+      "lenis",
+    ],
   },
 
-  // Image optimization
+  // Image performance optimization
   images: {
     formats: ["image/avif", "image/webp"],
+    minimumCacheTTL: 31536000,
     remotePatterns: [
       { protocol: "https", hostname: "cdn.sanity.io" },
       { protocol: "https", hostname: "images.unsplash.com" },
       { protocol: "https", hostname: "res.cloudinary.com" },
       { protocol: "https", hostname: "lh3.googleusercontent.com" },
     ],
-    deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
-    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
+    deviceSizes: [640, 750, 828, 1080, 1200, 1920],
+    imageSizes: [16, 32, 48, 64, 96, 128, 256],
   },
 
-  // Security headers
+  // Cache & Security headers
   async headers() {
     return [
+      {
+        source: "/:all*(svg|jpg|png|webp|avif|woff2|ico)",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=31536000, immutable",
+          },
+        ],
+      },
       {
         source: "/(.*)",
         headers: [

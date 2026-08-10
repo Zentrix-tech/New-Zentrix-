@@ -232,8 +232,13 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: { params: Promise<{ location: string }> }): Promise<Metadata> {
   const resolvedParams = await params;
   const locationSlug = resolvedParams.location;
-  const location = locationDetails[locationSlug];
-  if (!location) return {};
+  const nameFormatted = locationSlug.charAt(0).toUpperCase() + locationSlug.slice(1);
+  const location = locationDetails[locationSlug] || {
+    ...locationDetails.default,
+    name: nameFormatted,
+    title: `AI Automation & Software Development in ${nameFormatted}`,
+    description: `Zentrix Technology delivers custom software, HMS, manufacturing ERP, and AI automation solutions in ${nameFormatted}, Tamil Nadu.`,
+  };
 
   return {
     title: `${location.title} | ${siteConfig.name}`,

@@ -1,15 +1,3 @@
-export const unstable_instant = {
-  prefetch: 'static',
-  samples: [
-    { params: { service: 'web-development' } },
-    { params: { service: 'app-development' } },
-    { params: { service: 'ai-automation' } },
-    { params: { service: 'enterprise-software' } },
-    { params: { service: 'ui-ux-design' } },
-    { params: { service: 'seo' } }
-  ]
-};
-
 import { Suspense } from "react";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
@@ -399,16 +387,39 @@ export default function ServicePage({ params }: PageProps) {
     </Suspense>
   );
 }
-
 async function ServiceContent({ params }: PageProps) {
   const resolvedParams = await params;
   const rawServiceSlug = resolvedParams.service;
   const serviceSlug = aliases[rawServiceSlug] || rawServiceSlug;
-  const service = serviceDetails[serviceSlug];
 
-  if (!service) {
-    notFound();
-  }
+  const formattedTitle = rawServiceSlug
+    .split("-")
+    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+    .join(" ");
+
+  const service: ServiceDetail = serviceDetails[serviceSlug] || {
+    title: formattedTitle,
+    tagline: `Enterprise Grade ${formattedTitle} Solutions`,
+    description: `Zentrix Technology provides high-performance ${formattedTitle.toLowerCase()} solutions. We engineer scalable, production-ready software systems with Next.js, TypeScript, and modern cloud architecture.`,
+    iconName: "Globe",
+    image: "/work_avs_engg.webp",
+    color: "#A37E36",
+    tags: ["Next.js", "TypeScript", "Node.js", "Cloud APIs", "Enterprise"],
+    features: [
+      { title: "Custom Engineering", desc: "Built precisely around your core business processes." },
+      { title: "High Throughput & Speed", desc: "Near-instant response times and global CDN delivery." },
+      { title: "Security & Compliance", desc: "Role-based access control and end-to-end data encryption." },
+      { title: "SLA Support", desc: "Continuous performance monitoring and dedicated technical assistance." }
+    ],
+    metrics: [
+      { label: "Performance Score", value: "99/100" },
+      { label: "Uptime SLA", value: "99.99%" },
+      { label: "Operation Lift", value: "3.5x" }
+    ],
+    faqs: [
+      { q: `How does Zentrix deliver ${formattedTitle}?`, a: "We analyze your exact requirements, build custom Next.js/React & Node architectures with zero bloated templates, and deploy with complete test coverage." }
+    ]
+  };
 
   const serviceSchema = {
     "@context": "https://schema.org",
@@ -477,9 +488,19 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: { params: Promise<{ service: string }> }): Promise<Metadata> {
   const resolvedParams = await params;
-  const serviceSlug = resolvedParams.service;
-  const service = serviceDetails[serviceSlug];
-  if (!service) return {};
+  const rawServiceSlug = resolvedParams.service;
+  const serviceSlug = aliases[rawServiceSlug] || rawServiceSlug;
+
+  const formattedTitle = rawServiceSlug
+    .split("-")
+    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+    .join(" ");
+
+  const service = serviceDetails[serviceSlug] || {
+    title: formattedTitle,
+    tagline: `Enterprise Grade ${formattedTitle} Solutions`,
+    description: `Zentrix Technology provides high-performance ${formattedTitle.toLowerCase()} solutions. We engineer scalable, production-ready software systems with Next.js, TypeScript, and modern cloud architecture.`,
+  };
 
   return {
     title: `${service.title} — ${service.tagline} | ${siteConfig.name}`,

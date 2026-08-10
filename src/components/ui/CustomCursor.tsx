@@ -22,7 +22,7 @@ export default function CustomCursor() {
   const textRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
-  const [isTouchDevice, setIsTouchDevice] = useState(true);
+  const [isTouchDevice, setIsTouchDevice] = useState(false);
 
   const mouse = useRef({ x: -200, y: -200 });
   const dotPos = useRef({ x: -200, y: -200 });
@@ -37,11 +37,8 @@ export default function CustomCursor() {
   const magnetTarget = useRef<{ x: number; y: number } | null>(null);
 
   useEffect(() => {
-    const isTouchScreen =
-      "ontouchstart" in window ||
-      navigator.maxTouchPoints > 0 ||
-      window.matchMedia("(pointer: coarse)").matches;
-    setIsTouchDevice(isTouchScreen);
+    const isMobileTouchOnly = window.matchMedia("(pointer: coarse) and (hover: none)").matches;
+    setIsTouchDevice(isMobileTouchOnly);
     prefersReduced.current = window.matchMedia(
       "(prefers-reduced-motion: reduce)"
     ).matches;

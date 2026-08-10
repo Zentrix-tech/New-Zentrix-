@@ -75,13 +75,13 @@ const team = [
     portfolio: "https://gokulprasath.vercel.app/",
   },
   {
-    name: "Mohammad Rashid",
+    name: "Mohammed Rashid",
     role: "Co-Founder & CBO",
     bio: "Strategic business executive driving corporate partnerships, revenue growth, and market expansion. Dedicated to delivering high-impact enterprise software solutions.",
     color: "#F59E0B",
     emoji: "💼",
     skills: ["Business Strategy", "Client Partnerships", "Revenue Growth", "Enterprise Operations"],
-    image: "/cofounder_rashid.jpg",
+    image: "/cofounder_rashid.webp",
   },
 ];
 

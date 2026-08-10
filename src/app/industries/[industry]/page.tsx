@@ -302,8 +302,13 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: { params: Promise<{ industry: string }> }): Promise<Metadata> {
   const resolvedParams = await params;
   const industrySlug = resolvedParams.industry;
-  const industry = industryDetails[industrySlug];
-  if (!industry) return {};
+  const nameFormatted = industrySlug.charAt(0).toUpperCase() + industrySlug.slice(1);
+  const industry = industryDetails[industrySlug] || {
+    ...industryDetails.default,
+    name: nameFormatted,
+    title: `AI Automation & Custom Software for ${nameFormatted}`,
+    description: `Zentrix Technology provides high-performance custom software, ERP, CRM, and AI automation tailored for ${nameFormatted}.`,
+  };
 
   return {
     title: `${industry.title} | ${siteConfig.name}`,

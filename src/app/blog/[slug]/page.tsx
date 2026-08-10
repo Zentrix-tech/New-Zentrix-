@@ -1,17 +1,3 @@
-export const unstable_instant = {
-  prefetch: 'static',
-  samples: [
-    { params: { slug: 'future-of-ai-automation-2026' } },
-    { params: { slug: 'why-custom-erp-beats-saas' } },
-    { params: { slug: 'nextjs-vs-react-2026' } },
-    { params: { slug: 'mobile-app-flutter-react-native' } },
-    { params: { slug: 'school-management-systems-complete-guide' } },
-    { params: { slug: 'hospital-management-digital-transformation' } },
-    { params: { slug: 'gsap-animation-web-2026' } },
-    { params: { slug: 'seo-technical-guide-2026' } },
-  ],
-};
-
 import { Suspense } from "react";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
